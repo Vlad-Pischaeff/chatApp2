@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Avatar,Icon, Alert, Button, Content, FlexboxGrid, Panel, Form, FormGroup, ControlLabel, FormControl, ButtonToolbar, Checkbox } from "rsuite"
+import { Avatar, Icon, Alert, Button, Content, 
+        FlexboxGrid, Panel, Form, FormGroup, ControlLabel, 
+        FormControl, ButtonToolbar } from "rsuite"
 import { AvatarDefault } from '../avatars/user/AvatarDefault'
 import { useAuth } from '../hooks/auth.hook'
 import { useHttp } from '../hooks/http.hook'
@@ -19,6 +21,9 @@ const styles = {
     height: "5rem", 
     width: "5rem" 
   },
+  icon: {
+    color: '#999'
+  }
 }
 
 export default function RegisterPage () {
@@ -30,10 +35,6 @@ export default function RegisterPage () {
   const { setMenu, userAvatar } = useContext(context)
   
   useEffect(() => {
-    (!login.value || !password.value) && setSave(false)
-  }, [login, password])
-
-  useEffect(() => {
     if (error) Alert.error(`${error}`, 5000)
   }, [error])
 
@@ -42,13 +43,17 @@ export default function RegisterPage () {
   }, [])
 
   const handlerRegister = async () => {
-    try {
-      // const body = `{ "login":"${login.value}", "password":"${password.value}" }`
-      const body = { login: login.value, password: password.value }
-      const data = await request('/api/auth/register', 'POST', body)
-      console.log('register user data...', data)
-     } catch (e) {
-      console.log('register user error...', e)
+    if (login.value && password.value) {
+      try {
+        // const body = `{ "login":"${login.value}", "password":"${password.value}" }`
+        const body = { login: login.value, password: password.value }
+        const data = await request('/api/auth/register', 'POST', body)
+        console.log('register user data...', data)
+      } catch (e) {
+        console.log('register user error...', e)
+      }
+    } else {
+      Alert.error('No login or password entered...', 5000)
     }
   }
 
@@ -68,12 +73,10 @@ export default function RegisterPage () {
                 <FormControl name="password" type="password" {...password} />
               </FormGroup>
               <FormGroup>
-                {/* <Avatar>
-                  <AvatarDefault style={{ background: "#999" }} />
-                </Avatar> */}
-                <Button appearance="ghost" onClick={() => setShow(true)}>
+                 <Button appearance="ghost" onClick={() => setShow(true)}>
                   { !userAvatar
-                    ? <AvatarDefault style={styles.svg} />
+                    ? <Icon icon="avatar" size="4x" style={styles.icon} />
+                    // ? <AvatarDefault style={styles.svg} />
                     : <img src={userAvatar} style={styles.svg} />
                   }
                   <div>Choose avatar</div>
@@ -81,11 +84,9 @@ export default function RegisterPage () {
               </FormGroup>
               <FormGroup>
                 <ButtonToolbar>
-                  <Button appearance="primary" onClick={handlerRegister} loading={loading}>Sign up</Button>
-                  {/* <Button appearance="link">
-                    <Link to="/register">Choose avatar</Link>
-                  </Button> */}
-                  {/* <Checkbox inline checked={save} onClick={() => setSave(!save)}>Remember me</Checkbox> */}
+                  <Button appearance="primary" onClick={handlerRegister} loading={loading}>
+                    Sign up
+                  </Button>
                 </ButtonToolbar>
               </FormGroup>
             </Form>

@@ -3,6 +3,11 @@ import { Modal, Button } from 'rsuite'
 import { UploadUserAvatars } from './UploadUserAvatar'
 import { context } from '../context/context'
 
+const styles = {
+  body: {
+    margin: '1rem 0'
+  }
+}
 export default function ModalUserAvatars({show, setShow}) {
   const [image, setImage] = useState(null)
   const { setUserAvatar } = useContext(context)
@@ -17,7 +22,7 @@ export default function ModalUserAvatars({show, setShow}) {
       <Modal.Header>
         <Modal.Title>Choose file for avatar</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body style={styles.body} >
         <UploadUserAvatars setImage={setImage} />
       </Modal.Body>
       <Modal.Footer>

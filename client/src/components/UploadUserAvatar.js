@@ -13,7 +13,7 @@ const styles = {
     height: '10rem',
     margin: '0 1rem'
   },
-  hcanvas: {
+  none: {
     display: 'none',
   },
   box: {
@@ -21,11 +21,6 @@ const styles = {
     margin: '1rem 0',
     justifyContent: 'flex-start',
     width: '95%'
-  },
-  input: {
-    visibility: 'hidden',
-    width: 0,
-    height: 0
   },
   pointer: {
     cursor: 'pointer'
@@ -97,7 +92,7 @@ export const UploadUserAvatars = ({ setImage }) => {
           <label htmlFor="file-input" style={styles.pointer}>
             <Icon icon="upload" size="5x" />
           </label>
-          <input id="file-input" type="file" accept="image/*" onChange={onSelectFile} style={styles.input} />
+          <input id="file-input" type="file" accept="image/*" onChange={onSelectFile} style={styles.none} />
         </div>
         {uploading && <Loader backdrop center />}
         { initialImage 
@@ -109,7 +104,7 @@ export const UploadUserAvatars = ({ setImage }) => {
               />
               <div>
                 <canvas ref={previewCanvasRef} style={styles.canvas} />
-                <canvas ref={hiddenCanvasRef} style={styles.hcanvas} width='64' height='64' />
+                <canvas ref={hiddenCanvasRef} style={styles.none} width='64' height='64' />
               </div>
             </div>
           : <>Select file</>

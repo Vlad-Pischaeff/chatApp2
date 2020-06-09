@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Button, Content, FlexboxGrid, Panel, Form, FormGroup, ControlLabel, FormControl, ButtonToolbar, Checkbox  } from "rsuite";
+import { Button, Content, FlexboxGrid, Panel, Form, FormGroup, 
+         ControlLabel, FormControl, ButtonToolbar, Checkbox  } from "rsuite";
 import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/auth.hook'
 import { context } from '../context/context'
@@ -20,7 +21,7 @@ export default function LoginPage () {
   const login = useAuth('login', save)
   const password = useAuth('password', save)
   const { request, loading, error } = useHttp()
-  const { setMenu } = useContext(context)
+  const { setMenu, saveCredentials } = useContext(context)
 
   useEffect(() => {
     (!login.value || !password.value) && setSave(false)
@@ -34,6 +35,7 @@ export default function LoginPage () {
     try {
       const body = { login: login.value, password: password.value }
       const data = await request('/api/auth/login', 'POST', body)
+      saveCredentials(data)
       console.log('login user data...', data)
     } catch (e) {
       console.log('login user error...', e)

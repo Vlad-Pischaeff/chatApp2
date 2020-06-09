@@ -28,11 +28,10 @@ const styles = {
 
 export default function RegisterPage () {
   const [show, setShow] = useState(false)
-  const [save, setSave] = useState(false)
-  const login = useAuth('login', save)
-  const password = useAuth('password', save)
+  const login = useAuth('login', false)
+  const password = useAuth('password', false)
   const { request, loading, error } = useHttp()
-  const { setMenu, userAvatar } = useContext(context)
+  const { setMenu, userAvatar, saveCredentials } = useContext(context)
   
   useEffect(() => {
     if (error) Alert.error(`${error}`, 5000)
@@ -46,14 +45,15 @@ export default function RegisterPage () {
     if (login.value && password.value) {
       try {
         // const body = `{ "login":"${login.value}", "password":"${password.value}" }`
-        const body = { login: login.value, password: password.value }
+        const body = { login: login.value, password: password.value, avatar: userAvatar }
         const data = await request('/api/auth/register', 'POST', body)
-        console.log('register user data...', data)
+        saveCredentials(data)
+        console.log('register user data ...', data)
       } catch (e) {
-        console.log('register user error...', e)
+        console.log('register user error ...', e)
       }
     } else {
-      Alert.error('No login or password entered...', 5000)
+      Alert.error('No empty login or password ...', 5000)
     }
   }
 

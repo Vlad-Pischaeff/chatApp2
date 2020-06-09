@@ -11,7 +11,7 @@ router.post(
   '/register',
   async (req, res) => {
     try {
-      const { login, password } = req.body
+      const { login, password, avatar } = req.body
       const candidate = await User.findOne({ login })
  
       if (candidate) {
@@ -19,16 +19,16 @@ router.post(
       }
       
       const hashedPassword = await bcrypt.hash(password, 12)
-      const user = new User({ login, password: hashedPassword })
+      const user = new User({ login, password: hashedPassword, avatar })
       
       await user.save((err, doc) => {
         if (err) {
           console.error(err) 
           return res.status(500).json({message:`User ${login} not created...`})
         } else {
-          // const token = jwt.sign( { userId: doc.id }, SECRET, { expiresIn: '1h' } )
-          // return res.status(201).json({ token, userId: doc.id })
-          res.status(201).json({message:`User ${login} created...`})
+          const token = jwt.sign( { userId: doc.id }, SECRET, { expiresIn: '1h' } )
+          res.status(201).json({ token, userId: doc.id, avatar })
+          // res.status(201).json({message:`User ${login} created...`})
         }
       })
     } catch (e) {
@@ -58,7 +58,7 @@ router.post(
 
       const token = jwt.sign( { userId: candidate.id }, SECRET, { expiresIn: '1h' } )
 
-      res.status(201).json({ token, userId: candidate.id })
+      res.status(201).json({ token, userId: candidate.id, avatar: candidate.avatar })
     } catch (e) {
       res.status(500).json({ message:`Something wrong ${e}...` })
     }

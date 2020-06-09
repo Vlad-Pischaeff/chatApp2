@@ -5,6 +5,7 @@ import { Container } from 'rsuite'
 import MainRoutes from './routes/MainRoutes'
 import CustomFooter from './components/CustomFooter'
 import CustomNav from './components/CustomNav'
+import MainAppNav from './components/MainAppNav'
 import {context} from './context/context'
 import { useMenu } from './hooks/menu.hook'
 import { useStorage } from './hooks/storage.hook'
@@ -20,13 +21,14 @@ export default function App () {
   const [userAvatar, setUserAvatar] = useState(null)
   const { credentials, saveCredentials } = useStorage()
  
+  console.log('Main app credentials ...', credentials)
   return (
     <context.Provider value={{ menu, setMenu, 
                                userAvatar, setUserAvatar, 
                                credentials, saveCredentials }}>
       <Container style={styles.container}>
         <Router>
-          <CustomNav />
+          { credentials.avatar ? <MainAppNav /> : <CustomNav /> }
           <MainRoutes />
         </Router>
         <CustomFooter />

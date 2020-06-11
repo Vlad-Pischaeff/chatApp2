@@ -36,7 +36,7 @@ export default function LoginPage () {
       const body = { login: login.value, password: password.value }
       const data = await request('/api/auth/login', 'POST', body)
       saveCredentials(data)
-      console.log('login user data...', data)
+      // console.log('login user data...', data)
     } catch (e) {
       console.log('login user error...', e)
     }

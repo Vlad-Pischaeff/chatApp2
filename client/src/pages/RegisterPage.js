@@ -48,7 +48,7 @@ export default function RegisterPage () {
         const body = { login: login.value, password: password.value, avatar: userAvatar }
         const data = await request('/api/auth/register', 'POST', body)
         saveCredentials(data)
-        console.log('register user data ...', data)
+        // console.log('register user data ...', data)
       } catch (e) {
         console.log('register user error ...', e)
       }

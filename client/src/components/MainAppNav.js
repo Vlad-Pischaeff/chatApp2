@@ -1,14 +1,9 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { Header, Navbar, Nav, Icon, Button } from 'rsuite'
+import { Header, Navbar, Nav, Icon } from 'rsuite'
 import { context } from '../context/context'
 
 const styles = {
-  navbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  },
   header: {
     flex:  '0 1 auto',
     display: 'flex',
@@ -18,9 +13,10 @@ const styles = {
     width: '20rem'
   },
   svg: { 
-    height: "3rem", 
-    width: "3rem" 
-  },
+    height: '3.5rem', 
+    width: '3.5rem',
+    margin: '0 1rem 0 0' 
+  }
 }
 
 export default function MainAppNav() {
@@ -28,22 +24,19 @@ export default function MainAppNav() {
 
   return (
     <Header>
-      <Navbar appearance="inverse" style={styles.navbar}>
-        <Navbar.Header style={styles.header}>Chat application</Navbar.Header>
+      <Navbar appearance="inverse" >
+        <Navbar.Header style={styles.header}>
+          <img src={credentials.avatar} style={styles.svg} />
+        </Navbar.Header>
 
-          <Nav pullRight>
-            <Nav.Item eventKey="1" icon={<Icon icon="home" />} componentClass="span">
-              <Link to="/">Home</Link>
-            </Nav.Item>
-            <Nav.Item eventKey="2" componentClass="span">
-              <Link to="/profile">Profile</Link>
-            </Nav.Item>
-          </Nav>
-          
-          <div>
-            <img src={credentials.avatar} style={styles.svg} />
-          </div>
-
+        <Nav pullRight>
+          <Nav.Item eventKey="1" icon={<Icon icon="home" />} componentClass="span">
+            <Link to="/">Home</Link>
+          </Nav.Item>
+          <Nav.Item eventKey="2" componentClass="span">
+            <Link to="/profile">Profile</Link>
+          </Nav.Item>
+        </Nav>
       </Navbar>
     </Header>
   )

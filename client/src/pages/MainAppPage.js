@@ -1,8 +1,9 @@
 import React from 'react'
-import { Input, InputGroup, Icon, Avatar } from 'rsuite'
-import {Conversation} from '../avatars/Conversation'
-import {Chatroom} from '../avatars/Chatroom'
-import {PrivateChatroom} from '../avatars/PrivateChatroom'
+import { Input, InputGroup, Icon, Avatar, Badge } from 'rsuite'
+import conversations from '../avatars/conversations.svg'
+// import {Chatroom} from '../avatars/Chatroom'
+import privatechat from '../avatars/social-network.svg'
+import chatroom from '../avatars/chat-room.svg'
 
 const styles = {
   column: {
@@ -46,13 +47,14 @@ const styles = {
   },
   icon: {
     width: '3rem',
-    margin: '0 1rem'
+    background: 'transparent',
   },
   iconwrap: {
     display: 'flex',
     flexFlow: 'row nowrap',
     justifyContent: 'space-between',
     alignItems: 'center',
+    margin: '0.5rem'
   }
 }
 
@@ -69,9 +71,15 @@ export default function MainAppPage () {
               </InputGroup.Addon>
             </InputGroup>
             <div style={styles.iconwrap}>
-              <Conversation style={styles.icon} />
-              <Chatroom style={styles.icon} />
-              <PrivateChatroom style={styles.icon} />
+              <Badge>
+                <Avatar src={conversations} style={styles.icon} />
+              </Badge>
+              <Badge>
+                <Avatar src={chatroom} style={styles.icon} />
+              </Badge>
+              <Badge>
+                <Avatar src={privatechat} style={styles.icon} />
+              </Badge>
               <Icon icon="plus" style={styles.icon} size="2x" />
             </div>
           </section>

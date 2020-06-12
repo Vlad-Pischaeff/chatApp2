@@ -36,7 +36,7 @@ export default function App () {
                                socketRef }}>
       <Container style={styles.container}>
         <Router>
-          { credentials.avatar ? <MainAppNav /> : <CustomNav /> }
+          { credentials.token ? <MainAppNav /> : <CustomNav /> }
           <MainRoutes />
         </Router>
         <CustomFooter />

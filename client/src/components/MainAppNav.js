@@ -26,7 +26,10 @@ export default function MainAppNav() {
     <Header>
       <Navbar appearance="inverse" >
         <Navbar.Header style={styles.header}>
-          <img src={credentials.avatar} style={styles.svg} />
+          { credentials.avatar
+            ? <img src={credentials.avatar} style={styles.svg} />
+            : <Icon icon="avatar" size="3x" />
+          }
         </Navbar.Header>
 
         <Nav pullRight>

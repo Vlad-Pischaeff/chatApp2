@@ -1,5 +1,5 @@
-import React from 'react'
-import { Input, InputGroup, Icon, Avatar, Badge } from 'rsuite'
+import React, { useState } from 'react'
+import { Input, InputGroup, Icon, Avatar, Badge, Nav, IconButton } from 'rsuite'
 import conversations from '../avatars/conversations.svg'
 // import {Chatroom} from '../avatars/Chatroom'
 import privatechat from '../avatars/social-network.svg'
@@ -31,7 +31,7 @@ const styles = {
     background: '#c9d7ff'
   },
   menu: {
-    height: '6rem',
+    height: '6.5rem',
     background: '#cce9ff'
   },
   content: {
@@ -55,10 +55,25 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: '0.5rem'
+  },
+  plus: {
+    margin: '0.5rem'
   }
+
 }
 
 export default function MainAppPage () {
+  const [activeKey, setActiveKey] = useState()
+
+  const handleSelect = (e) => {
+    setActiveKey(e)
+    console.log('event ...', e)
+  }
+
+  const handleClick = () => {
+    console.log('plus...', activeKey)
+  }
+
   return (
     <div style={styles.column}>
       <main style={styles.main}>
@@ -70,18 +85,13 @@ export default function MainAppPage () {
                 <Icon icon="search" />
               </InputGroup.Addon>
             </InputGroup>
-            <div style={styles.iconwrap}>
-              <Badge>
-                <Avatar src={conversations} style={styles.icon} />
-              </Badge>
-              <Badge>
-                <Avatar src={chatroom} style={styles.icon} />
-              </Badge>
-              <Badge>
-                <Avatar src={privatechat} style={styles.icon} />
-              </Badge>
-              <Icon icon="plus" style={styles.icon} size="2x" />
-            </div>
+            <Nav appearance="tabs" justified onSelect={handleSelect} activeKey={activeKey}>
+              <Nav.Item eventKey="conversations" icon={<Avatar src={conversations} style={styles.icon} />}></Nav.Item>
+              <Nav.Item eventKey="chatroom" icon={<Avatar src={chatroom} style={styles.icon} />}></Nav.Item>
+              <Nav.Item eventKey="privatechat" icon={<Avatar src={privatechat} style={styles.icon} />}></Nav.Item>
+              <IconButton appearance="ghost" icon={<Icon icon="plus" />} circle size="lg" style={styles.plus} onClick={handleClick} />
+            </Nav>
+            
           </section>
           <section style={styles.content}>
             content

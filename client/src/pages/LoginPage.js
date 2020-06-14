@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Button, Content, FlexboxGrid, Panel, Form, FormGroup, 
-         ControlLabel, FormControl, ButtonToolbar, Checkbox  } from "rsuite";
+         ControlLabel, FormControl, ButtonToolbar, Checkbox, Alert } from "rsuite";
 import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/auth.hook'
 import { context } from '../context/context'
@@ -26,6 +26,10 @@ export default function LoginPage () {
   useEffect(() => {
     (!login.value || !password.value) && setSave(false)
   }, [login, password])
+
+  useEffect(() => {
+    if (error) Alert.error(`${error}`, 5000)
+  }, [error])
 
   useEffect(()=> {
     setMenu('signup')

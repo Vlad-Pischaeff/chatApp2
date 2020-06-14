@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import { Input, InputGroup, Icon, Avatar, Badge, Nav, IconButton } from 'rsuite'
+import React, { useState, useEffect } from 'react'
+import { Input, InputGroup, Icon, Avatar, Nav, IconButton } from 'rsuite'
 import conversations from '../avatars/conversations.svg'
-// import {Chatroom} from '../avatars/Chatroom'
 import privatechat from '../avatars/social-network.svg'
 import chatroom from '../avatars/chat-room.svg'
+import AddChatRoom from '../components/AddChatRoom'
 
 const styles = {
   column: {
@@ -59,19 +59,25 @@ const styles = {
   plus: {
     margin: '0.5rem'
   }
-
 }
 
 export default function MainAppPage () {
-  const [activeKey, setActiveKey] = useState()
+  const [activeKey, setActiveKey] = useState('conversations')
+  const [show, setShow] = useState(false)
+  const [disabled, setDisabled] = useState(true)
+
+  useEffect(() => {
+    activeKey === 'conversations' 
+    ? setDisabled(true)
+    : setDisabled(false)
+  }, [activeKey])
 
   const handleSelect = (e) => {
     setActiveKey(e)
-    console.log('event ...', e)
   }
 
   const handleClick = () => {
-    console.log('plus...', activeKey)
+    setShow(true)
   }
 
   return (
@@ -89,7 +95,12 @@ export default function MainAppPage () {
               <Nav.Item eventKey="conversations" icon={<Avatar src={conversations} style={styles.icon} />}></Nav.Item>
               <Nav.Item eventKey="chatroom" icon={<Avatar src={chatroom} style={styles.icon} />}></Nav.Item>
               <Nav.Item eventKey="privatechat" icon={<Avatar src={privatechat} style={styles.icon} />}></Nav.Item>
-              <IconButton appearance="ghost" icon={<Icon icon="plus" />} circle size="lg" style={styles.plus} onClick={handleClick} />
+              <IconButton appearance="primary" 
+                          icon={<Icon icon="plus" />} 
+                          circle size="lg" 
+                          style={styles.plus} 
+                          disabled={disabled}
+                          onClick={handleClick} />
             </Nav>
             
           </section>
@@ -106,6 +117,7 @@ export default function MainAppPage () {
           MAIN APP
         </h3>
       </footer>
+      <AddChatRoom show={show} setShow={setShow} activeKey={activeKey} />
     </div>
   )
 }

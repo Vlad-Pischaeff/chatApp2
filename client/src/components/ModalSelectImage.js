@@ -1,29 +1,28 @@
 import React, { useState, useContext } from 'react'
 import { Modal, Button } from 'rsuite'
-import { UploadUserAvatars } from './UploadUserAvatar'
+import { UploadImage } from './UploadImage'
 import { context } from '../context/context'
 
 const styles = {
-  body: {
-    margin: '1rem 0'
-  }
+  body: { margin: '1rem 0' }
 }
-export default function ModalUserAvatars({show, setShow}) {
+
+export default function ModalSelectImage({show, setShow}) {
   const [image, setImage] = useState(null)
-  const { setUserAvatar } = useContext(context)
+  const { setAvatar } = useContext(context)
 
   const OK_onClick = () => {
-    setUserAvatar(image)
+    setAvatar(image)
     setShow(false)
   }
 
    return (
     <Modal show={show} onHide={() => setShow(false)} >
       <Modal.Header>
-        <Modal.Title>Choose file for avatar</Modal.Title>
+        <Modal.Title>Choose file for image ...</Modal.Title>
       </Modal.Header>
       <Modal.Body style={styles.body} >
-        <UploadUserAvatars setImage={setImage} />
+        <UploadImage setImage={setImage} />
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={OK_onClick} appearance="primary">

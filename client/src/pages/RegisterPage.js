@@ -1,17 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Avatar, Icon, Alert, Button, Content, 
+import { Icon, Alert, Button, Content, 
         FlexboxGrid, Panel, Form, FormGroup, ControlLabel, 
         FormControl, ButtonToolbar } from "rsuite"
-import { AvatarDefault } from '../avatars/user/AvatarDefault'
 import { useAuth } from '../hooks/auth.hook'
 import { useHttp } from '../hooks/http.hook'
 import { context } from '../context/context'
-import ModalUserAvatars from '../components/ModalUserAvatars'
+import ModalSelectImage from '../components/ModalSelectImage'
 
 const styles = {
-  content: {
-    height: '100%',
-  },
+  content: { height: '100%' },
   item: {
     minWidth: '25rem',
     background: 'rgba(52, 152, 255, 0.1)'
@@ -21,9 +18,7 @@ const styles = {
     height: "5rem", 
     width: "5rem" 
   },
-  icon: {
-    color: '#999'
-  }
+  icon: { color: '#999' }
 }
 
 export default function RegisterPage () {
@@ -31,7 +26,7 @@ export default function RegisterPage () {
   const login = useAuth('login', false)
   const password = useAuth('password', false)
   const { request, loading, error } = useHttp()
-  const { setMenu, userAvatar, saveCredentials } = useContext(context)
+  const { setMenu, avatar, saveCredentials } = useContext(context)
   
   useEffect(() => {
     if (error) Alert.error(`${error}`, 5000)
@@ -44,11 +39,9 @@ export default function RegisterPage () {
   const handlerRegister = async () => {
     if (login.value && password.value) {
       try {
-        // const body = `{ "login":"${login.value}", "password":"${password.value}" }`
-        const body = { login: login.value, password: password.value, avatar: userAvatar }
+        const body = { login: login.value, password: password.value, avatar: avatar }
         const data = await request('/api/auth/register', 'POST', body)
         saveCredentials(data)
-        // console.log('register user data ...', data)
       } catch (e) {
         console.log('register user error ...', e)
       }
@@ -58,7 +51,6 @@ export default function RegisterPage () {
   }
 
   return (
-
       <Content>
       <FlexboxGrid justify="center" align="middle" style={styles.content}>
         <FlexboxGrid.Item colspan={12} style={styles.item}>
@@ -74,10 +66,9 @@ export default function RegisterPage () {
               </FormGroup>
               <FormGroup>
                  <Button appearance="ghost" onClick={() => setShow(true)}>
-                  { !userAvatar
-                    ? <Icon icon="avatar" size="4x" style={styles.icon} />
-                    // ? <AvatarDefault style={styles.svg} />
-                    : <img src={userAvatar} style={styles.svg} />
+                  { avatar
+                    ? <img src={avatar} style={styles.svg} />
+                    : <Icon icon="avatar" size="4x" style={styles.icon} />
                   }
                   <div>Choose avatar</div>
                 </Button>
@@ -93,8 +84,7 @@ export default function RegisterPage () {
           </Panel>
         </FlexboxGrid.Item>
       </FlexboxGrid>
-      <ModalUserAvatars show={show} setShow={setShow} />
+      <ModalSelectImage show={show} setShow={setShow} />
     </Content>
-
   )
 }

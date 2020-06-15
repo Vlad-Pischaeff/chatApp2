@@ -13,21 +13,17 @@ const styles = {
     height: '10rem',
     margin: '0 1rem'
   },
-  none: {
-    display: 'none',
-  },
+  none: { display: 'none' },
   box: {
     display: 'flex',
     margin: '1rem 0',
     justifyContent: 'flex-start',
     width: '95%'
   },
-  pointer: {
-    cursor: 'pointer'
-  }
+  pointer: { cursor: 'pointer' }
 }
 
-export const UploadUserAvatars = ({ setImage }) => {
+export const UploadImage = ({ setImage }) => {
   const [uploading, setUploading] = useState(false)
   const [initialImage, setInitialmage] = useState(null)
   const [completedCrop, setCompletedCrop] = useState(null)

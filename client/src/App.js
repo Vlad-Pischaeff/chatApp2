@@ -19,7 +19,7 @@ const styles = {
 	
 export default function App () {
   const { menu, setMenu } = useMenu()
-  const [userAvatar, setUserAvatar] = useState(null)
+  const [ avatar, setAvatar] = useState(null)
   const { credentials, saveCredentials } = useStorage()
   const { socketRef, sendMessage } = useWebsocket()
  
@@ -31,7 +31,7 @@ export default function App () {
 
   return (
     <context.Provider value={{ menu, setMenu, 
-                               userAvatar, setUserAvatar, 
+                               avatar, setAvatar, 
                                credentials, saveCredentials,
                                socketRef }}>
       <Container style={styles.container}>

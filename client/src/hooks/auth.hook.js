@@ -5,12 +5,13 @@ export const useAuth = (item, save) => {
 
   useEffect(() => {
     (save) && localStorage.setItem(item, value)
-    // console.log('save', save)
   }, [save])
 
   const handlerOnChange = useCallback(e => setValue(e), [])
 
   const handlerOnFocus = useCallback(() => setValue(''), [])
+
+  // console.log('auth hook ...', value)
 
   return {
     value,

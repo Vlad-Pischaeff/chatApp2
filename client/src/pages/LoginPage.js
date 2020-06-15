@@ -4,7 +4,7 @@ import { Button, Content, FlexboxGrid, Panel, Form, FormGroup,
 import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/auth.hook'
 import { context } from '../context/context'
-import { useHttp } from '../hooks/http.hook';
+import { useHttp } from '../hooks/http.hook'
 
 const styles = {
   content: {

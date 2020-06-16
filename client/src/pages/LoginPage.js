@@ -35,7 +35,7 @@ export default function LoginPage () {
     setMenu('signup')
   }, [])
 
-  const loginHandler = async () => {
+  const loginHandler = async (e) => {
     try {
       const body = { login: login.value, password: password.value }
       const data = await request('/api/auth/login', 'POST', body)

@@ -22,6 +22,10 @@ export default function App () {
   const [ avatar, setAvatar] = useState(null)
   const { credentials, saveCredentials } = useStorage()
   const { socketRef, sendMessage } = useWebsocket()
+  const headers = {
+    Authorization: credentials.token, 
+    'Content-Type': 'application/json'
+  }
  
   useEffect(() => {
     if (credentials.userId) {
@@ -33,7 +37,7 @@ export default function App () {
     <context.Provider value={{ menu, setMenu, 
                                avatar, setAvatar, 
                                credentials, saveCredentials,
-                               socketRef }}>
+                               socketRef, headers }}>
       <Container style={styles.container}>
         <Router>
           { credentials.token ? <MainAppNav /> : <CustomNav /> }

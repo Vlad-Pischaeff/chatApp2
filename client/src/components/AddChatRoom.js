@@ -12,26 +12,29 @@ const styles = {
 
 export default function AddChatRoom({show, setShow, activeKey}) {
   const [showUpload, setShowUpload] = useState(false)
-  const { avatar, credentials } = useContext(context)
+  const { avatar, credentials, headers } = useContext(context)
   const chatroomname = useAuth('chatroomname', false)
   const chatroomdesc = useAuth('chatroomdesc', false)
   const { request, loading, error } = useHttp()
 
-  const handleClick = async () => {
+  const handleClick = async (e) => {
     try {
       if (chatroomname.value && chatroomdesc.value) {
         const body = { 
-          name: chatroomname.value
+          name: chatroomname.value,
+          description: chatroomdesc.value,
+          private: activeKey === 'chatroom' ? false : true,
+          avatar: avatar ? avatar : null
          }
-        const data = await request('/api/room/create', 'POST', body, {Authorization: `Bearer ${credentials.token}`})
-        console.log('create room data ...', data)
+        const data = await request('/api/room/create', 'PUT', body, headers)
+        Alert.success(`Room "${data.room.name}" created ....`, 5000)
+        setShow(false)
       } else {
         Alert.error('Please fill required fields ...', 5000)
       }
     } catch (e) {
-      console.log('add chat room error ...', e, error)
+      Alert.error(e.message, 5000)
     }
-
   }
 
   return (

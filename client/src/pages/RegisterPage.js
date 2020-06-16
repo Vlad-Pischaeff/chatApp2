@@ -36,7 +36,7 @@ export default function RegisterPage () {
     setMenu('signin')
   }, [])
 
-  const handlerRegister = async () => {
+  const handlerRegister = async (e) => {
     if (login.value && password.value) {
       try {
         const body = { login: login.value, password: password.value, avatar: avatar }

@@ -4,7 +4,7 @@ const schema = new Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   avatar: { type: String, default: null },
-  private: { type: String, default: false },
+  private: { type: Boolean, default: false },
   owner: { type: Types.ObjectId, ref: 'Users' },
   followers: [String]
 })

@@ -4,41 +4,32 @@ const Rooms = require('../models/Rooms')
 const auth = require('../middleware/auth.middleware')
 const router = Router()
 
-router.post('/create', auth, async (req, res) => {
+router.put('/create', auth, async (req, res) => {
   try {
-    // const baseUrl = config.get('baseUrl')
-    // const {from} = req.body
-    console.log('create room body ...', req.body, 'header ...', req.headers)
-    // const code = shortid.generate()
+    const { name, description, avatar, private } = req.body
+    const owner = req.user.userId
 
-    // const existing = await Link.findOne({ from })
+    const existing = await Rooms.findOne({ name })
 
-    // if (existing) {
-    //   return res.json({ link: existing })
-    // }
+    if (existing) {
+      return res.status(500).json({ message: `room ${name} already existing ...` })
+    }
 
-    // const to = baseUrl + '/t/' + code
+    const room = new Rooms({ name, description, avatar, private, owner })
 
-    // const link = new Link({
-    //   code, to, from, owner: req.user.userId
-    // })
-
-    // await link.save()
-    // res.status(201).json({ link })
-    
+    await room.save()
+    res.status(201).json({ room })
   } catch(e) {
-    console.log('generate', e)
-    res.status(500).json({ message:"Something wrong..." })
+    res.status(500).json({ message:`Something wrong ..., details ${e}` })
   }
 })
 
 router.get('/', auth, async (req, res) => {
   try {
-    const links = await Link.find({ owner: req.user.userId})
-    res.json(links)
+    const rooms = await Rooms.find({$or: [{ owner: req.user.userId}, { followers: req.user.userId}] })
+    res.status(201).json(rooms)
   } catch(e) {
-    console.log('get root', e)
-    res.status(500).json({ message:"Something wrong..." })
+    res.status(500).json({ message:`Something wrong ..., details ${e}` })
   }
 })
 

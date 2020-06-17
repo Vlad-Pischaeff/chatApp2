@@ -43,7 +43,7 @@ export default function App () {
           { credentials.token ? <MainAppNav /> : <CustomNav /> }
           <MainRoutes />
         </Router>
-        <CustomFooter />
+        {/* <CustomFooter /> */}
       </Container>
     </context.Provider>
   )

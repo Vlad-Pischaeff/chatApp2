@@ -5,11 +5,10 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/Users')
 const router = Router()
 const SECRET = config.get("jwtSecret")
+const auth = require('../middleware/auth.middleware')
 
 // /api/auth/register
-router.post(
-  '/register',
-  async (req, res) => {
+router.post('/register', async (req, res) => {
     try {
       const { login, password, avatar } = req.body
       const candidate = await User.findOne({ login })
@@ -19,7 +18,7 @@ router.post(
       }
       
       const hashedPassword = await bcrypt.hash(password, 12)
-      const user = new User({ login, password: hashedPassword, avatar })
+      const user = new User({ login, password: hashedPassword, avatar, online: true })
       
       await user.save((err, doc) => {
         if (err) {
@@ -39,9 +38,7 @@ router.post(
 )
 
 // /api/auth/login
-router.post(
-  '/login',
-  async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
       const { login, password } = req.body
       const candidate = await User.findOne({ login })
@@ -66,16 +63,24 @@ router.post(
 )
 
 // /api/auth/upload
-router.post(
-  '/upload',
-  async (req, res) => {
+router.post('/upload', async (req, res) => {
     try {
-      // console.log('upload...', req.body, req.headers)
       res.status(201).json({})
     } catch (e) {
       res.status(500).json({ message:`Something wrong while uploading ${e}...` })
     }
   }
 )
+
+// /api/auth/search
+
+router.post('/search', auth, async (req, res) => {
+  try {
+    const users = await User.find({ login: { $regex: req.body.search, $options: "i" } })
+    res.status(201).json(users)
+  } catch(e) {
+    res.status(500).json({ message:`Something wrong ..., details ${e}` })
+  }
+})
 
 module.exports = router

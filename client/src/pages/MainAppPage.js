@@ -10,16 +10,15 @@ import { useHttp } from '../hooks/http.hook'
 import ElementCard from '../components/ElementCard'
 
 const styles = {
-  flex: { display: 'flex', justifyContent: 'space-between', },
-  row: { flexFlow: 'row nowrap', },
-  col: { flexFlow: 'column nowrap', },
-  height: { height: '82vh', },
-  main: { flex: '1 1 auto', background: '#cce9ff', },
-  aside: { minWidth: '18rem', background: '#e6d7ff', },
-  section: { flex: '2 1 auto', background: '#c9d7ff', },
-  menu: { height: '6.5rem', background: '#cce9ff', },
-  content: { flex: '1 1 auto', },
-  footer: { background: '#a6d7ff', height: '3.5rem', },
+  flexrow: { display: 'flex', justifyContent: 'space-between', flexFlow: 'row nowrap',},
+  flexcol: { display: 'flex', justifyContent: 'space-between', flexFlow: 'column nowrap', },
+  wrap: { flex: '1 1 auto', },
+  main: { flex: '1 0 auto', background: '#cce9ff', },
+  aside: { flex: '0 0 18rem', background: '#e6d7ff', },
+  menu: { flex: '0 0 6.5rem', background: '#cce9ff', },
+  rooms: { flex: '1 1 10.5rem', },
+  chat: { flex: '1 1 16.5rem', overflowY: 'auto', background: '#c9d7ff', },
+  footer: { background: '#a6d7ff', height: '3.5rem', flex: '0 0 auto', },
   icon: { width: '3rem', background: 'transparent', },
   plus: { margin: '0.5rem', }
 }
@@ -45,9 +44,9 @@ export default function MainAppPage () {
   }, [activeKey])
 
   return (
-    <div style={{...styles.flex, ...styles.col, ...styles.height}}>
-      <main style={{...styles.flex, ...styles.row, ...styles.main}}>
-        <aside style={{...styles.flex, ...styles.col, ...styles.aside}}>
+    <div style={{...styles.flexcol, ...styles.wrap}}>
+      <main style={{...styles.flexrow, ...styles.main}}>
+        <aside style={{...styles.flexcol, ...styles.aside}}>
           <section style={styles.menu}>
             <SearchInput activeKey={activeKey} />
              
@@ -60,14 +59,14 @@ export default function MainAppPage () {
             </Nav>
             
           </section>
-          <section style={styles.content}>
+          <section style={styles.rooms}>
             { activeKey === 'conversations'
               ? <ElementCard data={[]} />
               : <ElementCard data={items} />
             }    
           </section>
         </aside>
-        <article style={styles.section}>
+        <article style={styles.chat}>
           colspan={16}
         </article>
       </main>

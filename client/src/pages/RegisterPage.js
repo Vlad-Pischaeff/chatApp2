@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Icon, Alert, Button, Content, 
-        FlexboxGrid, Panel, Form, FormGroup, ControlLabel, 
-        FormControl, ButtonToolbar } from "rsuite"
+import { Icon, Alert, Button, FormControl, ButtonToolbar,
+        Panel, Form, FormGroup, ControlLabel } from "rsuite"
 import { useAuth } from '../hooks/auth.hook'
 import { useHttp } from '../hooks/http.hook'
 import { context } from '../context/context'
 import ModalSelectImage from '../components/ModalSelectImage'
 
 const styles = {
-  content: { height: '100%' },
+  wrap: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+  },
   item: {
-    minWidth: '25rem',
+    width: '25rem',
     background: 'rgba(52, 152, 255, 0.1)'
   },
   svg: { 
@@ -51,40 +55,36 @@ export default function RegisterPage () {
   }
 
   return (
-      <Content>
-      <FlexboxGrid justify="center" align="middle" style={styles.content}>
-        <FlexboxGrid.Item colspan={12} style={styles.item}>
-          <Panel header={<h3>Sign up</h3>} bordered shaded>
-            <Form fluid>
-              <FormGroup>
-                <ControlLabel>Username or email address</ControlLabel>
-                <FormControl name="name" {...login} />
-              </FormGroup>
-              <FormGroup>
-                <ControlLabel>Password</ControlLabel>
-                <FormControl name="password" type="password" {...password} />
-              </FormGroup>
-              <FormGroup>
-                 <Button appearance="ghost" onClick={() => setShow(true)}>
-                  { avatar
-                    ? <img src={avatar} style={styles.svg} />
-                    : <Icon icon="avatar" size="4x" style={styles.icon} />
-                  }
-                  <div>Choose avatar</div>
-                </Button>
-              </FormGroup>
-              <FormGroup>
-                <ButtonToolbar>
-                  <Button appearance="primary" onClick={handlerRegister} loading={loading}>
-                    Sign up
-                  </Button>
-                </ButtonToolbar>
-              </FormGroup>
-            </Form>
-          </Panel>
-        </FlexboxGrid.Item>
-      </FlexboxGrid>
+    <section style={styles.wrap} >
+      <Panel header={<h3>Sign up</h3>} bordered shaded style={styles.item}>
+        <Form fluid>
+          <FormGroup>
+            <ControlLabel>Username or email address</ControlLabel>
+            <FormControl name="name" {...login} />
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Password</ControlLabel>
+            <FormControl name="password" type="password" {...password} />
+          </FormGroup>
+          <FormGroup>
+              <Button appearance="ghost" onClick={() => setShow(true)}>
+              { avatar
+                ? <img src={avatar} style={styles.svg} />
+                : <Icon icon="avatar" size="4x" style={styles.icon} />
+              }
+              <div>Choose avatar</div>
+            </Button>
+          </FormGroup>
+          <FormGroup>
+            <ButtonToolbar>
+              <Button appearance="primary" onClick={handlerRegister} loading={loading}>
+                Sign up
+              </Button>
+            </ButtonToolbar>
+          </FormGroup>
+        </Form>
+      </Panel>
       <ModalSelectImage show={show} setShow={setShow} />
-    </Content>
+    </section>
   )
 }

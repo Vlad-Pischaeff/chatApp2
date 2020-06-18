@@ -9,7 +9,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'space-between'
   },
-  header: {
+  lheader: {
     flex:  '0 1 auto',
     display: 'flex',
     alignItems: 'center',

@@ -19,7 +19,7 @@ export default function ModalSelectImage({show, setShow}) {
    return (
     <Modal show={show} onHide={() => setShow(false)} >
       <Modal.Header>
-        <Modal.Title>Choose file for image ...</Modal.Title>
+        <Modal.Title>Choose file ...</Modal.Title>
       </Modal.Header>
       <Modal.Body style={styles.body} >
         <UploadImage setImage={setImage} />

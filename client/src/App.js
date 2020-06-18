@@ -12,8 +12,13 @@ import { useStorage } from './hooks/storage.hook'
 import  useWebsocket from './hooks/websocket.hook'
 
 const styles = {
-  container: {
-    height: '100vh',
+  container: { 
+    height: '100vh', 
+    minWidth: '40rem',
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-between',
+    background: 'rgba(124, 191, 255, 0.3)',
   },
 }
 	

@@ -1,56 +1,49 @@
 import React from 'react'
-import { List, FlexboxGrid, Icon } from 'rsuite'
+import { List, Icon } from 'rsuite'
 
-const styleCenter = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '60px'
-};
+const styles = {
+  element: {
+    height: '4rem',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    margin: '0.2rem',
+    background: 'dodgerblue',
+    color: 'white',
+  },
+  img: { flex: '0 0 4rem' },
+  content: {
+    flex: '1 1 auto',
+    height: '4rem',
+    margin: '0 0 0 0.4rem',
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  name: { flex: '0 0 1rem', fontSize: '1.1rem' },
+  description: { flex: '1 0 3rem', fontSize: '0.9rem' },
+  list: { height: '100%' }
+}
 
-const slimText = {
-  fontSize: '0.666em',
-  color: '#97969B',
-  fontWeight: 'lighter',
-  paddingBottom: 5
-};
-
-const titleStyle = {
-  paddingBottom: 5,
-  whiteSpace: 'nowrap',
-  fontWeight: 500
-};
 
 export default function ElementCard({data}) {
   return (
-    <List hover>
+    <List hover style={styles.list}>
       {data.map((item, index) => (
-        <List.Item key={item['id']} index={index}>
-          <FlexboxGrid>
-            {/*icon*/}
-            <FlexboxGrid.Item colspan={2} style={styleCenter}>
+          <section style={styles.element}>
+            <div style={styles.img} >
               { item.avatar
                 ? <img src={item.avatar} />
-                : <Icon icon="image" size="4x" style={{ color: 'darkgrey', fontSize: '1.5em' }} />
+                : <Icon icon="image" size="4x" />
               }
-            </FlexboxGrid.Item>
-            {/*base info*/}
-            <FlexboxGrid.Item
-              colspan={6}
-              style={{
-                ...styleCenter,
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                overflow: 'hidden'
-              }}
-            >
-              <div style={titleStyle}>{item['name']}</div>
-              <div style={slimText}>
-                <div>{item['description']}</div>
-              </div>
-            </FlexboxGrid.Item>
-          </FlexboxGrid>
-        </List.Item>
+            </div>
+
+            <div style={styles.content} >
+              <div style={styles.name} >{item['name']}</div>
+              <div style={styles.description} >{item['description']}</div>
+            </div>
+          </section>
       ))}
     </List>
   )

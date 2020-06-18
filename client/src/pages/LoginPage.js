@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Button, Content, FlexboxGrid, Panel, Form, FormGroup, 
+import { Button, Panel, Form, FormGroup, 
          ControlLabel, FormControl, ButtonToolbar, Checkbox, Alert } from "rsuite";
 import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/auth.hook'
@@ -7,11 +7,14 @@ import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 
 const styles = {
-  content: {
-    height: '100%'
+  wrap: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
   },
   item: {
-    minWidth: '25rem',
+    width: '25rem',
     background: 'rgba(52, 152, 255, 0.1)'
   },
 }
@@ -47,34 +50,28 @@ export default function LoginPage () {
   }
 
   return (
-
-      <Content>
-        <FlexboxGrid justify="center" align="middle" style={styles.content}>
-          <FlexboxGrid.Item colspan={12} style={styles.item}>
-            <Panel header={<h3>Sign in</h3>} bordered shaded>
-              <Form fluid>
-                <FormGroup>
-                  <ControlLabel>Username or email address</ControlLabel>
-                  <FormControl name="name" {...login} />
-                </FormGroup>
-                <FormGroup>
-                  <ControlLabel>Password</ControlLabel>
-                  <FormControl name="password" type="password" {...password} />
-                </FormGroup>
-                <FormGroup>
-                  <ButtonToolbar >
-                    <Button appearance="primary" onClick={loginHandler} loading={loading}>Sign in</Button>
-                    <Button appearance="link">
-                      <Link to="/register">Forgot password?</Link>
-                    </Button>
-                    <Checkbox inline checked={save} onClick={() => setSave(!save)}>Remember me</Checkbox>
-                  </ButtonToolbar>
-                </FormGroup>
-              </Form>
-            </Panel>
-          </FlexboxGrid.Item>
-        </FlexboxGrid>
-      </Content>
-
+    <section style={styles.wrap}>
+      <Panel header={<h3>Sign in</h3>} bordered shaded style={styles.item}>
+        <Form fluid>
+          <FormGroup>
+            <ControlLabel>Username or email address</ControlLabel>
+            <FormControl name="name" {...login} />
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Password</ControlLabel>
+            <FormControl name="password" type="password" {...password} />
+          </FormGroup>
+          <FormGroup>
+            <ButtonToolbar >
+              <Button appearance="primary" onClick={loginHandler} loading={loading}>Sign in</Button>
+              <Button appearance="link">
+                <Link to="/register">Forgot password?</Link>
+              </Button>
+              <Checkbox inline checked={save} onClick={() => setSave(!save)}>Remember me</Checkbox>
+            </ButtonToolbar>
+          </FormGroup>
+        </Form>
+      </Panel>
+    </section>
   )
 }

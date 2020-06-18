@@ -4,7 +4,7 @@ import { Header, Navbar, Nav, Icon } from 'rsuite'
 import { context } from '../context/context'
 
 const styles = {
-  header: {
+  lheader: {
     flex:  '0 1 auto',
     display: 'flex',
     alignItems: 'center',
@@ -25,7 +25,7 @@ export default function MainAppNav() {
   return (
     <Header>
       <Navbar appearance="inverse" >
-        <Navbar.Header style={styles.header}>
+        <Navbar.Header style={styles.lheader}>
           { credentials.avatar
             ? <img src={credentials.avatar} style={styles.svg} />
             : <Icon icon="avatar" size="3x" />

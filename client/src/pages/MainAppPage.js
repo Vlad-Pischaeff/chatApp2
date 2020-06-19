@@ -16,7 +16,7 @@ const styles = {
   main: { flex: '1 0 auto', background: '#cce9ff', },
   aside: { flex: '0 0 18rem', background: '#e6d7ff', },
   menu: { flex: '0 0 6.5rem', background: '#cce9ff', },
-  rooms: { flex: '1 1 10.5rem', },
+  rooms: { flex: '1 1 10.5rem', overflowY: 'auto', },
   chat: { flex: '1 1 16.5rem', overflowY: 'auto', background: '#c9d7ff', },
   footer: { background: '#a6d7ff', height: '3.5rem', flex: '0 0 auto', },
   icon: { width: '3rem', background: 'transparent', },
@@ -36,7 +36,7 @@ export default function MainAppPage () {
       try {
         const data = await request(`/api/room/${point}`, 'GET', null, headers)
         setItems(data)
-        // console.log('data ...', point, data)
+        console.log('data ...', point, data)
       } catch (e) { console.log('login user error...', e) }
     }
     getChatrooms(activeKey)

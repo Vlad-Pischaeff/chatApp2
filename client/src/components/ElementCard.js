@@ -1,5 +1,6 @@
 import React from 'react'
 import { List, Icon } from 'rsuite'
+import { useHover } from '../hooks/hover.hook'
 
 const styles = {
   element: {
@@ -10,6 +11,18 @@ const styles = {
     margin: '0.2rem',
     background: 'dodgerblue',
     color: 'white',
+    opacity: '0.8',
+  },
+  helement: {
+    height: '4rem',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    margin: '0.2rem',
+    background: 'dodgerblue',
+    color: 'white',
+    opacity: '1',
+    cursor: 'pointer',
   },
   img: { flex: '0 0 4rem' },
   content: {
@@ -28,10 +41,12 @@ const styles = {
 
 
 export default function ElementCard({data}) {
+  const { hover, ...hoverProps } = useHover()
+  // console.log('hover', hover)
   return (
-    <List hover style={styles.list}>
+    <List style={styles.list} >
       {data.map((item, index) => (
-          <section style={styles.element}>
+          <section style={hover ? styles.helement : styles.element } {...hoverProps} >
             <div style={styles.img} >
               { item.avatar
                 ? <img src={item.avatar} />
@@ -40,8 +55,8 @@ export default function ElementCard({data}) {
             </div>
 
             <div style={styles.content} >
-              <div style={styles.name} >{item['name']}</div>
-              <div style={styles.description} >{item['description']}</div>
+              <div style={styles.name} >{item.name}</div>
+              <div style={styles.description} >{item.description}</div>
             </div>
           </section>
       ))}

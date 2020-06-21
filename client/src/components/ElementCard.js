@@ -1,6 +1,6 @@
 import React from 'react'
-import { List, Icon } from 'rsuite'
-import { useHover } from '../hooks/hover.hook'
+import { Icon, Badge } from 'rsuite'
+import Radium from 'radium'
 
 const styles = {
   element: {
@@ -10,19 +10,13 @@ const styles = {
     alignItems: 'center',
     margin: '0.2rem',
     background: 'dodgerblue',
-    color: 'white',
-    opacity: '0.8',
-  },
-  helement: {
-    height: '4rem',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    margin: '0.2rem',
-    background: 'dodgerblue',
-    color: 'white',
-    opacity: '1',
-    cursor: 'pointer',
+    color: 'black',
+    opacity: '0.6',
+    ':hover': {
+      opacity: '1',
+      cursor: 'pointer',
+      color: 'white',
+    }
   },
   img: { flex: '0 0 4rem' },
   content: {
@@ -36,30 +30,27 @@ const styles = {
   },
   name: { flex: '0 0 1rem', fontSize: '1.1rem' },
   description: { flex: '1 0 3rem', fontSize: '0.9rem' },
-  list: { height: '100%' }
 }
 
 
-export default function ElementCard({data}) {
-  const { hover, ...hoverProps } = useHover()
-  // console.log('hover', hover)
-  return (
-    <List style={styles.list} >
-      {data.map((item, index) => (
-          <section style={hover ? styles.helement : styles.element } {...hoverProps} >
-            <div style={styles.img} >
-              { item.avatar
-                ? <img src={item.avatar} />
-                : <Icon icon="image" size="4x" />
-              }
-            </div>
+function ElementCard({key, item}) {
 
-            <div style={styles.content} >
-              <div style={styles.name} >{item.name}</div>
-              <div style={styles.description} >{item.description}</div>
-            </div>
-          </section>
-      ))}
-    </List>
+  return (
+    <section style={styles.element} key={key} >
+      <div style={styles.img} >
+        { item.avatar
+          ? <Badge><img src={item.avatar} /></Badge>
+          : <Badge><Icon icon="image" size="4x" /></Badge>
+        }
+      </div>
+
+      <div style={styles.content} >
+        <div style={styles.name} >{item.name}</div>
+        <div style={styles.description} >{item.description}</div>
+      </div>
+    </section>
   )
 }
+ElementCard = Radium(ElementCard)
+
+export default ElementCard

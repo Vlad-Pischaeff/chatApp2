@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "radium": "^0.26.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-image-crop": "^8.6.4",
@@ -37,7 +38,6 @@
   },
   "devDependencies": {
     "@craco/craco": "^5.6.4",
-    "craco-less": "^1.16.0",
-    "radium": "^0.26.0"
+    "craco-less": "^1.16.0"
   }
 }

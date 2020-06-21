@@ -3,6 +3,7 @@ import { Input, InputGroup, Icon } from 'rsuite'
 import { useAuth } from '../hooks/auth.hook'
 import { useHttp } from '../hooks/http.hook'
 import { context } from '../context/context'
+import ModalSearchResult from './ModalSearchResult'
 
 const styles = { search: { width: '97%', margin: '3px' }, }
 
@@ -11,6 +12,7 @@ export default function SearchInput ({ activeKey }) {
   const { request, loading, error } = useHttp()
   const { headers } = useContext(context)
   const [result, setResult] = useState([])
+  const [show, setShow] = useState(false)
   const [disabledSearch, setDisabledSearch] = useState(false)
 
   useEffect(() => {
@@ -21,8 +23,9 @@ export default function SearchInput ({ activeKey }) {
     const API = (activeKey === 'conversations') ? '/api/auth/search' : '/api/room/search'
     const body = { 'search': search.value }
     const data = await request(API, 'POST', body, headers)
-    console.log('search value ...', data)
+    console.log(`${API} search result ...`, data)
     setResult(data)
+    setShow(true)
   }
 
   const handleKeyPress = (e) => {
@@ -35,6 +38,7 @@ export default function SearchInput ({ activeKey }) {
       <InputGroup.Addon>
         <Icon icon="search" onClick={handleClick} />
       </InputGroup.Addon>
+      <ModalSearchResult show={show} setShow={setShow} data={result} />
     </InputGroup>
   )
 }

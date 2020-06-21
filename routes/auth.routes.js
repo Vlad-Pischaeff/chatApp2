@@ -83,4 +83,16 @@ router.post('/search', auth, async (req, res) => {
   }
 })
 
+// /api/auth/friends
+
+router.get('/friends', auth, async (req, res) => {
+  try {
+    // console.log('friends ...', req.user)
+    const users = await User.findOne({ _id: req.user.userId })
+    res.status(201).json(users.friends)
+  } catch(e) {
+    res.status(500).json({ message:`Something wrong ..., details ${e}` })
+  }
+})
+
 module.exports = router

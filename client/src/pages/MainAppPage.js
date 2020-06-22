@@ -54,7 +54,7 @@ export default function MainAppPage () {
       const data = await request('/api/auth/friends', 'GET', null, headers)
       setItems(data)
       console.log('friends data ...', activeKey, data)
-    } catch (e) { Alert.error(`api/auth/friends error ... ${e}`, 5000) }
+    } catch (e) { Alert.error(`/api/auth/friends error ... ${e}`, 5000) }
   }
   
   return (
@@ -76,7 +76,7 @@ export default function MainAppPage () {
           <section style={styles.rooms}>
             { loading 
               ? <Loader size='md' style={styles.plus} />
-              : <ElementList data={items} style={styles.list} />  
+              : <ElementList data={items} style={styles.list} multi='false' />  
             }
           </section>
 

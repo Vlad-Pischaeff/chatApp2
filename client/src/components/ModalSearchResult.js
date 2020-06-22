@@ -20,7 +20,7 @@ function ModalSearchResult({show, setShow, data}) {
         <Modal.Title>Choose room or user ...</Modal.Title>
       </Modal.Header>
       <Modal.Body style={styles.body} >
-        <ElementList data={data} style={styles.list}/>
+        <ElementList data={data} style={styles.list} />
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={OK_onClick} appearance="primary">

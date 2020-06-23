@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import { List, Icon, Badge } from 'rsuite'
 import Radium from 'radium'
+import { context } from '../context/context'
 
 const styles = {
   element: {
@@ -34,8 +35,9 @@ const styles = {
   noselect: { background: 'dodgerblue', },
 }
 
-function ElementList({data, style, multi}) {
-  const [selected, setSelected] = useState({})
+function ElementList({data, style, multi, selected, setSelected}) {
+  // const [selected, setSelected] = useState({})
+  const { credentials } = useContext(context)
 
   const handlerOnClick = (item, index) => {
     let obj = {...selected}
@@ -52,7 +54,7 @@ function ElementList({data, style, multi}) {
   }
 
   console.log('selected ...', selected, multi)
-
+  // const items = {...selected}
   return (
     <List style={style}>
       {data.map((item, index) => 
@@ -62,8 +64,8 @@ function ElementList({data, style, multi}) {
                         onClick={() => handlerOnClick(item, index)} key={index}>
           <div>
             { item.avatar
-              ? <Badge><img src={item.avatar} style={styles.img} /></Badge>
-              : <Badge><Icon icon="image" size="4x" /></Badge>
+              ? <Badge content={false}><img src={item.avatar} style={styles.img} /></Badge>
+              : <Badge content={false}><Icon icon="image" size="4x" /></Badge>
             }
           </div>
 
@@ -71,6 +73,14 @@ function ElementList({data, style, multi}) {
             <div style={styles.name} >{item.name ? item.name : item.login}</div>
             <div style={styles.description} >{item.description}</div>
           </div>
+          { item.owner === credentials.userId
+            ? <Icon icon="avatar" size="1x" /> 
+            : <div></div>
+          }
+          { item.private === true
+            ? <Icon icon="lock" size="1x" /> 
+            : <div></div>
+          }
         </section>
         )}
     </List>

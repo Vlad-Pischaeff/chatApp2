@@ -31,6 +31,7 @@ export default function MainAppPage () {
   const { request, loading, error } = useHttp()
   const { headers } = useContext(context)
   const [items, setItems] = useState([])
+  const [selectOne, setSelectOne] = useState({})
   
   useEffect(() => {
     activeKey === 'conversations' ? setDisabledPlus(true) : setDisabledPlus(false)
@@ -76,7 +77,7 @@ export default function MainAppPage () {
           <section style={styles.rooms}>
             { loading 
               ? <Loader size='md' style={styles.plus} />
-              : <ElementList data={items} style={styles.list} multi='false' />  
+              : <ElementList selected={selectOne} setSelected={setSelectOne} data={items} style={styles.list} multi='false' />  
             }
           </section>
 

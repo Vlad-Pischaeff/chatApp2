@@ -76,7 +76,11 @@ router.post('/upload', async (req, res) => {
 
 router.post('/search', auth, async (req, res) => {
   try {
-    const users = await User.find({ login: { $regex: req.body.search, $options: "i" } })
+    const users = await User.find({ 
+                                    login: { $regex: req.body.search, $options: "i" },
+                                    _id: { $not: { $eq: req.user.userId }},
+                                    friends: { $not: { $eq: req.user.userId }}
+                                   })
     res.status(201).json(users)
   } catch(e) {
     res.status(500).json({ message:`Something wrong ..., details ${e}` })

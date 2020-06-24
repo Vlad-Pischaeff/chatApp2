@@ -10,13 +10,17 @@ const styles = {
 function ModalSearchResult({show, setShow, data}) {
   const [selectMany, setSelectMany] = useState({})
 
-  const OK_onClick = () => {
-    console.log('OK')
+  const Hide = () => {
+    setSelectMany({})
     setShow(false)
   }
-  // console.log('length ...', Object.keys(selectMany).length, selectMany)
+
+  const OK_onClick = () => {
+    Hide()
+  }
+
   return (
-    <Modal show={show} onHide={() => setShow(false)} size='xs' >
+    <Modal show={show} onHide={Hide} size='xs' >
       <Modal.Header>
         <Modal.Title>Choose room or user ...</Modal.Title>
       </Modal.Header>
@@ -30,7 +34,7 @@ function ModalSearchResult({show, setShow, data}) {
         <Button onClick={OK_onClick} appearance="primary">
           Subcsribe
         </Button>
-        <Button onClick={() => setShow(false)} appearance="subtle">
+        <Button onClick={Hide} appearance="subtle">
           Cancel
         </Button>
       </Modal.Footer>

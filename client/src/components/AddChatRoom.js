@@ -12,7 +12,7 @@ const styles = {
 
 export default function AddChatRoom({show, setShow, activeKey}) {
   const [showUpload, setShowUpload] = useState(false)
-  const { avatar, credentials, headers } = useContext(context)
+  const { avatar, credentials, headers, setAvatar } = useContext(context)
   const chatroomname = useAuth('chatroomname', false)
   const chatroomdesc = useAuth('chatroomdesc', false)
   const { request, loading, error } = useHttp()
@@ -28,7 +28,7 @@ export default function AddChatRoom({show, setShow, activeKey}) {
          }
         const data = await request('/api/room/create', 'PUT', body, headers)
         Alert.success(`Room "${data.room.name}" created ....`, 5000)
-        setShow(false)
+        Hide()
       } else {
         Alert.error('Please fill required fields ...', 5000)
       }
@@ -36,9 +36,20 @@ export default function AddChatRoom({show, setShow, activeKey}) {
       Alert.error(e.message, 5000)
     }
   }
+  
+  const clearData = () => {
+    chatroomname.onFocus()
+    chatroomdesc.onFocus()
+    setAvatar(null)
+  }
+
+  const Hide = () => {
+    clearData()
+    setShow(false)
+  }
 
   return (
-    <Modal size="xs" show={show} onHide={() => setShow(false)} >
+    <Modal size="xs" show={show} onHide={Hide} >
       <Modal.Header>
         <Modal.Title>Create your own chatroom ...</Modal.Title>
       </Modal.Header>
@@ -54,7 +65,7 @@ export default function AddChatRoom({show, setShow, activeKey}) {
           </FormGroup>
         </Form>
         { avatar
-          ? <img src={avatar} style={styles.icon} />
+          ? <img src={avatar} style={styles.icon} onClick={() => setShowUpload(true)} />
           : <Icon icon="image" size="4x" style={styles.icon} onClick={() => setShowUpload(true)} />
         }
       </Modal.Body>
@@ -62,7 +73,7 @@ export default function AddChatRoom({show, setShow, activeKey}) {
         <Button appearance="primary" onClick={handleClick} >
           Ok
         </Button>
-        <Button onClick={() => setShow(false)} appearance="subtle">
+        <Button onClick={Hide} appearance="subtle">
           Cancel
         </Button>
       </Modal.Footer>

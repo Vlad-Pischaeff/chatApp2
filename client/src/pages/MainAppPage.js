@@ -36,8 +36,10 @@ export default function MainAppPage () {
   useEffect(() => {
     activeKey === 'conversations' ? setDisabledPlus(true) : setDisabledPlus(false)
     activeKey === 'conversations' ? getFriends() : getChatrooms(activeKey)
+    setSelectOne({})
   }, [activeKey])
 
+  //update list of rooms after adding new room
   useEffect(() => {
     !show && activeKey !== 'conversations' && getChatrooms(activeKey)
   }, [show])

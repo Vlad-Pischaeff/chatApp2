@@ -76,11 +76,13 @@ router.post('/upload', async (req, res) => {
 
 router.post('/search', auth, async (req, res) => {
   try {
+    const user = await User.findOne({ _id: req.user.userId })
+    const friends = user.friends
     const users = await User.find({ 
                                     login: { $regex: req.body.search, $options: "i" },
                                     _id: { $not: { $eq: req.user.userId }},
-                                    friends: { $not: { $eq: req.user.userId }}
-                                   })
+                                    friends: { $not: { $eq: friends }}
+                                  })
     res.status(201).json(users)
   } catch(e) {
     res.status(500).json({ message:`Something wrong ..., details ${e}` })
@@ -93,7 +95,8 @@ router.get('/friends', auth, async (req, res) => {
   try {
     // console.log('friends ...', req.user)
     const users = await User.findOne({ _id: req.user.userId })
-    res.status(201).json(users.friends)
+    const friends = await User.find({ _id: users.friends })
+    res.status(201).json(friends)
   } catch(e) {
     res.status(500).json({ message:`Something wrong ..., details ${e}` })
   }

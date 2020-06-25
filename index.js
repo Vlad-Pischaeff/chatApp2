@@ -6,10 +6,13 @@ const PORT = config.get('port') || 5000
 const path = require('path')
 const mongoose = require('mongoose')
 const WebSocket = require('ws')
+const bodyParser = require('body-parser')
 
 let clients = new Set()
 
 app.use(express.json({ extended: true }))
+// app.use(bodyParser.json())
+// app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/room', require('./routes/room.routes'))
 

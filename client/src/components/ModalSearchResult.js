@@ -1,21 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import ElementList from './ElementList'
 import { Modal, Button, Badge } from 'rsuite'
+import { context } from '../context/context'
+import { useHttp } from '../hooks/http.hook'
 
 const styles = {
   body: { margin: '1rem 0', width: '20rem' },
   list: { overflow: 'hidden', },
 }
 
-function ModalSearchResult({show, setShow, data}) {
+function ModalSearchResult({show, setShow, data, activeKey}) {
   const [selectMany, setSelectMany] = useState({})
+  const { request, loading, error } = useHttp()
+  const { headers, items, setItems } = useContext(context)
 
   const Hide = () => {
     setSelectMany({})
     setShow(false)
   }
 
-  const OK_onClick = () => {
+  const OK_onClick = async () => {
+    const API = (activeKey === 'conversations') ? '/api/auth/friends' : '/api/room/followers'
+    const body = { 'friends': selectMany }
+    const data = await request(API, 'PUT', body, headers)
+    console.log(`${API} put result ...`, data)
+    setItems(data)
     Hide()
   }
 

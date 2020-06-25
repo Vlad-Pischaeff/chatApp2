@@ -42,15 +42,6 @@ router.get('/privatechat', auth, async (req, res) => {
   }
 })
 
-// router.get('/conversations', auth, async (req, res) => {
-//   try {
-//     const rooms = await Rooms.find( {private: true, $or: [{ owner: req.user.userId}, { followers: req.user.userId}] })
-//     res.status(201).json(rooms)
-//   } catch(e) {
-//     res.status(500).json({ message:`Something wrong ..., details ${e}` })
-//   }
-// })
-
 router.post('/search', auth, async (req, res) => {
   try {
     const rooms = await Rooms.find({  private: false, 
@@ -59,6 +50,18 @@ router.post('/search', auth, async (req, res) => {
                                       followers: { $not: { $eq: req.user.userId }}
                                   })
     // console.log('rooms...', rooms)
+    res.status(201).json(rooms)
+  } catch(e) {
+    res.status(500).json({ message:`Something wrong ..., details ${e}` })
+  }
+})
+
+// put /api/room/followers
+router.put('/followers', auth, async (req, res) => {
+  try {
+    const candidates = Object.values(req.body.friends)
+    await Rooms.updateMany({ _id: candidates }, { $push: { followers: req.user.userId } })
+    const rooms = await Rooms.find( {private: false, $or: [{ owner: req.user.userId}, { followers: req.user.userId}] })
     res.status(201).json(rooms)
   } catch(e) {
     res.status(500).json({ message:`Something wrong ..., details ${e}` })

@@ -38,7 +38,7 @@ export default function SearchInput ({ activeKey }) {
       <InputGroup.Addon>
         <Icon icon="search" onClick={handleClick} />
       </InputGroup.Addon>
-      <ModalSearchResult show={show} setShow={setShow} data={result} />
+      <ModalSearchResult show={show} setShow={setShow} data={result} activeKey={activeKey} />
     </InputGroup>
   )
 }

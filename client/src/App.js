@@ -25,6 +25,7 @@ const styles = {
 export default function App () {
   const { menu, setMenu } = useMenu()
   const [ avatar, setAvatar] = useState(null)
+  const [ items, setItems ] = useState([])  //aside items
   const { credentials, saveCredentials } = useStorage()
   const { socketRef, sendMessage } = useWebsocket()
   const headers = {
@@ -42,7 +43,8 @@ export default function App () {
     <context.Provider value={{ menu, setMenu, 
                                avatar, setAvatar, 
                                credentials, saveCredentials,
-                               socketRef, headers }}>
+                               socketRef, headers,
+                               items, setItems }}>
       <Container style={styles.container}>
         <Router>
           { credentials.token ? <MainAppNav /> : <CustomNav /> }

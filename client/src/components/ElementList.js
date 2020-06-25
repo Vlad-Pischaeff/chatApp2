@@ -12,7 +12,7 @@ const styles = {
     margin: '0.2rem',
     padding: '0 0.3rem',
     color: 'black',
-    opacity: '0.6',
+    opacity: '0.8',
     ':hover': {
       opacity: '1',
       cursor: 'pointer',
@@ -33,6 +33,7 @@ const styles = {
   description: { flex: '1 0 3rem', fontSize: '0.9rem' },
   select: { background: '#0052a2', },
   noselect: { background: 'dodgerblue', },
+  icon: { margin: '0 0.2rem', position: 'relative', top: '1rem' },
 }
 
 function ElementList({data, style, multi, selected, setSelected}) {
@@ -74,11 +75,11 @@ function ElementList({data, style, multi, selected, setSelected}) {
             <div style={styles.description} >{item.description}</div>
           </div>
           { item.owner === credentials.userId
-            ? <Icon icon="avatar" size="1x" /> 
+            ? <Icon icon="avatar" size="1x" style={styles.icon} /> 
             : <div></div>
           }
           { item.private === true
-            ? <Icon icon="lock" size="1x" /> 
+            ? <Icon icon="lock" size="1x" style={styles.icon} /> 
             : <div></div>
           }
         </section>

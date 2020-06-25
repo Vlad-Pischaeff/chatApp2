@@ -29,8 +29,8 @@ export default function MainAppPage () {
   const [show, setShow] = useState(false)
   const [disabledPlus, setDisabledPlus] = useState(true)
   const { request, loading, error } = useHttp()
-  const { headers } = useContext(context)
-  const [items, setItems] = useState([])
+  const { headers, items, setItems } = useContext(context)
+  // const [items, setItems] = useState([])
   const [selectOne, setSelectOne] = useState({})
   
   useEffect(() => {

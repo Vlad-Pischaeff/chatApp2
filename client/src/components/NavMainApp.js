@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import { Header, Navbar, Nav, Icon } from 'rsuite'
 import { context } from '../context/context'
 
@@ -19,8 +19,16 @@ const styles = {
   }
 }
 
-export default function MainAppNav() {
-  const { credentials } = useContext(context)
+export default function NavMainApp() {
+  const { credentials, deleteCredentials } = useContext(context)
+  const history = useHistory()
+  let location = useLocation()
+
+  const Logout = (e) => {
+    e.preventDefault()
+    deleteCredentials()
+    history.push('/')
+  }
 
   return (
     <Header>
@@ -33,11 +41,17 @@ export default function MainAppNav() {
         </Navbar.Header>
 
         <Nav pullRight>
-          <Nav.Item eventKey="1" icon={<Icon icon="home" />} componentClass="span">
-            <Link to="/">Home</Link>
+          <Nav.Item eventKey="1" componentClass="span">
+            <Link to={{
+                        pathname: '/profile', 
+                        state: {background: location}
+                      }}>
+              Profile
+            </Link>
           </Nav.Item>
-          <Nav.Item eventKey="2" componentClass="span">
-            <Link to="/profile">Profile</Link>
+
+          <Nav.Item eventKey="2" icon={<Icon icon="exit" />} onClick={Logout} componentClass="span">
+            <Link to="/" >Exit</Link>
           </Nav.Item>
         </Nav>
       </Navbar>

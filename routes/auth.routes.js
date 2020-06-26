@@ -55,12 +55,22 @@ router.post('/login', async (req, res) => {
 
       const token = jwt.sign( { userId: candidate.id }, SECRET, { expiresIn: '1h' } )
 
-      res.status(201).json({ token, userId: candidate.id, avatar: candidate.avatar })
+      res.status(201).json({ login, token, userId: candidate.id, avatar: candidate.avatar })
     } catch (e) {
       res.status(500).json({ message:`Something wrong ${e}...` })
     }
   }
 )
+
+// get user information
+router.get('/user/:id', auth, async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id })
+    res.status(201).json(user)
+  } catch(e) {
+    res.status(500).json({ message:`Something wrong ..., details ${e}` })
+  }
+})
 
 // /api/auth/upload
 router.post('/upload', async (req, res) => {
@@ -88,7 +98,7 @@ router.post('/search', auth, async (req, res) => {
   }
 })
 
-// /api/auth/friends
+// list of friends /api/auth/friends
 
 router.get('/friends', auth, async (req, res) => {
   try {
@@ -100,7 +110,7 @@ router.get('/friends', auth, async (req, res) => {
   }
 })
 
-// put /api/auth/friends
+// add new friends /api/auth/friends
 router.put('/friends', auth, async (req, res) => {
   try {
     const candidates = Object.values(req.body.friends)

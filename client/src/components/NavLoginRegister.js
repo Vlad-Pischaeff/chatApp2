@@ -19,7 +19,7 @@ const styles = {
   }
 }
 
-export default function CustomNav() {
+export default function NavLoginRegister() {
   const { menu } = useContext(context)
 
   return (

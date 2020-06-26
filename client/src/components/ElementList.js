@@ -54,7 +54,7 @@ function ElementList({data, style, multi, selected, setSelected}) {
     }
   }
 
-  console.log('selected ...', selected, multi)
+  // console.log('selected ...', selected, multi)
   // const items = {...selected}
   return (
     <List style={style}>

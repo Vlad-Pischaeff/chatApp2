@@ -8,5 +8,10 @@ export const useStorage = () => {
     setCredentials(data)
   }, [])
 
-  return { credentials, saveCredentials }
+  const deleteCredentials = useCallback(() => {
+    localStorage.removeItem('credentials')
+    setCredentials({})
+  }, [])
+
+  return { credentials, saveCredentials, deleteCredentials }
 }

@@ -14,7 +14,7 @@ export const useAuth = (item, save) => {
   // console.log('auth hook ...', value)
 
   return {
-    value,
+    value, setValue,
     onChange: handlerOnChange,
     onFocus: handlerOnFocus
   }

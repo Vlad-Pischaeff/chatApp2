@@ -4,6 +4,8 @@ import LoginPage from '../pages/LoginPage'
 import RegisterPage from '../pages/RegisterPage'
 import MainAppPage from '../pages/MainAppPage'
 import ProfilePage from '../pages/ProfilePage'
+import ChatRoomPage from '../pages/ChatRoomPage'
+import PrivateChatPage from '../pages/PrivateChatPage'
 import { context } from '../context/context'
 
 export default function MainRoutes () {
@@ -12,7 +14,7 @@ export default function MainRoutes () {
   let location = useLocation()
   let background = location.state && location.state.background
 
-  // console.log('location ...', background, location)
+  console.log('location ...', background, location)
 
   if (isAuthenticated) {
     return (
@@ -20,9 +22,17 @@ export default function MainRoutes () {
         <Switch location={background || location}>
           <Route path='/' exact component={MainAppPage} />
           <Route path='/profile' exact children={<ProfilePage />} />
+          <Route path='/chatroom' exact children={<ChatRoomPage />} />
+          <Route path='/privatechat' exact children={<PrivateChatPage />} />
           <Redirect to='/' />
         </Switch>
-        { background && <Route path='/profile' exact children={<ProfilePage />} /> }
+        { background && 
+          <Switch>
+            <Route path='/profile' exact children={<ProfilePage />} />
+            <Route path='/chatroom' exact children={<ChatRoomPage />} />
+            <Route path='/privatechat' exact children={<PrivateChatPage />} />
+          </Switch> 
+        }
       </>
     )
   }

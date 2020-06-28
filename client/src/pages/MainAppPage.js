@@ -25,11 +25,11 @@ const styles = {
 }
 
 export default function MainAppPage () {
-  const [activeKey, setActiveKey] = useState('conversations')
+  // const [activeKey, setActiveKey] = useState('conversations')
   const [show, setShow] = useState(false)
   const [disabledPlus, setDisabledPlus] = useState(true)
   const { request, loading, error } = useHttp()
-  const { headers, items, setItems } = useContext(context)
+  const { headers, items, setItems, activeKey, setActiveKey } = useContext(context)
   // const [items, setItems] = useState([])
   const [selectOne, setSelectOne] = useState({})
   

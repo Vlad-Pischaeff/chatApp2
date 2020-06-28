@@ -26,6 +26,7 @@ export default function App () {
   const { menu, setMenu } = useMenu()
   const [ avatar, setAvatar] = useState(null)
   const [ items, setItems ] = useState([])  //aside items
+  const [ activeKey, setActiveKey ] = useState('conversations')
   const { credentials, saveCredentials, deleteCredentials } = useStorage()
   const { socketRef, sendMessage } = useWebsocket()
   const headers = Object.keys(credentials).length !== 0 
@@ -40,7 +41,8 @@ export default function App () {
 
   return (
     <context.Provider value={{ menu, setMenu, 
-                               avatar, setAvatar, 
+                               avatar, setAvatar,
+                               activeKey, setActiveKey, 
                                credentials, saveCredentials, deleteCredentials,
                                socketRef, headers,
                                items, setItems }}>

@@ -11,41 +11,39 @@ const styles = {
   icon: { margin: '1rem 0 0 0' }
 }
 
-export default function ProfilePage({ setShow, activeKey}) {
+export default function ProfilePage() {
   let history = useHistory()
   const [showUpload, setShowUpload] = useState(false)
-  const { avatar, credentials, headers, setAvatar } = useContext(context)
-  const login = useAuth('login', false)
+  const [show, setShow] = useState(true)
+  const { avatar, credentials, saveCredentials, headers, setAvatar } = useContext(context)
   const { request, loading, error } = useHttp()
+  const login = useAuth('login', false)
 
   useEffect(() => {
-    handleClick()
-    login.value = credentials.login
+    login.setValue(credentials.login)
+    setAvatar(credentials.avatar)
+    return function() {}
   }, [])
 
-  const handleClick = async (e) => {
+  const updateUserProfile = async () => {
     const id = credentials.userId
+    const body = {login: login.value, avatar: avatar }
     try {
-      const data = await request(`/api/auth/user/${id}`, 'GET', null, headers)
+      const data = await request(`/api/auth/user/${id}`, 'PATCH', body, headers)
+      saveCredentials({...credentials, login: data.login, avatar: data.avatar})
       setAvatar(data.avatar)
-    } catch (e) {
-      Alert.error(e.message, 5000)
-    }
+      closePage()
+    } catch (e) {Alert.error(`/api/auth/user/${id} error ... ${e}`, 5000) }
   }
-  
-  const clearData = () => {
-    login.onFocus()
+
+  const closePage = () => {
+    history.goBack()
+    setShow(false)
     setAvatar(null)
   }
 
-  const Hide = (e) => {
-    clearData()
-    e.stopPropagation()
-    history.goBack()
-  }
-
   return (
-    <Modal size="xs" show="true" onHide={Hide} >
+    <Modal size="xs" show={show} onHide={closePage} >
       <Modal.Header>
         <Modal.Title>Edit Your profile ...</Modal.Title>
       </Modal.Header>
@@ -56,16 +54,16 @@ export default function ProfilePage({ setShow, activeKey}) {
             <FormControl name="login" {...login} />
           </FormGroup>
         </Form>
-        { credentials
+        { avatar
           ? <img src={avatar} style={styles.icon} onClick={() => setShowUpload(true)} />
-          : <Icon icon="image" size="4x" style={styles.icon} onClick={() => setShowUpload(true)} />
+          : <Icon icon="avatar" size="4x" style={styles.icon} onClick={() => setShowUpload(true)} />
         }
       </Modal.Body>
       <Modal.Footer>
-        <Button appearance="primary" onClick={Hide} >
+        <Button onClick={updateUserProfile} appearance="primary"  >
           Ok
         </Button>
-        <Button onClick={Hide} appearance="subtle">
+        <Button onClick={closePage} appearance="subtle">
           Cancel
         </Button>
       </Modal.Footer>

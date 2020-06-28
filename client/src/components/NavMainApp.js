@@ -20,13 +20,14 @@ const styles = {
 }
 
 export default function NavMainApp() {
-  const { credentials, deleteCredentials } = useContext(context)
+  const { credentials, deleteCredentials, setAvatar, activeKey } = useContext(context)
   const history = useHistory()
   let location = useLocation()
 
   const Logout = (e) => {
     e.preventDefault()
     deleteCredentials()
+    setAvatar(null)
     history.push('/')
   }
 
@@ -38,21 +39,29 @@ export default function NavMainApp() {
             ? <img src={credentials.avatar} style={styles.svg} />
             : <Icon icon="avatar" size="3x" />
           }
+          <div>
+            <strong>{credentials.login}</strong>
+          </div>
         </Navbar.Header>
 
         <Nav pullRight>
-          <Nav.Item eventKey="1" componentClass="span">
-            <Link to={{
-                        pathname: '/profile', 
-                        state: {background: location}
-                      }}>
-              Profile
-            </Link>
-          </Nav.Item>
-
-          <Nav.Item eventKey="2" icon={<Icon icon="exit" />} onClick={Logout} componentClass="span">
-            <Link to="/" >Exit</Link>
-          </Nav.Item>
+          { activeKey === 'conversations'
+            ? <></>
+            : <Link to={{ pathname: `/${activeKey}`, state: {background: location} }}>
+                <Nav.Item eventKey="1" componentClass="span"
+                          icon={<Icon icon="comments" />}>Add {activeKey}</Nav.Item>
+              </Link>
+          }
+          <Link to={{ pathname: '/profile', state: {background: location} }}>
+            <Nav.Item eventKey="2" componentClass="span"
+                      icon={<Icon icon="avatar" />}>Profile</Nav.Item>
+          </Link>
+         
+          <Link to="/" >
+            <Nav.Item eventKey="3" componentClass="span" 
+                      icon={<Icon icon="exit" />} onClick={Logout}>Exit</Nav.Item>
+          </Link>
+          
         </Nav>
       </Navbar>
     </Header>

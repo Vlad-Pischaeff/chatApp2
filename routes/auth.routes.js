@@ -72,6 +72,18 @@ router.get('/user/:id', auth, async (req, res) => {
   }
 })
 
+// update user information
+router.patch('/user/:id', auth, async (req, res) => {
+  try {
+    const {id} = req.params
+    const user = await User.findByIdAndUpdate(id, req.body)
+    const newUser = await User.findOne({ _id: id })
+    res.status(201).json(newUser)
+  } catch(e) {
+    res.status(500).json({ message:`Something wrong ..., details ${e}` })
+  }
+})
+
 // /api/auth/upload
 router.post('/upload', async (req, res) => {
     try {

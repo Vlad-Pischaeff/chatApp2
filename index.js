@@ -5,6 +5,8 @@ const config = require('config')
 const PORT = config.get('port') || 5000
 const path = require('path')
 const mongoose = require('mongoose')
+mongoose.set('useFindAndModify', false)
+
 const WebSocket = require('ws')
 const bodyParser = require('body-parser')
 

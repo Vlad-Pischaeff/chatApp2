@@ -5,10 +5,10 @@ import RegisterPage from '../pages/RegisterPage'
 import MainAppPage from '../pages/MainAppPage'
 import ProfilePage from '../pages/ProfilePage'
 import ChatRoomPage from '../pages/ChatRoomPage'
-import PrivateChatPage from '../pages/PrivateChatPage'
+import SearchResultPage from '../pages/SearchResultPage'
 import { context } from '../context/context'
 
-export default function MainRoutes () {
+export default function MainRoutes() {
   const { credentials } = useContext(context)
   const isAuthenticated = !!credentials.token
   let location = useLocation()
@@ -23,14 +23,16 @@ export default function MainRoutes () {
           <Route path='/' exact component={MainAppPage} />
           <Route path='/profile' exact children={<ProfilePage />} />
           <Route path='/chatroom' exact children={<ChatRoomPage />} />
-          <Route path='/privatechat' exact children={<PrivateChatPage />} />
+          <Route path='/privatechat' exact children={<ChatRoomPage />} />
+          <Route path='/search' exact children={<SearchResultPage />} />
           <Redirect to='/' />
         </Switch>
         { background && 
           <Switch>
             <Route path='/profile' exact children={<ProfilePage />} />
             <Route path='/chatroom' exact children={<ChatRoomPage />} />
-            <Route path='/privatechat' exact children={<PrivateChatPage />} />
+            <Route path='/privatechat' exact children={<ChatRoomPage />} />
+            <Route path='/search' exact children={<SearchResultPage />} />
           </Switch> 
         }
       </>

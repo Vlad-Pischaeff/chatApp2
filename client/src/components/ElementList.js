@@ -36,9 +36,8 @@ const styles = {
   icon: { margin: '0 0.2rem', position: 'relative', top: '1rem' },
 }
 
-function ElementList({data, style, multi, selected, setSelected}) {
-  // const [selected, setSelected] = useState({})
-  const { credentials } = useContext(context)
+function ElementList({ data, style, multi, selected, setSelected}) {
+  const { credentials, items } = useContext(context)
 
   const handlerOnClick = (item, index) => {
     let obj = {...selected}
@@ -54,35 +53,32 @@ function ElementList({data, style, multi, selected, setSelected}) {
     }
   }
 
-  // console.log('selected ...', selected, multi)
-  // const items = {...selected}
   return (
     <List style={style}>
-      {data.map((item, index) => 
-        <section style={selected[index] 
-                        ? {...styles.select, ...styles.element} 
-                        : {...styles.noselect, ...styles.element}} 
-                        onClick={() => handlerOnClick(item, index)} key={index}>
-          <div>
-            { item.avatar
-              ? <Badge content={false}><img src={item.avatar} style={styles.img} /></Badge>
-              : <Badge content={false}><Icon icon="image" size="4x" /></Badge>
-            }
-          </div>
+      { data &&
+        data.map((item, index) => 
+          <section style={selected[index] 
+                          ? {...styles.select, ...styles.element} 
+                          : {...styles.noselect, ...styles.element}} 
+                          onClick={() => handlerOnClick(item, index)} key={index}>
+            <div>
+              { item.avatar
+                ? <Badge content={false}><img src={item.avatar} style={styles.img} /></Badge>
+                : <Badge content={false}><Icon icon="image" size="4x" /></Badge>
+              }
+            </div>
 
-          <div style={styles.content} >
-            <div style={styles.name} >{item.name ? item.name : item.login}</div>
-            <div style={styles.description} >{item.description}</div>
-          </div>
-          { item.owner === credentials.userId
-            ? <Icon icon="avatar" size="1x" style={styles.icon} /> 
-            : <div></div>
-          }
-          { item.private === true
-            ? <Icon icon="lock" size="1x" style={styles.icon} /> 
-            : <div></div>
-          }
-        </section>
+            <div style={styles.content} >
+              <div style={styles.name} >{item.name ? item.name : item.login}</div>
+              <div style={styles.description} >{item.description}</div>
+            </div>
+            { item.owner === credentials.userId
+              && <Icon icon="avatar" size="1x" style={styles.icon} /> 
+            }
+            { item.private === true
+              && <Icon icon="lock" size="1x" style={styles.icon} /> 
+            }
+          </section>
         )}
     </List>
   )

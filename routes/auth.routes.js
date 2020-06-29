@@ -123,7 +123,7 @@ router.get('/friends', auth, async (req, res) => {
 })
 
 // add new friends /api/auth/friends
-router.put('/friends', auth, async (req, res) => {
+router.patch('/friends', auth, async (req, res) => {
   try {
     const candidates = Object.values(req.body.friends)
     await User.updateMany({ _id: req.user.userId }, { $push: { friends: candidates } })

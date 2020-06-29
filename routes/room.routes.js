@@ -4,6 +4,7 @@ const Rooms = require('../models/Rooms')
 const auth = require('../middleware/auth.middleware')
 const router = Router()
 
+// create new room and return list of new rooms
 router.put('/create', auth, async (req, res) => {
   try {
     const { name, description, avatar, private } = req.body
@@ -18,7 +19,9 @@ router.put('/create', auth, async (req, res) => {
     const room = new Rooms({ name, description, avatar, private, owner })
 
     await room.save()
-    res.status(201).json({ room })
+    // res.status(201).json({ room })
+    const rooms = await Rooms.find( {private, $or: [{ owner: req.user.userId}, { followers: req.user.userId}] })
+    res.status(201).json(rooms)
   } catch(e) {
     res.status(500).json({ message:`Something wrong ..., details ${e}` })
   }
@@ -57,7 +60,7 @@ router.post('/search', auth, async (req, res) => {
 })
 
 // put /api/room/followers
-router.put('/followers', auth, async (req, res) => {
+router.patch('/followers', auth, async (req, res) => {
   try {
     const candidates = Object.values(req.body.friends)
     await Rooms.updateMany({ _id: candidates }, { $push: { followers: req.user.userId } })
@@ -71,6 +74,7 @@ router.put('/followers', auth, async (req, res) => {
 router.get('/:id', auth, async (req, res) => {
   try {
     const link = await Link.findById(req.params.id) 
+    console.log('link...', link)
     res.json(link)
   } catch(e) {
     console.log('get id', e)

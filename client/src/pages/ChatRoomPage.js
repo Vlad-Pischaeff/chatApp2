@@ -15,7 +15,7 @@ export default function ChatRoomPage() {
   let history = useHistory()
   const [show, setShow] = useState(true)
   const [showUpload, setShowUpload] = useState(false)
-  const { avatar, headers, setAvatar, activeKey } = useContext(context)
+  const { avatar, headers, setAvatar, activeKey, setItems } = useContext(context)
   const chatroomname = useAuth('chatroomname', false)
   const chatroomdesc = useAuth('chatroomdesc', false)
   const { request, loading, error } = useHttp()
@@ -30,7 +30,8 @@ export default function ChatRoomPage() {
           avatar: avatar ? avatar : null
          }
         const data = await request('/api/room/create', 'PUT', body, headers)
-        Alert.success(`Room "${data.room.name}" created ....`, 5000)
+        setItems(data)
+        Alert.success(`Room "${chatroomname.value}" created ....`, 5000)
         closePage()
       } else {
         Alert.error('Please fill required fields ...', 5000)

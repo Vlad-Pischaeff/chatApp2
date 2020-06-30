@@ -25,7 +25,8 @@ const styles = {
 export default function App () {
   const { menu, setMenu } = useMenu()
   const [ avatar, setAvatar] = useState(null)
-  const [ items, setItems ] = useState([])  //aside items
+  const [ items, setItems ] = useState([])            //aside items
+  const [ itemIndex, setItemIndex ] = useState()      //currently selected item index
   const [ activeKey, setActiveKey ] = useState('conversations')
   const { credentials, saveCredentials, deleteCredentials } = useStorage()
   const { socketRef, sendMessage } = useWebsocket()
@@ -39,13 +40,15 @@ export default function App () {
     }
   }, [credentials])
 
+  // console.log('items ...', items, itemIndex)
   return (
     <context.Provider value={{ menu, setMenu, 
                                avatar, setAvatar,
                                activeKey, setActiveKey, 
                                credentials, saveCredentials, deleteCredentials,
                                socketRef, headers,
-                               items, setItems }}>
+                               items, setItems,
+                               itemIndex, setItemIndex }}>
       <Container style={styles.container}>
         <Router>
           { Object.keys(credentials).length === 0 ? <NavLoginRegister /> : <NavMainApp /> }

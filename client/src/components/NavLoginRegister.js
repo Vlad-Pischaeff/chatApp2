@@ -28,17 +28,17 @@ export default function NavLoginRegister() {
         <Navbar.Header style={styles.header}>Chat application</Navbar.Header>
 
           <Nav pullRight>
-            <Nav.Item eventKey="1" icon={<Icon icon="home" />} componentClass="span">
-              <Link to="/">Home</Link>
-            </Nav.Item>
+            <Link to="/">
+              <Nav.Item eventKey="1" icon={<Icon icon="home" />} componentClass="span"> Home </Nav.Item>
+            </Link>
             {
               menu === 'signin'
-              ? <Nav.Item eventKey="2" componentClass="span">
-                  <Link to="/login">Login</Link>
-                </Nav.Item>
-              : <Nav.Item eventKey="3" componentClass="span">
-                  <Link to="/register">Register</Link>
-                </Nav.Item>
+              ? <Link to="/login">
+                  <Nav.Item eventKey="2" componentClass="span"> Login </Nav.Item>
+                </Link>
+              : <Link to="/register">
+                  <Nav.Item eventKey="3" componentClass="span"> Register </Nav.Item>
+                </Link>
             }
           </Nav>
 

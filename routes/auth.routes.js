@@ -135,4 +135,18 @@ router.patch('/friends', auth, async (req, res) => {
   }
 })
 
+// remove from friends /api/auth/unfollow/:id
+router.patch('/unfollow/:id', auth, async (req, res) => {
+  try {
+    const id = req.params.id
+    await User.updateOne({ _id: req.user.userId }, { $pull: { friends: id } })
+    const user = await User.findOne({ _id: req.user.userId })
+    const friends = await User.find({ _id: user.friends })
+    res.status(201).json(friends)
+  } catch(e) {
+    res.status(500).json({ message:`Something wrong ..., details ${e}` })
+  }
+})
+
+
 module.exports = router

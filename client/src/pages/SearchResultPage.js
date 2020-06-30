@@ -26,7 +26,7 @@ export default function SearchResultPage() {
   }
 
   const OK_onClick = async () => {
-    const API = (activeKey === 'conversations') ? '/api/auth/friends' : '/api/room/followers'
+    const API = (activeKey === 'conversations') ? '/api/auth/friends' : '/api/room/follow'
     const body = { 'friends': selectMany }
     const data = await request(API, 'PATCH', body, headers)
     console.log(`${API} patch result ...`, data)

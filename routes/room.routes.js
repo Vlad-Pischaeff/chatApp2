@@ -59,11 +59,23 @@ router.post('/search', auth, async (req, res) => {
   }
 })
 
-// put /api/room/followers
-router.patch('/followers', auth, async (req, res) => {
+// patch /api/room/follow
+router.patch('/follow', auth, async (req, res) => {
   try {
     const candidates = Object.values(req.body.friends)
     await Rooms.updateMany({ _id: candidates }, { $push: { followers: req.user.userId } })
+    const rooms = await Rooms.find( {private: false, $or: [{ owner: req.user.userId}, { followers: req.user.userId}] })
+    res.status(201).json(rooms)
+  } catch(e) {
+    res.status(500).json({ message:`Something wrong ..., details ${e}` })
+  }
+})
+
+// patch /api/room/unfollow
+router.patch('/unfollow/:id', auth, async (req, res) => {
+  try {
+    const id = req.params.id
+    await Rooms.updateOne({ _id: id }, { $pull: { followers: req.user.userId } })
     const rooms = await Rooms.find( {private: false, $or: [{ owner: req.user.userId}, { followers: req.user.userId}] })
     res.status(201).json(rooms)
   } catch(e) {

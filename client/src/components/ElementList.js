@@ -28,16 +28,18 @@ const styles = {
     flexFlow: 'column nowrap',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    width: '7rem',
   },
-  name: { flex: '0 0 1rem', fontSize: '1.1rem' },
-  description: { flex: '1 0 3rem', fontSize: '0.9rem' },
+  name: { flex: '0 0 2rem', fontSize: '1rem', lineHeight: '2rem', width: '7rem',},
+  description: { flex: '1 0 2rem', fontSize: '0.8rem', width: '7rem',},
+  elipsis: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', }, 
   select: { background: '#0052a2', },
   noselect: { background: 'dodgerblue', },
   icon: { margin: '0 0.2rem', position: 'relative', top: '1rem' },
 }
 
 function ElementList({ data, style, multi, selected, setSelected}) {
-  const { credentials, items } = useContext(context)
+  const { credentials, items, itemIndex, setItemIndex } = useContext(context)
 
   const handlerOnClick = (item, index) => {
     let obj = {...selected}
@@ -50,9 +52,10 @@ function ElementList({ data, style, multi, selected, setSelected}) {
       }
     } else {
      setSelected({[index]: item._id})
+     setItemIndex(index)
     }
   }
-
+  // console.log('element list data ...', data, data.length, itemIndex)
   return (
     <List style={style}>
       { data &&
@@ -69,11 +72,11 @@ function ElementList({ data, style, multi, selected, setSelected}) {
             </div>
 
             <div style={styles.content} >
-              <div style={styles.name} >{item.name ? item.name : item.login}</div>
-              <div style={styles.description} >{item.description}</div>
+              <div style={{...styles.name, ...styles.elipsis}} >{item.name ? item.name : item.login}</div>
+              <div style={{...styles.description, ...styles.elipsis}} >{item.description}</div>
             </div>
             { item.owner === credentials.userId
-              && <Icon icon="avatar" size="1x" style={styles.icon} /> 
+              && <div><Icon icon="avatar" size="1x" style={styles.icon} /></div> 
             }
             { item.private === true
               && <Icon icon="lock" size="1x" style={styles.icon} /> 

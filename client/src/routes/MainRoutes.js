@@ -7,6 +7,7 @@ import ProfilePage from '../pages/ProfilePage'
 import ChatRoomPage from '../pages/ChatRoomPage'
 import SearchResultPage from '../pages/SearchResultPage'
 import { context } from '../context/context'
+import UnsubscribePage from '../pages/UnsubscribePage'
 
 export default function MainRoutes() {
   const { credentials } = useContext(context)
@@ -25,6 +26,7 @@ export default function MainRoutes() {
           <Route path='/chatroom' exact children={<ChatRoomPage />} />
           <Route path='/privatechat' exact children={<ChatRoomPage />} />
           <Route path='/search' exact children={<SearchResultPage />} />
+          <Route path='/unfollow' exact children={<UnsubscribePage />} />
           <Redirect to='/' />
         </Switch>
         { background && 
@@ -33,6 +35,7 @@ export default function MainRoutes() {
             <Route path='/chatroom' exact children={<ChatRoomPage />} />
             <Route path='/privatechat' exact children={<ChatRoomPage />} />
             <Route path='/search' exact children={<SearchResultPage />} />
+            <Route path='/unfollow' exact children={<UnsubscribePage />} />
           </Switch> 
         }
       </>

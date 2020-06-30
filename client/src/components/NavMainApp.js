@@ -21,7 +21,7 @@ const styles = {
 }
 
 export default function NavMainApp() {
-  const { credentials, deleteCredentials, setAvatar, activeKey } = useContext(context)
+  const { credentials, deleteCredentials, setAvatar, activeKey, items, itemIndex } = useContext(context)
   const history = useHistory()
   let location = useLocation()
 
@@ -31,7 +31,7 @@ export default function NavMainApp() {
     setAvatar(null)
     history.push('/')
   }
-
+//  console.log('main nav menu ...', itemIndex)
   return (
     <Header>
       <Navbar appearance="inverse" >
@@ -47,19 +47,28 @@ export default function NavMainApp() {
         </Navbar.Header>
 
         <Nav pullRight>
+          { ( 
+             items[itemIndex] && items[itemIndex].owner !== credentials.userId
+            ) 
+              ? <Link to={{ pathname: '/unfollow', state: {background: location} }}>
+                  <Nav.Item eventKey="1" componentClass="span"
+                            icon={<Icon icon="thumbs-down" />}>Unsubscribe</Nav.Item>
+                </Link>
+              : <></>
+          }
           { activeKey !== 'conversations' &&
             <Link to={{ pathname: `/${activeKey}`, state: {background: location} }}>
-              <Nav.Item eventKey="1" componentClass="span"
+              <Nav.Item eventKey="2" componentClass="span"
                         icon={<Icon icon="comments" />}>Add {activeKey}</Nav.Item>
             </Link>
           }
           <Link to={{ pathname: '/profile', state: {background: location} }}>
-            <Nav.Item eventKey="2" componentClass="span"
+            <Nav.Item eventKey="3" componentClass="span"
                       icon={<Icon icon="avatar" />}>Profile</Nav.Item>
           </Link>
          
           <Link to="/" >
-            <Nav.Item eventKey="3" componentClass="span" 
+            <Nav.Item eventKey="4" componentClass="span" 
                       icon={<Icon icon="exit" />} onClick={Logout}>Exit</Nav.Item>
           </Link>
 

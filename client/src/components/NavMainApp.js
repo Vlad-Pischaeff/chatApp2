@@ -40,35 +40,37 @@ export default function NavMainApp() {
             ? <img src={credentials.avatar} style={styles.svg} />
             : <Icon icon="avatar" size="3x" />
           }
-          <div>
-            <strong>{credentials.login}</strong>
-          </div>
+          <div><h5>{credentials.login}</h5></div>
           { activeKey !== 'privatechat' &&  <SearchInput /> }
         </Navbar.Header>
 
         <Nav pullRight>
-          { ( 
-             items[itemIndex] && items[itemIndex].owner !== credentials.userId
-            ) 
+          { activeKey === 'privatechat' &&
+            <Link to={{ pathname: '/invite', state: {background: location} }}>
+              <Nav.Item eventKey="1" componentClass="span"
+                        icon={<Icon icon="people-group" />}>Invite users</Nav.Item>
+            </Link>
+          }
+          { ( items[itemIndex] && items[itemIndex].owner !== credentials.userId ) 
               ? <Link to={{ pathname: '/unfollow', state: {background: location} }}>
-                  <Nav.Item eventKey="1" componentClass="span"
+                  <Nav.Item eventKey="2" componentClass="span"
                             icon={<Icon icon="thumbs-down" />}>Unsubscribe</Nav.Item>
                 </Link>
               : <></>
           }
           { activeKey !== 'conversations' &&
             <Link to={{ pathname: `/${activeKey}`, state: {background: location} }}>
-              <Nav.Item eventKey="2" componentClass="span"
+              <Nav.Item eventKey="3" componentClass="span"
                         icon={<Icon icon="comments" />}>Add {activeKey}</Nav.Item>
             </Link>
           }
           <Link to={{ pathname: '/profile', state: {background: location} }}>
-            <Nav.Item eventKey="3" componentClass="span"
+            <Nav.Item eventKey="4" componentClass="span"
                       icon={<Icon icon="avatar" />}>Profile</Nav.Item>
           </Link>
          
           <Link to="/" >
-            <Nav.Item eventKey="4" componentClass="span" 
+            <Nav.Item eventKey="5" componentClass="span" 
                       icon={<Icon icon="exit" />} onClick={Logout}>Exit</Nav.Item>
           </Link>
 

@@ -3,7 +3,6 @@ import { Input, InputGroup, Icon } from 'rsuite'
 import { useAuth } from '../hooks/auth.hook'
 import { useHttp } from '../hooks/http.hook'
 import { context } from '../context/context'
-// import ModalSearchResult from './ModalSearchResult'
 import { Link, useLocation } from 'react-router-dom'
 
 const styles = { search: { width: '15rem', margin: '0 1rem' }, }
@@ -15,7 +14,6 @@ export default function SearchInput () {
   const { request, loading, error } = useHttp()
   const { headers, activeKey } = useContext(context)
   const [result, setResult] = useState([])
-  // const [show, setShow] = useState(false)
   const searchRef = useRef()
 
   const handleClick = async () => {
@@ -25,7 +23,6 @@ export default function SearchInput () {
     console.log(`${API} search result ...`, data)
     setResult(data)
     searchRef.current.click()
-    // setShow(true)
   }
 
   const handleKeyPress = (e) => {
@@ -39,7 +36,6 @@ export default function SearchInput () {
       <InputGroup.Addon>
         <Icon icon="search" onClick={handleClick} />
       </InputGroup.Addon>
-      {/* <ModalSearchResult show={show} setShow={setShow} data={result} /> */}
       <Link to={{ pathname: '/search', state: {background: location, result} }} ref={searchRef} />
     </InputGroup>
   )

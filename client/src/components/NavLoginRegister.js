@@ -25,14 +25,13 @@ export default function NavLoginRegister() {
   return (
     <Header>
       <Navbar appearance="inverse" style={styles.navbar}>
-        <Navbar.Header style={styles.header}>Chat application</Navbar.Header>
+        <Navbar.Header><h3>Chat application</h3></Navbar.Header>
 
           <Nav pullRight>
             <Link to="/">
               <Nav.Item eventKey="1" icon={<Icon icon="home" />} componentClass="span"> Home </Nav.Item>
             </Link>
-            {
-              menu === 'signin'
+            { menu === 'signin'
               ? <Link to="/login">
                   <Nav.Item eventKey="2" componentClass="span"> Login </Nav.Item>
                 </Link>

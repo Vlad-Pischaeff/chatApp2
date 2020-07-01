@@ -15,7 +15,7 @@ export default function UnsubscribePage() {
 
   const [show, setShow] = useState(true)
   const { request, loading, error } = useHttp()
-  const { headers, items, setItems, activeKey, itemIndex, setItemIndex } = useContext(context)
+  const { headers, items, setItems, activeKey, itemIndex } = useContext(context)
 
   const closeWindow = () => {
     setShow(false)

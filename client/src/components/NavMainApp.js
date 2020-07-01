@@ -31,7 +31,7 @@ export default function NavMainApp() {
     setAvatar(null)
     history.push('/')
   }
-//  console.log('main nav menu ...', itemIndex)
+  console.log('main nav menu ...', itemIndex)
   return (
     <Header>
       <Navbar appearance="inverse" >
@@ -45,7 +45,7 @@ export default function NavMainApp() {
         </Navbar.Header>
 
         <Nav pullRight>
-          { activeKey === 'privatechat' &&
+          { activeKey === 'privatechat' && itemIndex !== undefined &&
             <Link to={{ pathname: '/invite', state: {background: location} }}>
               <Nav.Item eventKey="1" componentClass="span"
                         icon={<Icon icon="people-group" />}>Invite users</Nav.Item>

@@ -16,7 +16,6 @@ const Speaker = ({ content, item, ...props }) => {
     const API = `/api/room/unfollow/${item}`
     const data = await request(API, 'PATCH', null, headers)
     setItems(data)
-    
   }
 
   return (

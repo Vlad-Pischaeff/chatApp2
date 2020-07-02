@@ -39,7 +39,7 @@ const styles = {
 }
 
 function ElementList({ data, style, multi, selected, setSelected}) {
-  const { credentials, items, itemIndex, setItemIndex, headers } = useContext(context)
+  const { credentials, itemIndex, setItemIndex } = useContext(context)
 
   const handlerOnClick = (item, index) => {
     let obj = {...selected}
@@ -55,7 +55,7 @@ function ElementList({ data, style, multi, selected, setSelected}) {
      setItemIndex(index)
     }
   }
-  // console.log('element list data ...', data, data.length, itemIndex)
+
   return (
     <List style={style}>
       { data &&

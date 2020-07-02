@@ -1,7 +1,10 @@
 import React, { useContext } from 'react'
-import { List, Icon, Badge, Whisper, Popover, Button } from 'rsuite'
+import { List, Icon, Badge } from 'rsuite'
 import Radium from 'radium'
 import { context } from '../context/context'
+import PopoverDelPrivChat from './PopoverDelPrivChat'
+import PopoverDelChat from './PopoverDelChat'
+import PopoverDelUser from './PopoverDelUser'
 
 const styles = {
   flex: { display: 'flex', justifyContent: 'space-between', },
@@ -19,15 +22,15 @@ const styles = {
     }
   },
   img: { height: '3.5rem' },
+  noimg: { fontSize: '3.3rem', },
   content: {
     flex: '1 1 auto',
-    height: '4rem',
     margin: '0 0 0 0.4rem',
     flexFlow: 'column nowrap',
-    alignItems: 'flex-start',
+    overflow: 'hidden',
   },
-  name: { flex: '0 0 2rem', fontSize: '1rem', lineHeight: '2rem', },
-  description: { flex: '1 0 2rem', fontSize: '0.8rem', width: '8rem',},
+  name: { fontSize: '1.2rem', lineHeight: '2rem', },
+  description: { fontSize: '0.8rem', },
   elipsis: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', }, 
   select: { background: '#0052a2', },
   noselect: { background: 'dodgerblue', },
@@ -35,16 +38,8 @@ const styles = {
   wrap: { flex: '1 0 auto', alignItems: 'flex-end', flexFlow: 'column nowrap', height: '4rem',}
 }
 
-const speaker = (
-  <Popover title="Remove this room">
-    <p>Do You want to delete </p>
-    <p>this chatroom?...</p>
-    <Button>OK</Button>
-  </Popover>
-)
-
 function ElementList({ data, style, multi, selected, setSelected}) {
-  const { credentials, items, itemIndex, setItemIndex } = useContext(context)
+  const { credentials, items, itemIndex, setItemIndex, headers } = useContext(context)
 
   const handlerOnClick = (item, index) => {
     let obj = {...selected}
@@ -72,7 +67,7 @@ function ElementList({ data, style, multi, selected, setSelected}) {
             <div>
               { item.avatar
                 ? <Badge content={false}><img src={item.avatar} style={styles.img} /></Badge>
-                : <Badge content={false}><Icon icon="image" size="4x" /></Badge>
+                : <Badge content={false}><Icon icon="image" style={styles.noimg} /></Badge>
               }
             </div>
 
@@ -82,11 +77,17 @@ function ElementList({ data, style, multi, selected, setSelected}) {
             </div>
             <div style={{...styles.wrap, ...styles.flex}}>
               <div>
-                { item.private === true && itemIndex !== undefined && selected[index] &&
-                    <Whisper  placement="rightStart" trigger="active" 
-                              speaker={speaker} enterable>
-                      <Icon icon="close" size="1x" style={styles.icon} /> 
-                    </Whisper>
+                { item.private === true && itemIndex !== undefined && 
+                  selected[index] &&
+                    <PopoverDelPrivChat placement="rightStart" content={item.name} item={item._id} />
+                }
+                { item.private === false && itemIndex !== undefined && 
+                  selected[index] && item.owner !== credentials.userId &&
+                    <PopoverDelChat placement="rightStart" content={item.name} item={item._id} />
+                }
+                { item.login && itemIndex !== undefined && 
+                  selected[index] &&
+                    <PopoverDelUser placement="rightStart" content={item.login} item={item._id} />
                 }
               </div>
               <div>

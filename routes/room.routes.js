@@ -83,6 +83,18 @@ router.patch('/unfollow/:id', auth, async (req, res) => {
   }
 })
 
+// delete room by id /api/room/:id
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    await Rooms.findByIdAndRemove(req.params.id) 
+    const rooms = await Rooms.find( {private: true, $or: [{ owner: req.user.userId}, { followers: req.user.userId}] })
+    res.status(200).json(rooms)
+  } catch(e) {
+    // console.log('get id', e)
+    res.status(500).json({ message:`Something wrong... ${e}` })
+  }
+})
+
 router.get('/:id', auth, async (req, res) => {
   try {
     const link = await Link.findById(req.params.id) 

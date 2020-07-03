@@ -15,10 +15,10 @@ export default function ChatRoomPage() {
   let history = useHistory()
   const [show, setShow] = useState(true)
   const [showUpload, setShowUpload] = useState(false)
-  const { avatar, headers, setAvatar, activeKey, setItems } = useContext(context)
+  const { avatar, setAvatar, activeKey, setItems } = useContext(context)
   const chatroomname = useAuth('chatroomname', false)
   const chatroomdesc = useAuth('chatroomdesc', false)
-  const { request, loading, error } = useHttp()
+  const { request, loading, error, header } = useHttp()
 
   const handleClick = async (e) => {
     try {
@@ -29,7 +29,7 @@ export default function ChatRoomPage() {
           private: activeKey === 'chatroom' ? false : true,
           avatar: avatar ? avatar : null
          }
-        const data = await request('/api/room/create', 'PUT', body, headers)
+        const data = await request('/api/room/create', 'PUT', body, header)
         setItems(data)
         Alert.success(`Room "${chatroomname.value}" created ....`, 5000)
         closePage()

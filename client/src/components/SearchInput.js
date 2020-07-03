@@ -11,15 +11,15 @@ export default function SearchInput () {
   let location = useLocation()
   
   const search = useAuth('search', false)
-  const { request, loading, error } = useHttp()
-  const { headers, activeKey } = useContext(context)
+  const { request, loading, error, header } = useHttp()
+  const { activeKey } = useContext(context)
   const [result, setResult] = useState([])
   const searchRef = useRef()
 
   const handleClick = async () => {
     const API = (activeKey === 'conversations') ? '/api/auth/search' : '/api/room/search'
     const body = { 'search': search.value }
-    const data = await request(API, 'POST', body, headers)
+    const data = await request(API, 'POST', body, header)
     console.log(`${API} search result ...`, data)
     setResult(data)
     searchRef.current.click()

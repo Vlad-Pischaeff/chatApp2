@@ -5,6 +5,7 @@ import { context } from '../context/context'
 import PopoverDelPrivChat from './PopoverDelPrivChat'
 import PopoverDelChat from './PopoverDelChat'
 import PopoverDelUser from './PopoverDelUser'
+import PopoverShowUserAvatars from './PopoverShowUserAvatars'
 
 const styles = {
   flex: { display: 'flex', justifyContent: 'space-between', },
@@ -39,7 +40,7 @@ const styles = {
 }
 
 function ElementList({ data, style, multi, selected, setSelected}) {
-  const { credentials, itemIndex, setItemIndex } = useContext(context)
+  const { credentials, itemIndex, setItemIndex, activeKey } = useContext(context)
 
   const handlerOnClick = (item, index) => {
     let obj = {...selected}
@@ -91,8 +92,14 @@ function ElementList({ data, style, multi, selected, setSelected}) {
                 }
               </div>
               <div>
-                { item.owner === credentials.userId &&
+                { activeKey === 'chatroom' && item.owner === credentials.userId &&
                     <Icon icon="avatar" size="1x" style={styles.icon} />
+                }
+                { activeKey === 'privatechat' && item.followers && item.followers.length !== 0 &&
+                    <PopoverShowUserAvatars placement="rightStart" item={item} />
+                }
+                { activeKey === 'privatechat' && item.followers && item.followers.length === 0 &&
+                    <Icon icon="user-o" size="1x" style={styles.icon} />
                 }
                 { item.private === true && 
                     <Icon icon="lock" size="1x" style={styles.icon} />

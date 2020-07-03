@@ -51,13 +51,6 @@ export default function NavMainApp() {
                         icon={<Icon icon="people-group" />}>Invite users</Nav.Item>
             </Link>
           }
-          {/* { ( items[itemIndex] && items[itemIndex].owner !== credentials.userId ) 
-              ? <Link to={{ pathname: '/unfollow', state: {background: location} }}>
-                  <Nav.Item eventKey="2" componentClass="span"
-                            icon={<Icon icon="thumbs-down" />}>Unsubscribe</Nav.Item>
-                </Link>
-              : <></>
-          } */}
           { activeKey !== 'conversations' &&
             <Link to={{ pathname: `/${activeKey}`, state: {background: location} }}>
               <Nav.Item eventKey="3" componentClass="span"

@@ -23,7 +23,7 @@ export default function LoginPage () {
   const [save, setSave] = useState(false)
   const login = useAuth('login', save)
   const password = useAuth('password', save)
-  const { request, loading, error } = useHttp()
+  const { request, loading, error, header } = useHttp()
   const { setMenu, saveCredentials } = useContext(context)
 
   useEffect(() => {

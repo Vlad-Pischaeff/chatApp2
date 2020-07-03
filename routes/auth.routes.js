@@ -122,6 +122,18 @@ router.get('/friends', auth, async (req, res) => {
   }
 })
 
+// list of invited friends /api/auth/invited
+
+router.post('/invited', auth, async (req, res) => {
+  try {
+    const invited = req.body.invited
+    const friends = await User.find({ _id: invited })
+    res.status(201).json(friends)
+  } catch(e) {
+    res.status(500).json({ message:`Something wrong ..., details ${e}` })
+  }
+})
+
 // add new friends /api/auth/friends
 router.patch('/friends', auth, async (req, res) => {
   try {

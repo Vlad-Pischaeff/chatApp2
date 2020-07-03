@@ -45,6 +45,16 @@ router.get('/privatechat', auth, async (req, res) => {
   }
 })
 
+// get private chat by id
+router.get('/privatechat/:id', auth, async (req, res) => {
+  try {
+    const room = await Rooms.findOne({ _id: req.params.id})
+    res.status(201).json(room)
+  } catch(e) {
+    res.status(500).json({ message:`Something wrong ..., details ${e}` })
+  }
+})
+
 router.post('/search', auth, async (req, res) => {
   try {
     const rooms = await Rooms.find({  private: false, 
@@ -53,6 +63,19 @@ router.post('/search', auth, async (req, res) => {
                                       followers: { $not: { $eq: req.user.userId }}
                                   })
     // console.log('rooms...', rooms)
+    res.status(201).json(rooms)
+  } catch(e) {
+    res.status(500).json({ message:`Something wrong ..., details ${e}` })
+  }
+})
+
+// patch /api/room/invite
+router.patch('/invite/:id', auth, async (req, res) => {
+  try {
+    const id = req.params.id
+    const candidates = Object.values(req.body.friends)
+    await Rooms.updateOne({ _id: id }, { $push: { followers: candidates } })
+    const rooms = await Rooms.find( {private: true, $or: [{ owner: req.user.userId}, { followers: req.user.userId}] })
     res.status(201).json(rooms)
   } catch(e) {
     res.status(500).json({ message:`Something wrong ..., details ${e}` })

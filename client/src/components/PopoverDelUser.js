@@ -7,14 +7,14 @@ let trigger = null
 const styles = { icon: { margin: '0 0.2rem',  }, }
 
 const Speaker = ({ content, item, ...props }) => {
-  const { credentials, setItems, headers, items, itemIndex, setItemIndex } = useContext(context)
-  const { request, loading, error } = useHttp()
+  const { credentials, setItems, items, itemIndex, setItemIndex } = useContext(context)
+  const { request, loading, error, header } = useHttp()
 
   const handlerOnClick = async () => {
     console.log('delete item ...', item)
     trigger.hide()    
     const API =`/api/auth/unfollow/${item}`
-    const data = await request(API, 'PATCH', null, headers)
+    const data = await request(API, 'PATCH', null, header)
     setItems(data)
   }
 

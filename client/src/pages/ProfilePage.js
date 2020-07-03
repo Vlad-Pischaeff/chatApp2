@@ -15,8 +15,8 @@ export default function ProfilePage() {
   let history = useHistory()
   const [showUpload, setShowUpload] = useState(false)
   const [show, setShow] = useState(true)
-  const { avatar, credentials, saveCredentials, headers, setAvatar } = useContext(context)
-  const { request, loading, error } = useHttp()
+  const { avatar, credentials, saveCredentials, setAvatar } = useContext(context)
+  const { request, loading, error, header } = useHttp()
   const login = useAuth('login', false)
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function ProfilePage() {
     const id = credentials.userId
     const body = {login: login.value, avatar: avatar }
     try {
-      const data = await request(`/api/auth/user/${id}`, 'PATCH', body, headers)
+      const data = await request(`/api/auth/user/${id}`, 'PATCH', body, header)
       saveCredentials({...credentials, login: data.login, avatar: data.avatar})
       setAvatar(data.avatar)
       closePage()

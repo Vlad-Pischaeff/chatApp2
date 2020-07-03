@@ -30,9 +30,6 @@ export default function App () {
   const [ activeKey, setActiveKey ] = useState('conversations')
   const { credentials, saveCredentials, deleteCredentials } = useStorage()
   const { socketRef, sendMessage } = useWebsocket()
-  const headers = Object.keys(credentials).length !== 0 
-    ? { 'Content-Type': 'application/json', Authorization: credentials.token }
-    : { 'Content-Type': 'application/json' }   
  
   useEffect(() => {
     if (credentials.userId) {
@@ -46,7 +43,7 @@ export default function App () {
                                avatar, setAvatar,
                                activeKey, setActiveKey, 
                                credentials, saveCredentials, deleteCredentials,
-                               socketRef, headers,
+                               socketRef, 
                                items, setItems,
                                itemIndex, setItemIndex }}>
       <Container style={styles.container}>

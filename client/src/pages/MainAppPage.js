@@ -6,6 +6,7 @@ import chatroom from '../avatars/chat-room.svg'
 import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 import ElementList from '../components/ElementList'
+import SendMessageInput from '../components/SendMessageInput'
 
 const styles = {
   flexrow: { display: 'flex', justifyContent: 'space-between', flexFlow: 'row nowrap',},
@@ -16,15 +17,15 @@ const styles = {
   menu: { flex: '0 0 3.5rem', background: '#cce9ff', },
   rooms: { flex: '1 1 15rem', overflowY: 'auto', },
   chat: { flex: '1 1 16.5rem', overflowY: 'auto', background: '#c9d7ff', },
-  footer: { background: '#a6d7ff', height: '3.5rem', flex: '0 0 auto', },
+  footer: { background: '#a6d7ff', height: '3.5rem', alignItems: 'center', },
   icon: { width: '3rem', background: 'transparent', },
   plus: { margin: '0.5rem', },
   list: { height: '100%' }
 }
 
 export default function MainAppPage () {
-  const { request, loading, error } = useHttp()
-  const { headers, items, setItems, activeKey, setActiveKey, setItemIndex } = useContext(context)
+  const { request, loading, error, header } = useHttp()
+  const { items, setItems, activeKey, setActiveKey, setItemIndex } = useContext(context)
   const [selectOne, setSelectOne] = useState({})
   
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function MainAppPage () {
 
   const getChatrooms = async () => {
     try {
-      const data = await request(`/api/room/${activeKey}`, 'GET', null, headers)
+      const data = await request(`/api/room/${activeKey}`, 'GET', null, header)
       setItems(data)
       console.log('rooms data ...', activeKey, data)
     } catch (e) { Alert.error(`/api/room/${activeKey} error ... ${e}`, 5000) }
@@ -43,7 +44,7 @@ export default function MainAppPage () {
 
   const getFriends = async () => {
     try {
-      const data = await request('/api/auth/friends', 'GET', null, headers)
+      const data = await request('/api/auth/friends', 'GET', null, header)
       setItems(data)
       console.log('friends data ...', activeKey, data)
     } catch (e) { Alert.error(`/api/auth/friends error ... ${e}`, 5000) }
@@ -74,10 +75,9 @@ export default function MainAppPage () {
           colspan={16}
         </article>
       </main>
-      <footer style={styles.footer}>
-        <h3>
-          MAIN APP
-        </h3>
+      <footer style={{...styles.flexrow, ...styles.footer}}>
+        <h5> Footer </h5>
+        <SendMessageInput />
       </footer>
     </div>
   )

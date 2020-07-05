@@ -25,7 +25,7 @@ const styles = {
 
 export default function MainAppPage () {
   const { request, loading, error, header } = useHttp()
-  const { items, setItems, activeKey, setActiveKey, setItemIndex } = useContext(context)
+  const { items, setItems, activeKey, setActiveKey, itemIndex, setItemIndex, messages } = useContext(context)
   const [selectOne, setSelectOne] = useState({})
   
   useEffect(() => {
@@ -72,7 +72,15 @@ export default function MainAppPage () {
 
         </aside>
         <article style={styles.chat}>
-          colspan={16}
+          {messages && messages.map((item, index) =>
+            <div>
+              <p>{item.from}</p>
+              <p>{item.to}</p>
+              <p>{item.text}</p>
+              <p>{item.date}</p>
+            </div>
+          )
+          }
         </article>
       </main>
       <footer style={{...styles.flexrow, ...styles.footer}}>

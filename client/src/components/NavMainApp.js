@@ -45,11 +45,13 @@ export default function NavMainApp() {
         </Navbar.Header>
 
         <Nav pullRight>
-          { activeKey === 'privatechat' && itemIndex !== undefined &&
-            <Link to={{ pathname: '/invite', state: {background: location} }}>
-              <Nav.Item eventKey="1" componentClass="span"
-                        icon={<Icon icon="people-group" />}>Invite users</Nav.Item>
-            </Link>
+          { activeKey === 'privatechat' && 
+            itemIndex !== undefined &&
+            items[itemIndex].owner === credentials.userId &&
+              <Link to={{ pathname: '/invite', state: {background: location} }}>
+                <Nav.Item eventKey="1" componentClass="span"
+                          icon={<Icon icon="people-group" />}>Invite users</Nav.Item>
+              </Link>
           }
           { activeKey !== 'conversations' &&
             <Link to={{ pathname: `/${activeKey}`, state: {background: location} }}>

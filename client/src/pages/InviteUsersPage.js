@@ -3,7 +3,7 @@ import ElementList from '../components/ElementList'
 import { Modal, Button, Badge } from 'rsuite'
 import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 const styles = {
   body: { margin: '1rem 0', width: '20rem' },
@@ -12,19 +12,25 @@ const styles = {
 
 export default function InviteUsersPage() {
   let history = useHistory()
-  let location = useLocation()
 
   const [selectMany, setSelectMany] = useState({})
   const [show, setShow] = useState(true)
   const { request, loading, error, header } = useHttp()
-  const { setItems, activeKey, items, itemIndex } = useContext(context)
+  const { setItems, items, itemIndex } = useContext(context)
   const [ friends, setFriends ] = useState()
 
   useEffect(() => {
     const getFriends = async () => {
-      const API = '/api/auth/friends'
+      let roomId = items[itemIndex]._id
+      let API = `/api/room/privatechat/${roomId}`
+      const room = await request(API, 'GET', null, header)
+      const followers = room.followers
+      API = '/api/auth/friends'
       const data = await request(API, 'GET', null, header)
-      setFriends(data)
+      //set users to invite without already exists ones      
+      let newArr = data.filter(user => 
+        followers.indexOf(user._id) === -1 && user )
+      setFriends(newArr)
     }
     getFriends()
   }, [])

@@ -110,12 +110,12 @@ router.post('/search', auth, async (req, res) => {
   }
 })
 
-// list of friends /api/auth/friends
+// list of friends ready to invite /api/auth/friends
 
 router.get('/friends', auth, async (req, res) => {
   try {
-    const users = await User.findOne({ _id: req.user.userId })
-    const friends = await User.find({ _id: users.friends })
+    const user = await User.findOne({ _id: req.user.userId })
+    const friends = await User.find({ _id: user.friends })
     res.status(201).json(friends)
   } catch(e) {
     res.status(500).json({ message:`Something wrong ..., details ${e}` })

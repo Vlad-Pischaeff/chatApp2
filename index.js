@@ -8,7 +8,7 @@ const mongoose = require('mongoose')
 mongoose.set('useFindAndModify', false)
 
 const WebSocket = require('ws')
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 
 let clients = new Set()
 
@@ -17,6 +17,7 @@ app.use(express.json({ extended: true }))
 // app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/room', require('./routes/room.routes'))
+app.use('/api/message', require('./routes/message.routes'))
 
 // app.get('/', function(req,res) {
 //   res.sendFile(__dirname + '/index.html')

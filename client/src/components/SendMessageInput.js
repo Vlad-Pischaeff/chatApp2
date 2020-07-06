@@ -13,7 +13,7 @@ export default function SendMessageInput () {
   const { activeKey, items, itemIndex, credentials, setMessages } = useContext(context)
   const [result, setResult] = useState([])
   const [disabled, setDisabled] = useState(true)
-  let from = credentials.userId
+  // let from = credentials.userId
   let to = itemIndex === undefined ? null : items[itemIndex]._id
 
   useEffect(() => {
@@ -25,19 +25,19 @@ export default function SendMessageInput () {
   const handleClick = async () => {
     const API = '/api/message/new'
     const text = message.value
-    const body = { from, to, text }
+    const body = { to, text }
     const data = await request(API, 'PUT', body, header)
     console.log('search result ... ', data)
-    getUserMessages()
+    // getUserMessages()
     message.onFocus()
   }
 
-  const getUserMessages = async () => {
-    const API = `/api/message/user/${from}/${to}`
-    const data = await request(API, 'GET', null, header)
-    console.log('get messages result ...', data)
-    setMessages(data)
-  }
+  // const getUserMessages = async () => {
+  //   const API = `/api/message/user/${to}`
+  //   const data = await request(API, 'GET', null, header)
+  //   console.log('get messages result ...', data)
+  //   setMessages(data)
+  // }
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') handleClick()

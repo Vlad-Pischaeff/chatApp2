@@ -20,7 +20,7 @@ export default function SearchInput () {
     const API = (activeKey === 'conversations') ? '/api/auth/search' : '/api/room/search'
     const body = { 'search': search.value }
     const data = await request(API, 'POST', body, header)
-    console.log(`${API} search result ...`, data)
+    // console.log(`${API} search result ...`, data)
     setResult(data)
     searchRef.current.click()
   }

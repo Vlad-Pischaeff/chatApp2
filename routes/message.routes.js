@@ -10,7 +10,8 @@ const auth = require('../middleware/auth.middleware')
 // /api/message/new
 router.put('/new', auth, async (req, res) => {
     try {
-      const { from, to, text } = req.body
+      const { to, text } = req.body
+      const from = req.user.userId
       const message = new Message({ from, to, text })
 
       await message.save((err, doc) => {
@@ -28,14 +29,25 @@ router.put('/new', auth, async (req, res) => {
 )
 
 // get messages from user
-router.get('/user/:user/:talker', auth, async (req, res) => {
+router.get('/user/:talker', auth, async (req, res) => {
   try {
-    const user = req.params.user
+    const user = req.user.userId
     const talker = req.params.talker
     const messages = await Message.find({ $or: [
-      { from: user, to: talker }, { from: talker, to: user }
+      { from: user, to: talker }, 
+      { from: talker, to: user }
     ]})
-    console.log(messages)
+    res.status(201).json(messages)
+  } catch(e) {
+    res.status(500).json({ message:`Something wrong ..., details ${e}` })
+  }
+})
+
+// get messages from public chat room
+router.get('/chat/:id', auth, async (req, res) => {
+  try {
+    const id = req.params.id
+    const messages = await Message.find({ to: id })
     res.status(201).json(messages)
   } catch(e) {
     res.status(500).json({ message:`Something wrong ..., details ${e}` })

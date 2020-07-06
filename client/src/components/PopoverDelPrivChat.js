@@ -11,7 +11,7 @@ const Speaker = ({ content, item, ...props }) => {
   const { request, loading, error, header } = useHttp()
 
   const handlerOnClick = async () => {
-    console.log('delete item ...', item)
+    // console.log('delete item ...', item)
     trigger.hide()
     const API = `/api/room/${item}`
     const data = await request(API, 'DELETE', null, header)

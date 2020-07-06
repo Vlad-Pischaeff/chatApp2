@@ -27,7 +27,7 @@ export default function App () {
   const [ avatar, setAvatar] = useState(null)
   const [ items, setItems ] = useState([])            //aside items
   const [ itemIndex, setItemIndex ] = useState()      //currently selected item index
-  const [ messages, setMessages ] = useState()        //currently visible messages
+  const [ messages, setMessages ] = useState([])      //currently visible messages
   const [ activeKey, setActiveKey ] = useState('conversations')
   const { credentials, saveCredentials, deleteCredentials } = useStorage()
   const { socketRef, sendMessage } = useWebsocket()

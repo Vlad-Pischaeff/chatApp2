@@ -31,7 +31,7 @@ export default function NavMainApp() {
     setAvatar(null)
     history.push('/')
   }
-  console.log('main nav menu ...', itemIndex)
+  // console.log('main nav menu ...', itemIndex)
   return (
     <Header>
       <Navbar appearance="inverse" >

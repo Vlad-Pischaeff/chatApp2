@@ -122,12 +122,13 @@ router.get('/friends', auth, async (req, res) => {
   }
 })
 
-// list of invited friends /api/auth/invited
-
+// list of invited friends /api/auth/invited or
+// list of users profile in array of id's including room owner profile
 router.post('/invited', auth, async (req, res) => {
   try {
     const invited = req.body.invited
     const friends = await User.find({ _id: invited })
+    // console.log('friends...', friends, invited)
     res.status(201).json(friends)
   } catch(e) {
     res.status(500).json({ message:`Something wrong ..., details ${e}` })

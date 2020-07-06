@@ -7,6 +7,8 @@ import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 import ElementList from '../components/ElementList'
 import SendMessageInput from '../components/SendMessageInput'
+import MessagesUserList from '../components/MessagesUserList'
+import MessagesChatList from '../components/MessagesChatList'
 
 const styles = {
   flexrow: { display: 'flex', justifyContent: 'space-between', flexFlow: 'row nowrap',},
@@ -38,7 +40,7 @@ export default function MainAppPage () {
     try {
       const data = await request(`/api/room/${activeKey}`, 'GET', null, header)
       setItems(data)
-      console.log('rooms data ...', activeKey, data)
+      // console.log('rooms data ...', activeKey, data)
     } catch (e) { Alert.error(`/api/room/${activeKey} error ... ${e}`, 5000) }
   }
 
@@ -46,7 +48,7 @@ export default function MainAppPage () {
     try {
       const data = await request('/api/auth/friends', 'GET', null, header)
       setItems(data)
-      console.log('friends data ...', activeKey, data)
+      // console.log('friends data ...', activeKey, data)
     } catch (e) { Alert.error(`/api/auth/friends error ... ${e}`, 5000) }
   }
   
@@ -72,14 +74,9 @@ export default function MainAppPage () {
 
         </aside>
         <article style={styles.chat}>
-          {messages && messages.map((item, index) =>
-            <div>
-              <p>{item.from}</p>
-              <p>{item.to}</p>
-              <p>{item.text}</p>
-              <p>{item.date}</p>
-            </div>
-          )
+          { activeKey === 'conversations'
+            ? <MessagesUserList />
+            : <MessagesChatList />
           }
         </article>
       </main>

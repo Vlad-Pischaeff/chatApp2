@@ -7,16 +7,8 @@ import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 
 const styles = {
-  wrap: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-  },
-  item: {
-    width: '25rem',
-    background: 'rgba(52, 152, 255, 0.1)'
-  },
+  wrap: { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', },
+  item: { width: '25rem', background: 'rgba(52, 152, 255, 0.1)' },
 }
 
 export default function LoginPage () {
@@ -24,7 +16,7 @@ export default function LoginPage () {
   const login = useAuth('login', save)
   const password = useAuth('password', save)
   const { request, loading, error, header } = useHttp()
-  const { setMenu, saveCredentials } = useContext(context)
+  const { setMenu, saveCredentials, socketSendMessage } = useContext(context)
 
   useEffect(() => {
     (!login.value || !password.value) && setSave(false)
@@ -43,7 +35,7 @@ export default function LoginPage () {
       const body = { login: login.value, password: password.value }
       const data = await request('/api/auth/login', 'POST', body)
       saveCredentials(data)
-      // console.log('login user data...', data)
+      socketSendMessage({ 'online': data.userId })
     } catch (e) {
       console.log('login user error...', e)
     }

@@ -8,13 +8,10 @@ const mongoose = require('mongoose')
 mongoose.set('useFindAndModify', false)
 
 const WebSocket = require('ws')
-// const bodyParser = require('body-parser')
 
 let clients = new Set()
 
 app.use(express.json({ extended: true }))
-// app.use(bodyParser.json())
-// app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/room', require('./routes/room.routes'))
 app.use('/api/message', require('./routes/message.routes'))
@@ -30,7 +27,7 @@ const start = async () => {
       useUnifiedTopology: true,
       useCreateIndex: true
     })
-    const server = app.listen(PORT, () => {
+    const server = await app.listen(PORT, () => {
       console.log(`server started on port ${PORT}...`)
     })
 
@@ -39,13 +36,21 @@ const start = async () => {
     wss.on('connection', ws => {
       console.log('websocket app started...')
       ws.isAlive = true
-      // ...add clients to Set
       let client = {}
-      client.socket = ws
-      clients.add(client)
     
       ws.on('message', message => {
-        console.log('received: %s', message)
+        let data = JSON.parse(message)
+        console.log('received: %s', message, data)
+        if (data.online) {
+          // ...add clients to Set
+          client.id = data.online
+          client.socket = ws
+          clients.add(client)
+          
+          for(let client of clients) {
+            client.socket.send(message)
+          }
+        }
       })
     
       ws.on('pong', () => {

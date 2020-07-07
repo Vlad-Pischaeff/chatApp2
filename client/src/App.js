@@ -30,11 +30,11 @@ export default function App () {
   const [ messages, setMessages ] = useState([])      //currently visible messages
   const [ activeKey, setActiveKey ] = useState('conversations')
   const { credentials, saveCredentials, deleteCredentials } = useStorage()
-  const { socketRef, sendMessage } = useWebsocket()
+  const { socketRef, socketSendMessage } = useWebsocket()
  
   useEffect(() => {
     if (credentials.userId) {
-      sendMessage(`client connected ... ${credentials.userId}`)
+      // socketSendMessage({ 'online': credentials.userId })
     }
   }, [credentials])
 
@@ -44,7 +44,7 @@ export default function App () {
                                avatar, setAvatar,
                                activeKey, setActiveKey, 
                                credentials, saveCredentials, deleteCredentials,
-                               socketRef, 
+                               socketRef, socketSendMessage,
                                items, setItems,
                                itemIndex, setItemIndex,
                                messages, setMessages }}>

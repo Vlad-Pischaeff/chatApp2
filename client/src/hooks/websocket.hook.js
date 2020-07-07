@@ -1,10 +1,12 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
 const protocolPrefix = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
 let {host} = window.location
 const url = `${protocolPrefix}//${host}/ws`
+let socketReady = false
 
 export default function useWebsocket() {
   const socketRef = useRef()
+  // const [ socketReady, setSocketReady ] = useState(false)
 
   useEffect(() => {
     const webSocket = new WebSocket(url)
@@ -16,29 +18,40 @@ export default function useWebsocket() {
 
   const handleOpen = () => {
     console.log("Websocket opened ...")
-    socketRef.current.send('client connected ...')
+    socketReady = true
+    let message = { 'client': 'connected' }
+    socketRef.current.send(JSON.stringify(message))
   }
 
   const handleClose = () => {
-    console.log("Websocket closed ...");
+    console.log("Websocket closed ...")
   }
 
-  const sendMessage = useCallback(
+  const socketSendMessage = useCallback(
     message => {
-      socketRef.current.send(JSON.stringify(message));
+      console.log('socketReady ...', socketReady)
+      socketReady && socketRef.current.send(JSON.stringify(message))
     },
     [socketRef]
   )
-
+ 
   const handleReceiveMessage = messageObject => {
-    const message = JSON.parse(messageObject.data);
-    switch (message.type) {
-      case 'value1': sendMessage(message)
-      case 'value2': sendMessage(message)
-      case 'value3': sendMessage(message)
-      default: sendMessage(message)
+    const message = JSON.parse(messageObject.data)
+    console.log('web socket message ...', messageObject.data, message)
+    switch (message) {
+      case 'value1': 
+        socketSendMessage(message)
+        break
+      case 'value2': 
+        socketSendMessage(message)
+        break
+      case 'value3': 
+        socketSendMessage(message)
+        break
+      default: 
+        console.log('socket message from server ...', message)
     }
   }
 
-  return {socketRef, sendMessage}
+  return {socketRef, socketSendMessage}
 }

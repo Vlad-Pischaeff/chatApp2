@@ -22,8 +22,9 @@ const styles = {
       color: 'white',
     }
   },
-  img: { height: '3.5rem' },
+  img: { height: '3.5rem', },
   noimg: { fontSize: '3.3rem', },
+  grey: { filter: 'grayscale(100%)', },
   content: {
     flex: '1 1 auto',
     margin: '0 0 0 0.4rem',
@@ -79,7 +80,7 @@ function ElementList({ data, style, multi, selected, setSelected}) {
             <div style={{...styles.wrap, ...styles.flex}}>
               <div>
                 { item.private === true && itemIndex !== undefined && 
-                  selected[index] &&
+                  selected[index] && item.owner === credentials.userId &&
                     <PopoverDelPrivChat placement="rightStart" content={item.name} item={item._id} />
                 }
                 { item.private === false && itemIndex !== undefined && 

@@ -29,7 +29,8 @@ export default function MainAppPage () {
   const { request, loading, error, header } = useHttp()
   const { items, setItems, activeKey, setActiveKey, itemIndex, setItemIndex, messages } = useContext(context)
   const [selectOne, setSelectOne] = useState({})
-  
+  let dialogs = null
+
   useEffect(() => {
     activeKey === 'conversations' ? getFriends() : getChatrooms(activeKey)
     setSelectOne({})
@@ -73,12 +74,14 @@ export default function MainAppPage () {
           </section>
 
         </aside>
-        <article style={styles.chat}>
+
+        <article style={styles.chat}> 
           { activeKey === 'conversations'
-            ? <MessagesUserList />
-            : <MessagesChatList />
+              ? <MessagesUserList />
+              : <MessagesChatList />
           }
         </article>
+        
       </main>
       <footer style={{...styles.flexrow, ...styles.footer}}>
         <h5> Footer </h5>

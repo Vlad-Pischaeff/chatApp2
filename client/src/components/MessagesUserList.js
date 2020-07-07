@@ -3,10 +3,9 @@ import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 
 const styles = {
-  wrap: { maxWidth: '65%',  display: 'flex',  flexFlow: 'row nowrap', margin: '1rem', },
+  wrap: { maxWidth: '75%',  display: 'flex',  flexFlow: 'row nowrap', margin: '1rem', },
   mywrap: { display: 'flex',  flexFlow: 'row-reverse nowrap', margin: '1rem', },
-  wrapmsg: { maxWidth: '65%',  display: 'flex',  flexFlow: 'column nowrap', 
-              padding: '0.2rem 0.3rem', },
+  wrapmsg: { maxWidth: '75%',  display: 'flex',  flexFlow: 'column nowrap', padding: '0.2rem 0.3rem', },
   mymsg: { background: '#a6d7ff', color: 'black', },
   msg: { background: '#409cff', color: 'white', },
   img: { width: '3rem', height: '3rem', },
@@ -33,13 +32,14 @@ const styles = {
 }
 
 export default function MessagesUserList() {
-  const { items, itemIndex, messages, setMessages, credentials } = useContext(context)
+  const { items, itemIndex, setItemIndex, messages, setMessages, credentials } = useContext(context)
   const { request, loading, error, header } = useHttp()
   let to = itemIndex === undefined ? null : items[itemIndex]._id
   let msgList = null
 
   useEffect(() => {
     setMessages([])
+    return function () { setItemIndex() }
   }, [])
 
   useEffect(() => {

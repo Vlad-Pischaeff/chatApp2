@@ -43,7 +43,7 @@ export default function MessagesUserList() {
   }, [])
 
   useEffect(() => {
-    itemIndex !== undefined && getUserMessages()
+    itemIndex !== undefined && items[0].friends !== undefined && getUserMessages()
   }, [itemIndex])
 
   const getUserMessages = async () => {

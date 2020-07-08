@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
+import { Loader } from 'rsuite'
 
 const styles = {
   wrap: { maxWidth: '75%',  display: 'flex',  flexFlow: 'row nowrap', margin: '1rem', },
@@ -29,6 +30,7 @@ const styles = {
   date: { fontSize: '0.7rem',  },
   color: { color: 'cyan', },
   mycolor: { color: 'cornflowerblue', },
+  loader: { margin: '2rem', },
 }
 
 export default function MessagesUserList() {
@@ -75,5 +77,8 @@ export default function MessagesUserList() {
       })
   }
   
-  return msgList
+  if (loading)
+    return <Loader size='lg' style={styles.loader} />
+  else
+    return msgList
 }

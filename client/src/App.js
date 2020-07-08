@@ -30,24 +30,32 @@ export default function App () {
   const [ messages, setMessages ] = useState([])      //currently visible messages
   const [ activeKey, setActiveKey ] = useState('conversations')
   const { credentials, saveCredentials, deleteCredentials } = useStorage()
-  const { socketRef, socketSendMessage } = useWebsocket()
- 
+  const { socketRef, socketMessage, socketSendMessage } = useWebsocket()
+  const [ onlineUsers, setOnlineUsers ] = useState({})
+
   useEffect(() => {
     if (credentials.userId) {
       // socketSendMessage({ 'online': credentials.userId })
     }
   }, [credentials])
 
+  useEffect(() => {
+    if (socketMessage.online) {
+      setOnlineUsers({ ...onlineUsers, [socketMessage.online]: true })
+    }
+  }, [socketMessage])
+  
   // console.log('items ...', items, itemIndex)
   return (
     <context.Provider value={{ menu, setMenu, 
                                avatar, setAvatar,
                                activeKey, setActiveKey, 
                                credentials, saveCredentials, deleteCredentials,
-                               socketRef, socketSendMessage,
+                               socketRef, socketMessage, socketSendMessage,
                                items, setItems,
                                itemIndex, setItemIndex,
-                               messages, setMessages }}>
+                               messages, setMessages,
+                               onlineUsers }}>
       <Container style={styles.container}>
         <Router>
           { Object.keys(credentials).length === 0 ? <NavLoginRegister /> : <NavMainApp /> }

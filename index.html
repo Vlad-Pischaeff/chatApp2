@@ -1,10 +1,11 @@
 <script>
-  var ws = new WebSocket('ws://localhost:5000/ws')
+  var ws = new WebSocket('ws://localhost:3000/ws')
   // event emmited when connected
   ws.onopen = function () {
     console.log('websocket is connected ...')
     // sending a send event to websocket server
-    ws.send('connected')
+    let message = JSON.stringify({'connected': 'user'})
+    ws.send(message)
   }
   // event emmited when receiving message 
   ws.onmessage = function (ev) {

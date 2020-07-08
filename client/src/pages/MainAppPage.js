@@ -18,7 +18,7 @@ const styles = {
   aside: { background: 'rgba(196, 162, 252, 0.44)', width: '15rem' },
   menu: { flex: '0 0 3.5rem', background: '#cce9ff', },
   rooms: { flex: '1 1 15rem', overflowY: 'auto', },
-  chat: { flex: '1 1 16.5rem', overflowY: 'auto', background: '#c9d7ff', },
+  messages: { flex: '1 1 16.5rem', overflowY: 'auto', background: '#c9d7ff', },
   footer: { background: '#a6d7ff', height: '3.5rem', alignItems: 'center', },
   icon: { width: '3rem', background: 'transparent', },
   plus: { margin: '0.5rem', },
@@ -27,21 +27,19 @@ const styles = {
 
 export default function MainAppPage () {
   const { request, loading, error, header } = useHttp()
-  const { items, setItems, activeKey, setActiveKey, itemIndex, setItemIndex, messages } = useContext(context)
+  const { items, setItems, activeKey, setActiveKey, setItemIndex } = useContext(context)
   const [selectOne, setSelectOne] = useState({})
-  let dialogs = null
 
   useEffect(() => {
     activeKey === 'conversations' ? getFriends() : getChatrooms(activeKey)
     setSelectOne({})
     setItemIndex()
   }, [activeKey])
-
+  
   const getChatrooms = async () => {
     try {
       const data = await request(`/api/room/${activeKey}`, 'GET', null, header)
       setItems(data)
-      // console.log('rooms data ...', activeKey, data)
     } catch (e) { Alert.error(`/api/room/${activeKey} error ... ${e}`, 5000) }
   }
 
@@ -49,10 +47,9 @@ export default function MainAppPage () {
     try {
       const data = await request('/api/auth/friends', 'GET', null, header)
       setItems(data)
-      // console.log('friends data ...', activeKey, data)
     } catch (e) { Alert.error(`/api/auth/friends error ... ${e}`, 5000) }
   }
-  
+
   return (
     <div style={{...styles.flexcol, ...styles.wrap}}>
       <main style={{...styles.flexrow, ...styles.main}}>
@@ -75,11 +72,13 @@ export default function MainAppPage () {
 
         </aside>
 
-        <article style={styles.chat}> 
+        <article style={{...styles.flexcol, ...styles.messages}}> 
+          <div style={styles.messages}>
           { activeKey === 'conversations'
               ? <MessagesUserList />
               : <MessagesChatList />
           }
+          </div>
         </article>
         
       </main>

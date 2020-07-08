@@ -11,10 +11,8 @@ export const useAuth = (item, save) => {
 
   const handlerOnFocus = useCallback(() => setValue(''), [])
 
-  // console.log('auth hook ...', value)
-
   return {
-    value, setValue,
+    value, 
     onChange: handlerOnChange,
     onFocus: handlerOnFocus
   }

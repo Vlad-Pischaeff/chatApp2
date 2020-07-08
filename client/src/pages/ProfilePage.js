@@ -20,7 +20,7 @@ export default function ProfilePage() {
   const login = useAuth('login', false)
 
   useEffect(() => {
-    login.setValue(credentials.login)
+    login.onChange(credentials.login)
     setAvatar(credentials.avatar)
     return function() {}
   }, [])

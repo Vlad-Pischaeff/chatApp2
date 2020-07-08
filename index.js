@@ -8,30 +8,37 @@ const mongoose = require('mongoose')
 mongoose.set('useFindAndModify', false)
 
 const WebSocket = require('ws')
+// const server = require('http').createServer(app)
+// const wss = new WebSocket.Server({ server, path: '/ws' })
 
 let clients = new Set()
+// let wss
 
 app.use(express.json({ extended: true }))
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/room', require('./routes/room.routes'))
 app.use('/api/message', require('./routes/message.routes'))
 
-// app.get('/', function(req,res) {
-//   res.sendFile(__dirname + '/index.html')
-// })
+app.get('/', function(req,res) {
+  res.sendFile(__dirname + '/index.html')
+})
 
 const start = async () => {
   try {
     await mongoose.connect(config.get('mongoUrl'), {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useCreateIndex: true
+      useyCreateIndex: true
     })
     const server = await app.listen(PORT, () => {
       console.log(`server started on port ${PORT}...`)
     })
 
-    const wss = new WebSocket.Server({ server, path: '/ws' })
+    wss = new WebSocket.Server({ server, path: '/ws' })
+    
+    // server.listen(PORT, () => {
+    //   console.log(`server started on port ${PORT}...`)
+    // })
 
     wss.on('connection', ws => {
       console.log('websocket app started...')
@@ -40,17 +47,22 @@ const start = async () => {
     
       ws.on('message', message => {
         let data = JSON.parse(message)
-        console.log('received: %s', message, data)
+        // console.log('received: %s', message, data, wss.clients.size)
         if (data.online) {
           // ...add clients to Set
           client.id = data.online
           client.socket = ws
           clients.add(client)
           
-          for(let client of clients) {
-            client.socket.send(message)
-          }
+          wss.clients.forEach(client => {
+              client.send(message)
+          })
         }
+        // wss.clients.forEach(client => {
+        //   if (client !== ws && client.readyState === WebSocket.OPEN) {
+        //     client.send(message)
+        //   }
+        // })
       })
     
       ws.on('pong', () => {

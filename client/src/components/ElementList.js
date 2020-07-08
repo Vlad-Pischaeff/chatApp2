@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { List, Icon, Badge } from 'rsuite'
 import Radium from 'radium'
 import { context } from '../context/context'
@@ -25,6 +25,8 @@ const styles = {
   img: { height: '3.5rem', },
   noimg: { fontSize: '3.3rem', },
   grey: { filter: 'grayscale(100%)', },
+  greycolor: { color: '#6a6a6a', },
+  color: { color: '#7200a6', },
   content: {
     flex: '1 1 auto',
     margin: '0 0 0 0.4rem',
@@ -41,7 +43,11 @@ const styles = {
 }
 
 function ElementList({ data, style, multi, selected, setSelected}) {
-  const { credentials, itemIndex, setItemIndex, activeKey } = useContext(context)
+  const { credentials, itemIndex, setItemIndex, activeKey, onlineUsers } = useContext(context)
+
+  useEffect(() => {
+    console.log('items use effect ...', onlineUsers)
+  }, [onlineUsers])
 
   const handlerOnClick = (item, index) => {
     let obj = {...selected}
@@ -67,9 +73,23 @@ function ElementList({ data, style, multi, selected, setSelected}) {
                           : {...styles.noselect, ...styles.element, ...styles.flex}} 
                           onClick={() => handlerOnClick(item, index)} key={index}>
             <div>
-              { item.avatar
-                ? <Badge content={false}><img src={item.avatar} style={styles.img} /></Badge>
-                : <Badge content={false}><Icon icon="image" style={styles.noimg} /></Badge>
+              { (() => {
+                  if (activeKey === 'conversations') {
+                    return item.avatar
+                    ? <Badge  content={false}><img src={item.avatar} 
+                              style={onlineUsers !==undefined && onlineUsers[item._id] 
+                                ? {...styles.img}
+                                : {...styles.img, ...styles.grey}} /></Badge>
+                    : <Badge  content={false}><Icon icon="avatar" 
+                              style={onlineUsers !==undefined && onlineUsers[item._id] 
+                                ? {...styles.noimg, ...styles.color}
+                                : {...styles.noimg, ...styles.greycolor}} /></Badge>
+                  } else {
+                    return item.avatar
+                    ? <Badge content={false}><img src={item.avatar} style={styles.img} /></Badge>
+                    : <Badge content={false}><Icon icon="image" style={styles.noimg} /></Badge>
+                  }
+                })()
               }
             </div>
 

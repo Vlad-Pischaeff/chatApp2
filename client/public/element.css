@@ -1,0 +1,13 @@
+.element {
+  height: 4rem;
+  align-items: center;
+  margin: 0.2rem;
+  padding: 0 0.3rem;
+  color: #111111;
+  opacity: 0.8;
+}
+.element:hover {
+  opacity: 1;
+  cursor: pointer;
+  color: white;
+}

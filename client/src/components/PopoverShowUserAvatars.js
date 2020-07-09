@@ -12,7 +12,7 @@ const styles = {
 
 const Speaker = ({ item, ...props }) => {
   const { credentials } = useContext(context)
-  const { request, loading, error, header } = useHttp()
+  const { request } = useHttp()
   const [ users, setUsers ] = useState()
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const Speaker = ({ item, ...props }) => {
       let arr = [...item.followers, item.owner]
       const body = { invited: arr }
       const API ='/api/auth/invited'
-      const data = await request(API, 'POST', body, header)
+      const data = await request(API, 'POST', body)
       setUsers(data)
     }
     getInvitedUsers()
@@ -35,7 +35,7 @@ const Speaker = ({ item, ...props }) => {
           ? <></>
           : <div>
               { item.avatar
-                ? <img src={item.avatar} style={styles.image} />
+                ? <img src={item.avatar} style={styles.image} alt='' />
                 : <Icon icon="image" style={styles.image} />
               }
             </div>

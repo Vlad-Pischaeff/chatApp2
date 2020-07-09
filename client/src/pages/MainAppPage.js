@@ -26,8 +26,8 @@ const styles = {
 }
 
 export default function MainAppPage () {
-  const { request, loading, error, header } = useHttp()
-  const { items, setItems, activeKey, setActiveKey, setItemIndex } = useContext(context)
+  const { request, loading } = useHttp()
+  const { items, setItems, activeKey, setActiveKey, setItemIndex, socketMessage, setLinks, links } = useContext(context)
   const [selectOne, setSelectOne] = useState({})
 
   useEffect(() => {
@@ -36,20 +36,35 @@ export default function MainAppPage () {
     setItemIndex()
   }, [activeKey])
   
+  useEffect(() => {
+    if (socketMessage.online) {
+      let obj = { 'online': true }
+      setLinks({ ...links, [socketMessage.online]: obj })
+      console.log('MainAppPage new message ...', socketMessage)
+    }
+    if (socketMessage.offline) {
+      let obj = { 'online': false }
+      setLinks({ ...links, [socketMessage.offline]: obj })
+      console.log('MainAppPage new message ...', socketMessage)
+    }
+  }, [socketMessage])
+
   const getChatrooms = async () => {
     try {
-      const data = await request(`/api/room/${activeKey}`, 'GET', null, header)
+      const data = await request(`/api/room/${activeKey}`, 'GET')
       setItems(data)
     } catch (e) { Alert.error(`/api/room/${activeKey} error ... ${e}`, 5000) }
   }
 
   const getFriends = async () => {
     try {
-      const data = await request('/api/auth/friends', 'GET', null, header)
+      const data = await request('/api/auth/friends', 'GET')
       setItems(data)
     } catch (e) { Alert.error(`/api/auth/friends error ... ${e}`, 5000) }
   }
 
+  console.log('MainAppPage links ...', links)
+  
   return (
     <div style={{...styles.flexcol, ...styles.wrap}}>
       <main style={{...styles.flexrow, ...styles.main}}>

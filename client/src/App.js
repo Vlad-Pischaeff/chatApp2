@@ -3,7 +3,6 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import 'rsuite/lib/styles/themes/default/index.less'
 import { Container } from 'rsuite'
 import MainRoutes from './routes/MainRoutes'
-import CustomFooter from './components/CustomFooter'
 import NavLoginRegister from './components/NavLoginRegister'
 import NavMainApp from './components/NavMainApp'
 import {context} from './context/context'
@@ -23,15 +22,17 @@ const styles = {
 }
 	
 export default function App () {
-  const { menu, setMenu } = useMenu()
   const [ avatar, setAvatar] = useState(null)
   const [ items, setItems ] = useState([])            //aside items
   const [ itemIndex, setItemIndex ] = useState()      //currently selected item index
   const [ messages, setMessages ] = useState([])      //currently visible messages
   const [ activeKey, setActiveKey ] = useState('conversations')
+  const [ links, setLinks ] = useState({})            // my friends, subscriptions and my 
+                                                      // chatrooms current state
+  const { menu, setMenu } = useMenu()
   const { credentials, saveCredentials, deleteCredentials } = useStorage()
   const { socketRef, socketMessage, socketSendMessage } = useWebsocket()
-  const [ onlineUsers, setOnlineUsers ] = useState({})
+
 
   useEffect(() => {
     if (credentials.userId) {
@@ -39,12 +40,6 @@ export default function App () {
     }
   }, [credentials])
 
-  useEffect(() => {
-    if (socketMessage.online) {
-      setOnlineUsers({ ...onlineUsers, [socketMessage.online]: true })
-    }
-  }, [socketMessage])
-  
   // console.log('items ...', items, itemIndex)
   return (
     <context.Provider value={{ menu, setMenu, 
@@ -55,13 +50,12 @@ export default function App () {
                                items, setItems,
                                itemIndex, setItemIndex,
                                messages, setMessages,
-                               onlineUsers }}>
+                               links, setLinks }}>
       <Container style={styles.container}>
         <Router>
           { Object.keys(credentials).length === 0 ? <NavLoginRegister /> : <NavMainApp /> }
           <MainRoutes />
         </Router>
-        {/* <CustomFooter /> */}
       </Container>
     </context.Provider>
   )

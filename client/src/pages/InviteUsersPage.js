@@ -15,7 +15,7 @@ export default function InviteUsersPage() {
 
   const [selectMany, setSelectMany] = useState({})
   const [show, setShow] = useState(true)
-  const { request, loading, error, header } = useHttp()
+  const { request } = useHttp()
   const { setItems, items, itemIndex } = useContext(context)
   const [ friends, setFriends ] = useState()
 
@@ -23,10 +23,10 @@ export default function InviteUsersPage() {
     const getFriends = async () => {
       let roomId = items[itemIndex]._id
       let API = `/api/room/privatechat/${roomId}`
-      const room = await request(API, 'GET', null, header)
+      const room = await request(API, 'GET')
       const followers = room.followers
       API = '/api/auth/friends'
-      const data = await request(API, 'GET', null, header)
+      const data = await request(API, 'GET')
       //set users to invite without already exists ones      
       let newArr = data.filter(user => 
         followers.indexOf(user._id) === -1 && user )
@@ -46,7 +46,7 @@ export default function InviteUsersPage() {
     console.log('room id ...', roomId)
     const API = `/api/room/invite/${roomId}`
     const body = { 'friends': selectMany }
-    const data = await request(API, 'PATCH', body, header)
+    const data = await request(API, 'PATCH', body)
     console.log(`${API} patch result ...`, data)
     setItems(data)
     closeWindow()

@@ -18,7 +18,7 @@ export default function ChatRoomPage() {
   const { avatar, setAvatar, activeKey, setItems } = useContext(context)
   const chatroomname = useAuth('chatroomname', false)
   const chatroomdesc = useAuth('chatroomdesc', false)
-  const { request, loading, error, header } = useHttp()
+  const { request } = useHttp()
 
   const handleClick = async (e) => {
     try {
@@ -29,7 +29,7 @@ export default function ChatRoomPage() {
           private: activeKey === 'chatroom' ? false : true,
           avatar: avatar ? avatar : null
          }
-        const data = await request('/api/room/create', 'PUT', body, header)
+        const data = await request('/api/room/create', 'PUT', body)
         setItems(data)
         Alert.success(`Room "${chatroomname.value}" created ....`, 5000)
         closePage()
@@ -71,7 +71,7 @@ export default function ChatRoomPage() {
           </FormGroup>
         </Form>
         { avatar
-          ? <img src={avatar} style={styles.icon} onClick={() => setShowUpload(true)} />
+          ? <img src={avatar} style={styles.icon} onClick={() => setShowUpload(true)} alt='' />
           : <Icon icon="image" size="4x" style={styles.icon} onClick={() => setShowUpload(true)} />
         }
       </Modal.Body>

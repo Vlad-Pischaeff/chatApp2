@@ -7,15 +7,15 @@ let webSocket = new WebSocket(url)
 export default function useWebsocket() {
   const socketRef = useRef()
   const [ socketMessage, setSocketMessage ] = useState({})
-  let isReady = false
+  const isReady = useRef()
 
   useEffect(() => {
     webSocket.onopen = handleOpen
     webSocket.onclose = handleClose
     webSocket.onmessage = handleReceiveMessage
     socketRef.current = webSocket
-    isReady = true
-    console.log('socket initialisation ...', isReady )
+    isReady.current = true
+    console.log('Websocket initialisation ... isReady =', isReady )
   }, [])
 
   const handleOpen = () => {
@@ -26,12 +26,12 @@ export default function useWebsocket() {
 
   const handleClose = () => {
     console.log("Websocket closed ...")
-    isReady = false
+    isReady.current = false
   }
 
   const socketSendMessage = useCallback(
     message => {
-      isReady && socketRef.current.send(JSON.stringify(message))
+      isReady.current && socketRef.current.send(JSON.stringify(message))
     },
     [socketRef]
   )
@@ -39,7 +39,7 @@ export default function useWebsocket() {
   const handleReceiveMessage = messageObject => {
     const message = JSON.parse(messageObject.data)
     setSocketMessage(message)
-    console.log('received message ...', message)
+    console.log('Websocket.hook received message ...', message)
   }
 
   return {socketRef, socketMessage, socketSendMessage}

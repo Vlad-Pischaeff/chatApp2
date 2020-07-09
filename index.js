@@ -28,8 +28,9 @@ const start = async () => {
     await mongoose.connect(config.get('mongoUrl'), {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useyCreateIndex: true
+      useCreateIndex: true
     })
+    
     const server = await app.listen(PORT, () => {
       console.log(`server started on port ${PORT}...`)
     })
@@ -53,30 +54,50 @@ const start = async () => {
           client.id = data.online
           client.socket = ws
           clients.add(client)
-          
+          // console.log('client...', ws)
+          // wss.clients.forEach(client => {
+          //     client.send(message)
+          // })
+        }
+        if (data.from) {
           wss.clients.forEach(client => {
+            if (client !== ws && client.readyState === WebSocket.OPEN) {
               client.send(message)
+            }
           })
         }
-        // wss.clients.forEach(client => {
-        //   if (client !== ws && client.readyState === WebSocket.OPEN) {
-        //     client.send(message)
-        //   }
-        // })
       })
     
       ws.on('pong', () => {
         ws.isAlive = true
-        console.log('isAlive', ws.isAlive,`${new Date()}`)
+        // console.log('all clients ...', clients.size)
+        // console.log('isAlive', ws.isAlive,`${new Date()}`)
+        for (let client of clients) {
+          let message = JSON.stringify({ online: client.id })
+          wss.clients.forEach(client => client.send(message))
+        }
       })
     })
     
     //...preserve constant clients connections...
+    // setInterval(() => {
+    //   wss.clients.forEach(ws => {
+    //     if (!ws.isAlive) return ws.terminate()
+    //     ws.isAlive = false
+    //     ws.ping()
+    //   })
+    // }, 10000)
+
     setInterval(() => {
-      wss.clients.forEach(ws => {
-        if (!ws.isAlive) return ws.terminate()
-        ws.isAlive = false
-        ws.ping()
+      clients.forEach(ws => {
+        if (!ws.socket.isAlive) {
+          let message = JSON.stringify({ offline: ws.id })
+          wss.clients.forEach(client => client.send(message))
+          clients.delete(ws)
+          return ws.socket.terminate()
+        }
+        ws.socket.isAlive = false
+        ws.socket.ping()
       })
     }, 10000)
 

@@ -35,8 +35,8 @@ const styles = {
 
 export default function MessagesUserList() {
   const { items, itemIndex, setItemIndex, messages, setMessages, credentials } = useContext(context)
-  const { request, loading, error, header } = useHttp()
-  let to = itemIndex === undefined ? null : items[itemIndex]._id
+  const { request, loading } = useHttp()
+  let to = items[itemIndex] === undefined ? null : items[itemIndex]._id
   let msgList = null
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function MessagesUserList() {
 
   const getUserMessages = async () => {
     const API = `/api/message/user/${to}`
-    const data = await request(API, 'GET', null, header)
+    const data = await request(API, 'GET')
     setMessages(data)
   }
 
@@ -59,7 +59,7 @@ export default function MessagesUserList() {
       let date = new Date(item.date).toLocaleString() 
       return credentials.userId !== item.from
         ? <section key={index} style={styles.wrap} >
-            <img src={items[itemIndex].avatar} style={styles.img} />
+            <img src={items[itemIndex].avatar} style={styles.img} alt='' />
             <span style={{...styles.arrow, ...styles.left}}></span>
             <article style={{...styles.wrapmsg, ...styles.msg}}>
               <div style={{...styles.date, ...styles.color}}> {date} </div>
@@ -67,7 +67,7 @@ export default function MessagesUserList() {
             </article>
           </section>
         : <section key={index} style={styles.mywrap} >
-            <img src={credentials.avatar} style={styles.img} />
+            <img src={credentials.avatar} style={styles.img} alt='' />
             <span style={{...styles.arrow, ...styles.right}}></span>
             <article style={{...styles.wrapmsg, ...styles.mymsg}}>
               <div style={{...styles.date, ...styles.mycolor}}> {date} </div>

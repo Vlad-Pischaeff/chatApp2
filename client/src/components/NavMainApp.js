@@ -11,7 +11,6 @@ const styles = {
     alignItems: 'center',
     margin: '0 1rem',
     fontSize: '1.5rem',
-    // width: '20rem'
   },
   svg: { 
     height: '3.5rem', 

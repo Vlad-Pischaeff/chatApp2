@@ -16,7 +16,7 @@ export default function SearchResultPage() {
 
   const [selectMany, setSelectMany] = useState({})
   const [show, setShow] = useState(true)
-  const { request, loading, error, header } = useHttp()
+  const { request } = useHttp()
   const { setItems, activeKey } = useContext(context)
 
   const closeWindow = () => {
@@ -28,7 +28,7 @@ export default function SearchResultPage() {
   const OK_onClick = async () => {
     const API = (activeKey === 'conversations') ? '/api/auth/friends' : '/api/room/follow'
     const body = { 'friends': selectMany }
-    const data = await request(API, 'PATCH', body, header)
+    const data = await request(API, 'PATCH', body)
     console.log(`${API} patch result ...`, data)
     setItems(data)
     closeWindow()

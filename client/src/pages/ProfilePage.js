@@ -16,7 +16,7 @@ export default function ProfilePage() {
   const [showUpload, setShowUpload] = useState(false)
   const [show, setShow] = useState(true)
   const { avatar, credentials, saveCredentials, setAvatar } = useContext(context)
-  const { request, loading, error, header } = useHttp()
+  const { request } = useHttp()
   const login = useAuth('login', false)
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function ProfilePage() {
     const id = credentials.userId
     const body = {login: login.value, avatar: avatar }
     try {
-      const data = await request(`/api/auth/user/${id}`, 'PATCH', body, header)
+      const data = await request(`/api/auth/user/${id}`, 'PATCH', body)
       saveCredentials({...credentials, login: data.login, avatar: data.avatar})
       setAvatar(data.avatar)
       closePage()
@@ -55,7 +55,7 @@ export default function ProfilePage() {
           </FormGroup>
         </Form>
         { avatar
-          ? <img src={avatar} style={styles.icon} onClick={() => setShowUpload(true)} />
+          ? <img src={avatar} style={styles.icon} onClick={() => setShowUpload(true)} alt='' />
           : <Icon icon="avatar" size="4x" style={styles.icon} onClick={() => setShowUpload(true)} />
         }
       </Modal.Body>

@@ -69,7 +69,7 @@ export default function RegisterPage () {
           <FormGroup>
               <Button appearance="ghost" onClick={() => setShow(true)}>
               { avatar
-                ? <img src={avatar} style={styles.svg} />
+                ? <img src={avatar} style={styles.svg} alt='' />
                 : <Icon icon="avatar" size="4x" style={styles.icon} />
               }
               <div>Choose avatar</div>

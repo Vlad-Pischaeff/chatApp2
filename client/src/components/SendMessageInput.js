@@ -9,11 +9,11 @@ const styles = { search: { width: '25rem', margin: '0 1rem' }, }
 export default function SendMessageInput () {
   
   const message = useAuth('message', false)
-  const { request, loading, error, header } = useHttp()
+  const { request } = useHttp()
   const { items, itemIndex, socketSendMessage, credentials } = useContext(context)
   const [disabled, setDisabled] = useState(true)
   let from = credentials.userId
-  let to = itemIndex === undefined ? null : items[itemIndex]._id
+  let to = items[itemIndex] === undefined ? null : items[itemIndex]._id
 
   useEffect(() => {
     itemIndex !== undefined 
@@ -25,7 +25,7 @@ export default function SendMessageInput () {
     const API = '/api/message/new'
     const text = message.value
     const body = { to, text }
-    const data = await request(API, 'PUT', body, header)
+    await request(API, 'PUT', body)
     message.onFocus()
     let msg = { 'from': from, 'to': to}
     socketSendMessage(msg)

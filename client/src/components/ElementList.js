@@ -9,7 +9,7 @@ function ElementList(props) {
     <List style={style}>
       { data &&  
           data.map((item, index) => 
-            <Element item={item} index={index} {...arr} />
+            <Element item={item} index={index} {...arr} key={index} />
           )
       }
     </List>

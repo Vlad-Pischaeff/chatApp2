@@ -31,22 +31,21 @@ const styles = {
   mycolor: { color: 'cornflowerblue', },
 }
 
-export default function MessageElement(props) {
+export default function MessageUserListElement(props) {
   const { item, date } = props
-  const { credentials } = useContext(context)
+  const { credentials, items, itemIndex } = useContext(context)
 
   return credentials.userId !== item.from
-      ? <section key={item._id} style={styles.wrap} >
-          <img src={item.avatar} style={styles.img} alt='' />
+      ? <section style={styles.wrap} >
+          <img src={items[itemIndex].avatar} style={styles.img} alt='' />
           <span style={{...styles.arrow, ...styles.left}}></span>
           <article style={{...styles.wrapmsg, ...styles.msg}}>
             <div style={{...styles.date, ...styles.color}}> {date} </div>
-            <div style={{...styles.user, ...styles.color}}> User {item.login} wrote : </div>
             <div> {item.text} </div>
           </article>
         </section>
-      : <section key={item._id} style={styles.mywrap} >
-          <img src={item.avatar} style={styles.img} alt='' />
+      : <section style={styles.mywrap} >
+          <img src={credentials.avatar} style={styles.img} alt='' />
           <span style={{...styles.arrow, ...styles.right}}></span>
           <article style={{...styles.wrapmsg, ...styles.mymsg}}>
             <div style={{...styles.date, ...styles.mycolor}}> {date} </div>

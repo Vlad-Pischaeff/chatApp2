@@ -1,84 +1,52 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
-import { Loader } from 'rsuite'
-
-const styles = {
-  wrap: { maxWidth: '75%',  display: 'flex',  flexFlow: 'row nowrap', margin: '1rem', },
-  mywrap: { display: 'flex',  flexFlow: 'row-reverse nowrap', margin: '1rem', },
-  wrapmsg: { maxWidth: '75%',  display: 'flex',  flexFlow: 'column nowrap', padding: '0.2rem 0.3rem', },
-  mymsg: { background: '#a6d7ff', color: 'black', },
-  msg: { background: '#409cff', color: 'white', },
-  img: { width: '3rem', height: '3rem', },
-  arrow: {
-    margin: '0',
-    padding: '0',
-    content: '',  
-    width: '1rem',
-    height: '1rem',
-    position: 'relative',
-    borderStyle: 'solid',
-  },
-  left: {
-    borderWidth: '1rem 0 0 1rem',
-    borderColor: 'rgb(64, 156, 255) transparent transparent transparent',
-  },
-  right: {
-    borderWidth: '0 0 1rem 1rem',
-    borderColor: ' transparent transparent transparent rgb(166, 215, 255)',
-  },
-  date: { fontSize: '0.7rem',  },
-  color: { color: 'cyan', },
-  mycolor: { color: 'cornflowerblue', },
-  loader: { margin: '2rem', },
-}
+import MessageUserListElement from './MessageUserListElement'
 
 export default function MessagesUserList() {
-  const { items, itemIndex, setItemIndex, messages, setMessages, credentials } = useContext(context)
-  const { request, loading } = useHttp()
+  const { items, itemIndex, credentials, socketMessage, activeKey } = useContext(context)
+  const [ newMessages, setNewMessages ] = useState([])
+  const { request } = useHttp()
   let to = items[itemIndex] === undefined ? null : items[itemIndex]._id
+  const liRef = useRef('')
   let msgList = null
 
   useEffect(() => {
-    setMessages([])
-    return function () { setItemIndex() }
-  }, [])
+    liRef.current && liRef.current.scrollIntoView({ behavior: 'smooth' })
+  }, [newMessages])
 
   useEffect(() => {
-    itemIndex !== undefined && items[0].friends !== undefined && getUserMessages()
+    setNewMessages([])
+  }, [activeKey])
+
+  useEffect(() => {
+    itemIndex !== undefined && 
+    items[0].friends !== undefined && 
+    getUserMessages()
   }, [itemIndex])
+
+  useEffect(() => {
+    if (items[itemIndex] !== undefined && 
+        ((socketMessage.to === items[itemIndex]._id && socketMessage.from === credentials.userId) ||
+        (socketMessage.from === items[itemIndex]._id && socketMessage.to === credentials.userId))) {
+        getUserMessages()
+    }
+  }, [socketMessage])
 
   const getUserMessages = async () => {
     const API = `/api/message/user/${to}`
     const data = await request(API, 'GET')
-    setMessages(data)
+    setNewMessages(data)
   }
 
-  if (itemIndex !== undefined) {
-    msgList = messages.map((item, index) => {
+  if (itemIndex !== undefined && newMessages.length !== 0) {
+    msgList = newMessages.map((item, index) => {
       let date = new Date(item.date).toLocaleString() 
-      return credentials.userId !== item.from
-        ? <section key={index} style={styles.wrap} >
-            <img src={items[itemIndex].avatar} style={styles.img} alt='' />
-            <span style={{...styles.arrow, ...styles.left}}></span>
-            <article style={{...styles.wrapmsg, ...styles.msg}}>
-              <div style={{...styles.date, ...styles.color}}> {date} </div>
-              <div> {item.text} </div>
-            </article>
-          </section>
-        : <section key={index} style={styles.mywrap} >
-            <img src={credentials.avatar} style={styles.img} alt='' />
-            <span style={{...styles.arrow, ...styles.right}}></span>
-            <article style={{...styles.wrapmsg, ...styles.mymsg}}>
-              <div style={{...styles.date, ...styles.mycolor}}> {date} </div>
-              <div> {item.text} </div>
-            </article>
-          </section>    
-      })
+      return  <li key={index} ref={liRef}>
+                <MessageUserListElement item={item} date={date} />
+              </li>
+    })
   }
   
-  if (loading)
-    return <Loader size='lg' style={styles.loader} />
-  else
-    return msgList
+  return msgList
 }

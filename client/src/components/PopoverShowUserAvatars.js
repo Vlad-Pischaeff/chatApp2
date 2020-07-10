@@ -33,7 +33,7 @@ const Speaker = ({ item, ...props }) => {
         {users && users.map((item,index) => 
           item._id === credentials.userId
           ? <></>
-          : <div>
+          : <div key={index} >
               { item.avatar
                 ? <img src={item.avatar} style={styles.image} alt='' />
                 : <Icon icon="image" style={styles.image} />
@@ -53,7 +53,7 @@ export default function PopoverShowUserAvatars({ placement, item }) {
               triggerRef={triggerRef}
               placement={placement} 
               speaker={<Speaker item={item} />} >
-      <Icon icon="user" size="1x" style={styles.icon} /> 
+      <Icon icon="user" style={styles.icon} /> 
     </Whisper>
   )
 }

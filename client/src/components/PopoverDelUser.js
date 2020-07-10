@@ -35,7 +35,7 @@ export default function PopoverDelUser({ content, placement, item }) {
               triggerRef={triggerRef}
               placement={placement} 
               speaker={<Speaker content={content} item={item} />} >
-      <Icon icon="close" size="1x" style={styles.icon} /> 
+      <Icon icon="close" style={styles.icon} /> 
     </Whisper>
   )
 }

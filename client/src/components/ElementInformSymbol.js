@@ -14,16 +14,16 @@ export default function ElementInformSymbol(props) {
   return (
     <div>
       { activeKey === 'chatroom' && item.owner === credentials.userId &&
-          <Icon icon="avatar" size="1x" style={styles.icon} />
+          <Icon icon="avatar" style={styles.icon} />
       }
       { activeKey === 'privatechat' && item.followers && item.followers.length !== 0 &&
           <PopoverShowUserAvatars placement="rightStart" item={item} />
       }
       { activeKey === 'privatechat' && item.followers && item.followers.length === 0 &&
-          <Icon icon="user-o" size="1x" style={styles.icon} />
+          <Icon icon="user-o" style={styles.icon} />
       }
       { item.private === true && 
-          <Icon icon="lock" size="1x" style={styles.icon} />
+          <Icon icon="lock" style={styles.icon} />
       }
     </div>
   )

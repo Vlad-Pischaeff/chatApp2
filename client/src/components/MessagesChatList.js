@@ -1,19 +1,23 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
-import { Loader } from 'rsuite'
-import MessageElement from './MessageElement'
-
-const styles = {
-  loader: { margin: '2rem', },
-}
+import MessageChatListElement from './MessageChatListElement'
 
 export default function MessagesChatList() {
-  const { items, itemIndex, credentials, socketMessage } = useContext(context)
-  const { request, loading } = useHttp()
+  const { items, itemIndex, socketMessage, activeKey } = useContext(context)
+  const { request } = useHttp()
   const [ newMessages, setNewMessages ] = useState([])
   let to = items[itemIndex] === undefined ? null : items[itemIndex]._id
+  const liRef = useRef('')
   let msgList = null
+
+  useEffect(() => {
+    liRef.current && liRef.current.scrollIntoView({ behavior: 'smooth' })
+  }, [newMessages])
+
+  useEffect(() => {
+    setNewMessages([])
+  }, [activeKey])
 
   useEffect(() => {
     getInformation()
@@ -64,14 +68,13 @@ export default function MessagesChatList() {
   }
    
   if (itemIndex !== undefined && newMessages.length !== 0) {
-    msgList = newMessages.map(item => {
+    msgList = newMessages.map((item, index) => {
       let date = new Date(item.date).toLocaleString() 
-      return <MessageElement item={item} date={date} />
+      return  <li key={index} ref={liRef}>
+                <MessageChatListElement item={item} date={date} />
+              </li>
     })
   }
-  
-  if (loading)
-    return <Loader size='lg' style={styles.loader} />
-  else
-    return msgList
+
+  return msgList
 }

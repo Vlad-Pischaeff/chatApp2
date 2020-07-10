@@ -40,12 +40,12 @@ export default function MainAppPage () {
     if (socketMessage.online) {
       let obj = { 'online': true }
       setLinks({ ...links, [socketMessage.online]: obj })
-      console.log('MainAppPage new message ...', socketMessage)
+      // console.log('MainAppPage new message ...', socketMessage)
     }
     if (socketMessage.offline) {
       let obj = { 'online': false }
       setLinks({ ...links, [socketMessage.offline]: obj })
-      console.log('MainAppPage new message ...', socketMessage)
+      // console.log('MainAppPage new message ...', socketMessage)
     }
   }, [socketMessage])
 
@@ -63,7 +63,7 @@ export default function MainAppPage () {
     } catch (e) { Alert.error(`/api/auth/friends error ... ${e}`, 5000) }
   }
 
-  console.log('MainAppPage links ...', links)
+  // console.log('MainAppPage links ...', links)
   
   return (
     <div style={{...styles.flexcol, ...styles.wrap}}>

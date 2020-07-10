@@ -25,20 +25,13 @@ export default function App () {
   const [ avatar, setAvatar] = useState(null)
   const [ items, setItems ] = useState([])            //aside items
   const [ itemIndex, setItemIndex ] = useState()      //currently selected item index
-  const [ messages, setMessages ] = useState([])      //currently visible messages
+  // const [ messages, setMessages ] = useState([])      //currently visible messages
   const [ activeKey, setActiveKey ] = useState('conversations')
   const [ links, setLinks ] = useState({})            // my friends, subscriptions and my 
                                                       // chatrooms current state
   const { menu, setMenu } = useMenu()
   const { credentials, saveCredentials, deleteCredentials } = useStorage()
   const { socketRef, socketMessage, socketSendMessage } = useWebsocket()
-
-
-  useEffect(() => {
-    if (credentials.userId) {
-      // socketSendMessage({ 'online': credentials.userId })
-    }
-  }, [credentials])
 
   // console.log('items ...', items, itemIndex)
   return (
@@ -49,7 +42,7 @@ export default function App () {
                                socketRef, socketMessage, socketSendMessage,
                                items, setItems,
                                itemIndex, setItemIndex,
-                               messages, setMessages,
+                              //  messages, setMessages,
                                links, setLinks }}>
       <Container style={styles.container}>
         <Router>

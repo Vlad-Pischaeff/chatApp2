@@ -61,9 +61,9 @@ const start = async () => {
         }
         if (data.from) {
           wss.clients.forEach(client => {
-            if (client !== ws && client.readyState === WebSocket.OPEN) {
+            // if (client !== ws && client.readyState === WebSocket.OPEN) {
               client.send(message)
-            }
+            // }
           })
         }
       })

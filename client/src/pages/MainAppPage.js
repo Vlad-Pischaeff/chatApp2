@@ -31,40 +31,93 @@ export default function MainAppPage () {
   const [selectOne, setSelectOne] = useState({})
 
   useEffect(() => {
-    activeKey === 'conversations' ? getFriends() : getChatrooms(activeKey)
+    activeKey === 'conversations' 
+      ? getFriends().then(e => setItems(e)) 
+      : getChatrooms(activeKey).then(e => setItems(e))
     setSelectOne({})
     setItemIndex()
+    console.log('MainAppPage ... activeKey effect')
   }, [activeKey])
   
   useEffect(() => {
+    getAllLinks()
+      .then(e => fillLinks(e))
+    console.log('MainAppPage ... [] effect')
+  }, [])
+
+  useEffect(() => {
+    console.log('MainAppPage ... [links] effect', links)
+  }, [links])
+
+  useEffect(() => {
+    let obj = {...links}
     if (socketMessage.online) {
-      let obj = { 'online': true }
-      setLinks({ ...links, [socketMessage.online]: obj })
-      // console.log('MainAppPage new message ...', socketMessage)
+      let key = socketMessage.online
+      console.log('online', key, obj)
+      if ((obj[key] !== undefined) && (obj[key]['online'] === false)) {
+        obj[key] = { ...obj[key], 'online' : true }
+        setLinks(obj)
+      }
     }
     if (socketMessage.offline) {
-      let obj = { 'online': false }
-      setLinks({ ...links, [socketMessage.offline]: obj })
-      // console.log('MainAppPage new message ...', socketMessage)
+      let key = socketMessage.offline
+      if ((obj[key] !== undefined) && (obj[key]['online'] === true)) {
+        obj[key] = { ...obj[key], 'online' : false }
+        setLinks(obj)
+      }
     }
+    if (socketMessage.to) {
+      let key = socketMessage.to
+      if (obj[key] !== undefined && !obj[key]['login']) {
+        let val = obj[key]['msgs'] === false 
+          ? 1 
+          : obj[key]['msgs']++
+        obj[key] = { ...obj[key], 'msgs': val }
+        setLinks(obj)
+      }
+    }
+    if (socketMessage.from) {
+      let key = socketMessage.from
+      if (obj[key]['login']) {
+        let val = obj[key]['msgs'] === false 
+          ? 1 
+          : obj[key]['msgs']++
+        obj[key] = { ...obj[key], 'msgs': val }
+        setLinks(obj)
+      }
+    }
+    console.log('MainAppPage ... [socketMessage] effect', links)
   }, [socketMessage])
 
-  const getChatrooms = async () => {
+  const getChatrooms = async (room) => {
     try {
-      const data = await request(`/api/room/${activeKey}`, 'GET')
-      setItems(data)
-    } catch (e) { Alert.error(`/api/room/${activeKey} error ... ${e}`, 5000) }
+      return await request(`/api/room/${room}`, 'GET')
+    } catch (e) { Alert.error(`/api/room/${room} error ... ${e}`, 5000) }
   }
 
   const getFriends = async () => {
     try {
-      const data = await request('/api/auth/friends', 'GET')
-      setItems(data)
+      return await request('/api/auth/friends', 'GET')
     } catch (e) { Alert.error(`/api/auth/friends error ... ${e}`, 5000) }
   }
 
-  // console.log('MainAppPage links ...', links)
-  
+  const getAllLinks = async () => {
+    let friends = await getFriends()
+    let chatrooms = await getChatrooms('chatroom')
+    let privatechat = await getChatrooms('privatechat')
+    return [...friends, ...chatrooms, ...privatechat]
+  }
+
+  const fillLinks = (data) => {
+    let obj = {}
+    data.forEach(e => {
+      e.login
+        ? obj[e._id] = { 'msgs': false, 'online': false, 'user': e.login }
+        : obj[e._id] = { 'msgs': false, 'online': false }
+    })
+    setLinks({ ...links, ...obj })
+  }
+  console.log('MainAppPage ... render')
   return (
     <div style={{...styles.flexcol, ...styles.wrap}}>
       <main style={{...styles.flexrow, ...styles.main}}>

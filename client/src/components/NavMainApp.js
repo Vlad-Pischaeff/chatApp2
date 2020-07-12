@@ -36,7 +36,7 @@ export default function NavMainApp() {
       <Navbar appearance="inverse" >
         <Navbar.Header style={styles.lheader}>
           { credentials.avatar
-            ? <img src={credentials.avatar} style={styles.svg} />
+            ? <img src={credentials.avatar} style={styles.svg} alt='' />
             : <Icon icon="avatar" size="3x" />
           }
           <div><h5>{credentials.login}</h5></div>

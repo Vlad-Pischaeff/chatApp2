@@ -54,17 +54,9 @@ const start = async () => {
           client.id = data.online
           client.socket = ws
           clients.add(client)
-          // console.log('client...', ws)
-          // wss.clients.forEach(client => {
-          //     client.send(message)
-          // })
         }
         if (data.from) {
-          wss.clients.forEach(client => {
-            // if (client !== ws && client.readyState === WebSocket.OPEN) {
-              client.send(message)
-            // }
-          })
+          wss.clients.forEach(client => client.send(message))
         }
       })
     

@@ -2,14 +2,16 @@ import { useEffect, useRef, useCallback, useState } from 'react'
 const protocolPrefix = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
 let {host} = window.location
 const url = `${protocolPrefix}//${host}/ws`
-let webSocket = new WebSocket(url)
+// let webSocket = new WebSocket(url)
 
 export default function useWebsocket() {
   const socketRef = useRef()
+  const isReady = useRef()  
   const [ socketMessage, setSocketMessage ] = useState({})
-  const isReady = useRef()
+
 
   useEffect(() => {
+    let webSocket = new WebSocket(url)
     webSocket.onopen = handleOpen
     webSocket.onclose = handleClose
     webSocket.onmessage = handleReceiveMessage
@@ -41,6 +43,16 @@ export default function useWebsocket() {
     setSocketMessage(message)
     console.log('Websocket.hook received message ...', message)
   }
-
+  // function waitForOpenSocket(socket) {
+  //   return new Promise((resolve, _reject) => {
+  //     while (socket.readyState !== socket.OPEN) { /* no-op */ }
+  //     return resolve()
+  //   })
+  // }
+  
+  // async function sendMessage(socket, msg) {
+  //   await waitForOpenSocket(socket)
+  //   socket.send(msg)
+  // }
   return {socketRef, socketMessage, socketSendMessage}
 }

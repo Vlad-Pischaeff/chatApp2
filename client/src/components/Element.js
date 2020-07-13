@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { context } from '../context/context'
 import ElementAvatar from './ElementAvatar'
 import ElementDeleteSymbol from './ElementDeleteSymbol'
@@ -22,12 +22,8 @@ const styles = {
 }
 
 function Element(props) {
-  const { setItemIndex, links } = useContext(context)
+  const { setItemIndex } = useContext(context)
   const { item, index, multi, selected, setSelected } = props
-
-  // useEffect(() => {
-  //   console.log('Element links use effect ...', links)
-  // }, [links])
 
   const handlerOnClick = (item, index) => {
     let obj = {...selected}

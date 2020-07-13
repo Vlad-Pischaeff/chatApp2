@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from  'react'
 import { Popover, Whisper, Icon } from "rsuite"
 import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
-let trigger = null
+// let trigger = null
 
 const styles = { 
   icon: { margin: '0 0.2rem', }, 
@@ -46,11 +46,11 @@ const Speaker = ({ item, ...props }) => {
 }
 
 export default function PopoverShowUserAvatars({ placement, item }) {
-  const triggerRef = ref => (trigger = ref)
+  // const triggerRef = ref => (trigger = ref)
 
   return (
     <Whisper  trigger="hover" 
-              triggerRef={triggerRef}
+              // triggerRef={triggerRef}
               placement={placement} 
               speaker={<Speaker item={item} />} >
       <Icon icon="user" style={styles.icon} /> 

@@ -26,67 +26,67 @@ const styles = {
 }
 
 export default function MainAppPage () {
-  const { request, loading } = useHttp()
-  const { items, setItems, activeKey, setActiveKey, setItemIndex, socketMessage, setLinks, links } = useContext(context)
+  const { request } = useHttp()
+  const { items, setItems, activeKey, setActiveKey, itemIndex, setItemIndex, socketMessage, setLinks, links, credentials } = useContext(context)
   const [selectOne, setSelectOne] = useState({})
+  const [ loading, setLoading ] = useState(false)
 
   useEffect(() => {
+    setLoading(true)
     activeKey === 'conversations' 
-      ? getFriends().then(e => setItems(e)) 
-      : getChatrooms(activeKey).then(e => setItems(e))
+      ? getFriends()
+          .then(e => setItems(e))
+          .then(() => setLoading(false)) 
+      : getChatrooms(activeKey)
+          .then(e => setItems(e))
+          .then(() => setLoading(false))
     setSelectOne({})
     setItemIndex()
-    console.log('MainAppPage ... activeKey effect')
   }, [activeKey])
   
   useEffect(() => {
     getAllLinks()
       .then(e => fillLinks(e))
-    console.log('MainAppPage ... [] effect')
   }, [])
-
-  useEffect(() => {
-    console.log('MainAppPage ... [links] effect', links)
-  }, [links])
 
   useEffect(() => {
     let obj = {...links}
     if (socketMessage.online) {
       let key = socketMessage.online
-      console.log('online', key, obj)
       if ((obj[key] !== undefined) && (obj[key]['online'] === false)) {
         obj[key] = { ...obj[key], 'online' : true }
         setLinks(obj)
-      }
+      } // if user is our friend and hi is online, then set property obj[key]['online'] = true
     }
     if (socketMessage.offline) {
       let key = socketMessage.offline
       if ((obj[key] !== undefined) && (obj[key]['online'] === true)) {
         obj[key] = { ...obj[key], 'online' : false }
         setLinks(obj)
-      }
+      } // if user is our friend and hi is offline, then set property obj[key]['online'] = false
     }
-    if (socketMessage.to) {
-      let key = socketMessage.to
-      if (obj[key] !== undefined && !obj[key]['login']) {
+    if (socketMessage.toroom) {
+      let key = socketMessage.toroom
+      if (obj[key] !== undefined && 
+          (items[itemIndex] === undefined || key !== items[itemIndex]._id)) {
         let val = obj[key]['msgs'] === false 
           ? 1 
-          : obj[key]['msgs']++
+          : +obj[key]['msgs'] + 1
         obj[key] = { ...obj[key], 'msgs': val }
         setLinks(obj)
-      }
-    }
-    if (socketMessage.from) {
-      let key = socketMessage.from
-      if (obj[key]['login']) {
+      } // if room is in our subscription or we own it,
+    }   // then set property obj[key]['msgs'] = as counter of new messages to room
+    if (socketMessage.fromuser && socketMessage.to === credentials.userId) {
+      let key = socketMessage.fromuser
+      if (obj[key] !== undefined &&
+          (items[itemIndex] === undefined || key !== items[itemIndex]._id)) {
         let val = obj[key]['msgs'] === false 
           ? 1 
-          : obj[key]['msgs']++
+          : +obj[key]['msgs'] + 1
         obj[key] = { ...obj[key], 'msgs': val }
         setLinks(obj)
-      }
-    }
-    console.log('MainAppPage ... [socketMessage] effect', links)
+      } // if user is our friend,
+    }   // then set property obj[key]['msgs'] = as counter of new messages from user
   }, [socketMessage])
 
   const getChatrooms = async (room) => {
@@ -110,14 +110,10 @@ export default function MainAppPage () {
 
   const fillLinks = (data) => {
     let obj = {}
-    data.forEach(e => {
-      e.login
-        ? obj[e._id] = { 'msgs': false, 'online': false, 'user': e.login }
-        : obj[e._id] = { 'msgs': false, 'online': false }
-    })
+    data.forEach(e =>  obj[e._id] = { 'msgs': false, 'online': false })
     setLinks({ ...links, ...obj })
   }
-  console.log('MainAppPage ... render')
+
   return (
     <div style={{...styles.flexcol, ...styles.wrap}}>
       <main style={{...styles.flexrow, ...styles.main}}>

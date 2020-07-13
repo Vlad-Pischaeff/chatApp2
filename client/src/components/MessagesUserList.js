@@ -2,41 +2,58 @@ import React, { useContext, useEffect, useState, useRef } from 'react'
 import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 import MessageUserListElement from './MessageUserListElement'
+import { Loader } from 'rsuite'
+
+const styles = {
+  plus: { margin: '2rem', }, 
+}
 
 export default function MessagesUserList() {
-  const { items, itemIndex, credentials, socketMessage, activeKey } = useContext(context)
+  const { items, itemIndex, credentials, socketMessage, activeKey, links, setLinks } = useContext(context)
   const [ newMessages, setNewMessages ] = useState([])
   const { request } = useHttp()
+  const [ loading , setLoading ] = useState(false)
   let to = items[itemIndex] === undefined ? null : items[itemIndex]._id
   const liRef = useRef('')
   let msgList = null
 
   useEffect(() => {
     liRef.current && liRef.current.scrollIntoView({ behavior: 'smooth' })
-  }, [newMessages])
+  }, [newMessages, loading])
 
   useEffect(() => {
     setNewMessages([])
   }, [activeKey])
 
   useEffect(() => {
-    itemIndex !== undefined && 
-    items[0].friends !== undefined && 
-    getUserMessages()
+    console.log('MessagesUserList  ...itemIndex', newMessages, liRef.current)
+    if (itemIndex !== undefined && items[0].friends !== undefined) {  
+      setLoading(true)
+      getUserMessages()
+        .then(e => setNewMessages(e))
+        .then(() => setLoading(false))
+      setLinksMsgsFalse()
+    }
   }, [itemIndex])
 
   useEffect(() => {
     if (items[itemIndex] !== undefined && 
-        ((socketMessage.to === items[itemIndex]._id && socketMessage.from === credentials.userId) ||
-        (socketMessage.from === items[itemIndex]._id && socketMessage.to === credentials.userId))) {
+        ((socketMessage.to === items[itemIndex]._id && socketMessage.fromuser === credentials.userId) ||
+        (socketMessage.fromuser === items[itemIndex]._id && socketMessage.to === credentials.userId))) {
         getUserMessages()
+          .then(e => setNewMessages(e))
     }
   }, [socketMessage])
 
   const getUserMessages = async () => {
     const API = `/api/message/user/${to}`
-    const data = await request(API, 'GET')
-    setNewMessages(data)
+    return await request(API, 'GET')
+  }
+
+  const setLinksMsgsFalse = () => {
+    const obj = { ...links }
+    obj[to] = { ...obj[to], 'msgs': false }
+    setLinks(obj)
   }
 
   if (itemIndex !== undefined && newMessages.length !== 0) {
@@ -47,6 +64,9 @@ export default function MessagesUserList() {
               </li>
     })
   }
-  
-  return msgList
+
+  if (loading)
+    return <Loader size='md' style={styles.plus} />
+  else
+    return msgList 
 }

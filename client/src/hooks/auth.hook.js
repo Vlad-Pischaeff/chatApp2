@@ -4,8 +4,8 @@ export const useAuth = (item, save) => {
   const [value, setValue] = useState(localStorage.getItem(item) || '')
 
   useEffect(() => {
-    (save) && localStorage.setItem(item, value)
-  }, [save])
+    save && localStorage.setItem(item, value)
+  }, [save, item, value])
 
   const handlerOnChange = useCallback(e => setValue(e), [])
 

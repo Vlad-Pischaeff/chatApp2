@@ -4,7 +4,7 @@ import { useHttp } from '../hooks/http.hook'
 import MessageChatListElement from './MessageChatListElement'
 
 export default function MessagesChatList() {
-  const { items, itemIndex, socketMessage, activeKey } = useContext(context)
+  const { items, itemIndex, socketMessage, activeKey, links, setLinks } = useContext(context)
   const { request } = useHttp()
   const [ newMessages, setNewMessages ] = useState([])
   let to = items[itemIndex] === undefined ? null : items[itemIndex]._id
@@ -21,11 +21,12 @@ export default function MessagesChatList() {
 
   useEffect(() => {
     getInformation()
+    setLinksMsgsFalse()
   }, [itemIndex])
 
   useEffect(() => {
     if (items[itemIndex] !== undefined && 
-        socketMessage.to === items[itemIndex]._id) {
+        socketMessage.toroom === items[itemIndex]._id) {
       getInformation()
     }
   }, [socketMessage])
@@ -66,7 +67,13 @@ export default function MessagesChatList() {
     const API = '/api/auth/invited'
     return await request(API, 'POST', body)
   }
-   
+  
+  const setLinksMsgsFalse = () => {
+    const obj = { ...links }
+    obj[to] = { ...obj[to], 'msgs': false }
+    setLinks(obj)
+  }
+
   if (itemIndex !== undefined && newMessages.length !== 0) {
     msgList = newMessages.map((item, index) => {
       let date = new Date(item.date).toLocaleString() 

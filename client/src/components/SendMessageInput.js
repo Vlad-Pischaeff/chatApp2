@@ -10,7 +10,7 @@ export default function SendMessageInput () {
   
   const message = useAuth('message', false)
   const { request } = useHttp()
-  const { items, itemIndex, socketSendMessage, credentials } = useContext(context)
+  const { items, itemIndex, socketSendMessage, credentials, activeKey } = useContext(context)
   const [disabled, setDisabled] = useState(true)
   let from = credentials.userId
   let to = items[itemIndex] === undefined ? null : items[itemIndex]._id
@@ -27,7 +27,10 @@ export default function SendMessageInput () {
     const body = { to, text }
     await request(API, 'PUT', body)
     message.onFocus()
-    let msg = { 'from': from, 'to': to}
+    let msg = activeKey === 'conversations' 
+      ? { 'fromuser': from, 'to': to }
+      : { 'from': from, 'toroom': to }
+      console.log('SendMessageInput ...', activeKey, msg)
     socketSendMessage(msg)
   }
 

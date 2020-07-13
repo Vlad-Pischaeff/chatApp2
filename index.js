@@ -58,6 +58,9 @@ const start = async () => {
         if (data.from) {
           wss.clients.forEach(client => client.send(message))
         }
+        if (data.to) {
+          wss.clients.forEach(client => client.send(message))
+        }
       })
     
       ws.on('pong', () => {

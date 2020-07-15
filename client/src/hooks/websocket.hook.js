@@ -8,17 +8,23 @@ export default function useWebsocket() {
   const socketRef = useRef()
   const isReady = useRef()  
   const [ socketMessage, setSocketMessage ] = useState({})
-
+  const [webSocket, setWebsocket] = useState()
 
   useEffect(() => {
-    let webSocket = new WebSocket(url)
-    webSocket.onopen = handleOpen
-    webSocket.onclose = handleClose
-    webSocket.onmessage = handleReceiveMessage
-    socketRef.current = webSocket
-    isReady.current = true
-    console.log('Websocket initialisation ... isReady =', isReady )
+    let socket = new WebSocket(url)
+    setWebsocket(socket)
   }, [])
+
+  useEffect(() => {
+    if (webSocket !== undefined) {
+      webSocket.onopen = handleOpen
+      webSocket.onclose = handleClose
+      webSocket.onmessage = handleReceiveMessage
+      socketRef.current = webSocket
+      isReady.current = true
+      console.log('Websocket initialisation ... isReady =', isReady, webSocket )
+    }
+  }, [webSocket])
 
   const handleOpen = () => {
     console.log("Websocket opened ...")
@@ -28,7 +34,10 @@ export default function useWebsocket() {
 
   const handleClose = () => {
     console.log("Websocket closed ...")
-    isReady.current = false
+    let socket = new WebSocket(url)
+    setWebsocket(socket)
+    console.log("Websocket new connection ...")
+    isReady.current = true
   }
 
   const socketSendMessage = useCallback(
@@ -43,6 +52,7 @@ export default function useWebsocket() {
     setSocketMessage(message)
     console.log('Websocket.hook received message ...', message)
   }
+
   // function waitForOpenSocket(socket) {
   //   return new Promise((resolve, _reject) => {
   //     while (socket.readyState !== socket.OPEN) { /* no-op */ }
@@ -54,5 +64,6 @@ export default function useWebsocket() {
   //   await waitForOpenSocket(socket)
   //   socket.send(msg)
   // }
+  
   return {socketRef, socketMessage, socketSendMessage}
 }

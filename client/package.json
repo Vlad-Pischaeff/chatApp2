@@ -6,14 +6,13 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "http-proxy-middleware": "^1.0.4",
-    "radium": "^0.26.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-image-crop": "^8.6.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "rsuite": "^4.7.0"
+    "rsuite": "^4.7.0",
+    "http-proxy-middleware": "^0.20.0"
   },
   "scripts": {
     "start": "craco start",
@@ -24,7 +23,6 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://localhost:5000",
   "browserslist": {
     "production": [
       ">0.2%",

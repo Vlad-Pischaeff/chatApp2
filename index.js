@@ -4,6 +4,7 @@ const cors = require('cors')
 const fs = require('fs')
 const http = require('http')
 const https = require('https')
+const httpolyglot = require('httpolyglot')
 const privateKey  = fs.readFileSync('./selfsigned.key', 'utf8')
 const certificate = fs.readFileSync('./selfsigned.crt', 'utf8')
 const credentials = {key: privateKey, cert: certificate}
@@ -17,6 +18,15 @@ mongoose.set('useFindAndModify', false)
 const WebSocket = require('ws')
 const httpServer = http.createServer(app)
 const httpsServer = https.createServer(credentials, app)
+const httPolyglot = httpolyglot.createServer(credentials, app)
+// const httPolyglot = httpolyglot.createServer({credentials}, (req, res) => {
+//   if (!req.socket.encrypted) {
+//     res.writeHead(301, { 'Location': 'https://localhost:5000' });
+//     return res.end();
+//   }
+//   res.writeHead(200, { 'Content-Type': 'text/plain' });
+//   res.end('Welcome, HTTPS user!');
+// })
 // const wss = new WebSocket.Server({ server, path: '/ws' })
 
 let clients = new Set()
@@ -25,17 +35,23 @@ app.use(express.json({ extended: true }))
 app.use(cors())
 
 //redirect to https
-// app.use((req, resp, next) => {
-//   // console.log('req header...', req.headers, req.secure, req.headers.host, req.url )
-//   if (req.secure) return next()
-//   // res.redirect("https://" + req.headers.host + req.url)
+// app.use((req, res, next) => {
+// //   // console.log('req header...', req.headers, req.secure, req.headers.host, req.url )
+//   if (req.secure) { 
+//     console.log('secured connection ...')
+//     return next()
+//   } else { 
+//     console.log('redirect to https ...')
+//     res.redirect("https://" + req.headers.host + req.url)
+//   }
 // })
 
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/room', require('./routes/room.routes'))
 app.use('/api/message', require('./routes/message.routes'))
 
-// app.get('/', function(req, res) {
+// app.get('*', function(req, res) {
+//   console.log('get /')
 //   res.sendFile(__dirname + '/index.html')
 // })
 
@@ -59,12 +75,17 @@ const start = async () => {
     //   console.log(`server started on port ${PORT}...`)
     // })
 
-    const server = await httpServer.listen(PORT, () => {
-      console.log('http server started ...')
-    })
+    // const server = await httpServer.listen(PORT, () => {
+    //   console.log('http server started ...')
+    // })
+
     // const server = await httpsServer.listen(PORT, () => {
     //   console.log('https server started ...')
     // })
+
+    const server = await httPolyglot.listen(PORT, () => {
+      console.log('http polyglot server started ...')
+    })
 
     wss = new WebSocket.Server({ server, path: '/ws' })
     
@@ -85,9 +106,6 @@ const start = async () => {
         if (data.from || data.to) {
           wss.clients.forEach(client => client.send(message))
         }
-        // if (data.to) {
-        //   wss.clients.forEach(client => client.send(message))
-        // }
       })
     
       ws.on('pong', () => {
@@ -130,8 +148,3 @@ const start = async () => {
 }
 
 start()
-
-
-
-
-

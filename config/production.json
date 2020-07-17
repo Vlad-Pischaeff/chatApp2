@@ -1,6 +1,5 @@
 {
   "port": 5000,
   "mongoUrl": "mongodb://127.0.0.1:27017/app",
-  "jwtSecret": "jrv0e7rf2oi43dfq0",
-	"baseUrl": "https://chat.cheburator.info:5000"
+  "jwtSecret": "jrv0e7rf2oi43dfq0"
 }

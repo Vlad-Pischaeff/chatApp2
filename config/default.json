@@ -1,6 +1,5 @@
 {
   "port": 5000,
   "mongoUrl": "mongodb+srv://vlad:123321@cluster0-pphif.mongodb.net/app?retryWrites=true&w=majority",
-  "jwtSecret": "jrv0e7rf2oi43dfq0",
-	"baseUrl": "http://localhost:5000"
+  "jwtSecret": "jrv0e7rf2oi43dfq0"
 }

@@ -18,7 +18,7 @@ router.post('/register', async (req, res) => {
       }
       
       const hashedPassword = await bcrypt.hash(password, 12)
-      const user = new User({ login, password: hashedPassword, avatar, online: true })
+      const user = new User({ login, password: hashedPassword, avatar })
       
       await user.save((err, doc) => {
         if (err) {
@@ -26,7 +26,7 @@ router.post('/register', async (req, res) => {
           return res.status(500).json({message:`User ${login} not created...`})
         } else {
           const token = jwt.sign( { userId: doc.id }, SECRET, { expiresIn: '1h' } )
-          res.status(201).json({ token, userId: doc.id, avatar })
+          res.status(201).json({ login, token, userId: doc.id, avatar })
           // res.status(201).json({message:`User ${login} created...`})
         }
       })

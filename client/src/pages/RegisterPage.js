@@ -30,7 +30,7 @@ export default function RegisterPage () {
   const login = useAuth('login', false)
   const password = useAuth('password', false)
   const { request, loading, error } = useHttp()
-  const { setMenu, avatar, saveCredentials } = useContext(context)
+  const { setMenu, avatar, saveCredentials, socketSendMessage } = useContext(context)
   
   useEffect(() => {
     if (error) Alert.error(`${error}`, 5000)
@@ -46,6 +46,7 @@ export default function RegisterPage () {
         const body = { login: login.value, password: password.value, avatar: avatar }
         const data = await request('/api/auth/register', 'POST', body)
         saveCredentials(data)
+        socketSendMessage({ 'online': data.userId })
       } catch (e) {
         console.log('register user error ...', e)
       }

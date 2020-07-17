@@ -52,6 +52,7 @@ export default function MainAppPage () {
   useEffect(() => {
     let obj = {...links}
     if (socketMessage.online) {
+      console.log('MainAppPage ... UseEffect...', links, socketMessage.online)
       let key = socketMessage.online
       if ((obj[key] !== undefined) && (obj[key]['online'] === false)) {
         obj[key] = { ...obj[key], 'online' : true }

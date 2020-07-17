@@ -10,8 +10,8 @@
     "client:build": "npm run build --prefix client",
     "server": "node index",
     "dev-server": "nodemon index",
-    "dev": "concurrently --kill-others-on-fail \"npm run dev-server\" \"npm run client\"",
-    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+    "dev": "cross-env NODE_ENV=development concurrently --kill-others-on-fail \"npm run dev-server\" \"npm run client\"",
+    "start": "cross-env NODE_ENV=production node index.js"
   },
   "author": "",
   "license": "ISC",

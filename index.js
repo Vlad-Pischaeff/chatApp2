@@ -23,19 +23,29 @@ let clients = new Set()
 
 app.use(express.json({ extended: true }))
 app.use(cors())
+
+//redirect to https
+// app.use((req, resp, next) => {
+//   // console.log('req header...', req.headers, req.secure, req.headers.host, req.url )
+//   if (req.secure) return next()
+//   // res.redirect("https://" + req.headers.host + req.url)
+// })
+
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/room', require('./routes/room.routes'))
 app.use('/api/message', require('./routes/message.routes'))
 
-app.use((req, resp, next) => {
-  // console.log('req header...', req.headers, req.secure, req.headers.host, req.url )
-  if (req.secure) return next()
-  // res.redirect("https://" + req.headers.host + req.url)
-})
+// app.get('/', function(req, res) {
+//   res.sendFile(__dirname + '/index.html')
+// })
 
-app.get('/', function(req, res) {
-  res.sendFile(__dirname + '/index.html')
-})
+if (process.env.NODE_ENV === 'production') {
+  app.use('/', express.static(path.join(__dirname, 'client', 'build', )))
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', '/index.html'))
+  })
+}
 
 const start = async () => {
   try {

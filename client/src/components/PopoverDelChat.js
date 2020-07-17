@@ -4,7 +4,9 @@ import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 let trigger = null
 
-const styles = { icon: { margin: '0 0.2rem',  }, }
+const styles = { 
+  icon: { margin: '0 0.2rem',  }, 
+}
 
 const Speaker = ({ content, item, ...props }) => {
   const { setItems } = useContext(context)

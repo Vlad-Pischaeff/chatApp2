@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from  'react'
 import { Popover, Whisper, Icon } from "rsuite"
 import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
-// let trigger = null
 
 const styles = { 
   icon: { margin: '0 0.2rem', }, 
@@ -20,19 +19,18 @@ const Speaker = ({ item, ...props }) => {
       let arr = [...item.followers, item.owner]
       const body = { invited: arr }
       const API ='/api/auth/invited'
-      const data = await request(API, 'POST', body)
-      setUsers(data)
+      return await request(API, 'POST', body)
     }
     getInvitedUsers()
+      .then(data => setUsers(data))
   }, [])
 
   return (
-
     <Popover title="Invited users ..." {...props}>
       <div style={styles.flex}>
-        {users && users.map((item,index) => 
+        {users && users.map((item, index) => 
           item._id === credentials.userId
-          ? <></>
+          ? <div key={index} ></div>
           : <div key={index} >
               { item.avatar
                 ? <img src={item.avatar} style={styles.image} alt='' />
@@ -46,8 +44,6 @@ const Speaker = ({ item, ...props }) => {
 }
 
 export default function PopoverShowUserAvatars({ placement, item }) {
-  // const triggerRef = ref => (trigger = ref)
-
   return (
     <Whisper  trigger="hover" 
               // triggerRef={triggerRef}

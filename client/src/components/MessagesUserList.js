@@ -5,7 +5,7 @@ import MessageUserListElement from './MessageUserListElement'
 import { Loader } from 'rsuite'
 
 const styles = {
-  plus: { margin: '2rem', }, 
+  loader: { margin: '2rem', }, 
 }
 
 export default function MessagesUserList() {
@@ -26,7 +26,6 @@ export default function MessagesUserList() {
   }, [activeKey])
 
   useEffect(() => {
-    console.log('MessagesUserList  ...itemIndex', newMessages, liRef.current)
     if (itemIndex !== undefined && items[0].friends !== undefined) {  
       setLoading(true)
       getUserMessages()
@@ -66,7 +65,7 @@ export default function MessagesUserList() {
   }
 
   if (loading)
-    return <Loader size='md' style={styles.plus} />
+    return <Loader size='md' style={styles.loader} />
   else
     return msgList 
 }

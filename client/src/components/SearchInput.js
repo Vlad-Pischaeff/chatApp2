@@ -5,11 +5,12 @@ import { useHttp } from '../hooks/http.hook'
 import { context } from '../context/context'
 import { Link, useLocation } from 'react-router-dom'
 
-const styles = { search: { width: '15rem', margin: '0 1rem' }, }
+const styles = { 
+  search: { width: '15rem', margin: '0 1rem' }, 
+}
 
 export default function SearchInput () {
   let location = useLocation()
-  
   const search = useAuth('search', false)
   const { request } = useHttp()
   const { activeKey } = useContext(context)
@@ -20,7 +21,6 @@ export default function SearchInput () {
     const API = (activeKey === 'conversations') ? '/api/auth/search' : '/api/room/search'
     const body = { 'search': search.value }
     const data = await request(API, 'POST', body)
-    // console.log(`${API} search result ...`, data)
     setResult(data)
     searchRef.current.click()
   }
@@ -30,7 +30,6 @@ export default function SearchInput () {
   }
 
   return (
-
     <InputGroup size='md' style={styles.search} >
       <Input placeholder='search' onKeyPress={handleKeyPress} {...search} />
       <InputGroup.Addon>

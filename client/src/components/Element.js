@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { context } from '../context/context'
+import './Element.css'
 import ElementAvatar from './ElementAvatar'
 import ElementDeleteSymbol from './ElementDeleteSymbol'
 import ElementInformSymbol from './ElementInformSymbol'

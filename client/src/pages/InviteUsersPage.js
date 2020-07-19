@@ -59,7 +59,7 @@ export default function InviteUsersPage() {
       </Modal.Header>
       <Modal.Body style={styles.body} >
         <ElementList  selected={selectMany} setSelected={setSelectMany} 
-                      data={friends} style={styles.list} multi='true' />
+                      data={friends} style={styles.list} multi='true' modal='true' />
       </Modal.Body>
       <Modal.Footer>
         <Badge content={Object.keys(selectMany).length > 0 ? Object.keys(selectMany).length : false} >

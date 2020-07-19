@@ -23,11 +23,12 @@ const styles = {
 }
 
 function Element(props) {
-  const { setItemIndex } = useContext(context)
-  const { item, index, multi, selected, setSelected } = props
+  const { setItemIndex, links, setLinks } = useContext(context)
+  const { item, index, multi, modal, selected, setSelected } = props
 
   const handlerOnClick = (item, index) => {
     let obj = {...selected}
+    // if "multi" === "true", than you can select many items together
     if (multi === 'true') {
       if (obj[index]) {
         delete obj[index]
@@ -35,10 +36,21 @@ function Element(props) {
       } else {
         setSelected({...obj, [index]: item._id})
       }
+    // if "multi" === "false", than you can select only one item
     } else {
-     setSelected({[index]: item._id})
-     setItemIndex(index)
+      setSelected({[index]: item._id})
+      setItemIndex(index)
+      // if "modal" === "false", than <Element /> used on aside
+      // and we reset counter
+      if (modal === 'false') setLinksMsgsFalse(item)
     }
+  }
+  // reset unreaded messages counter while select item
+  const setLinksMsgsFalse = (item) => {
+    const to = item._id
+    const obj = { ...links }
+    obj[to] = { ...obj[to], 'msgs': false }
+    setLinks(obj)
   }
 
   return (

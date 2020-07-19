@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Avatar, Nav, Loader, Alert } from 'rsuite'
+import { Avatar, Nav, Loader, Alert, IconButton, Icon, Whisper, Tooltip } from 'rsuite'
 import conversations from '../avatars/conversations.svg'
 import privatechat from '../avatars/social-network.svg'
 import chatroom from '../avatars/chat-room.svg'
@@ -52,7 +52,6 @@ export default function MainAppPage () {
   useEffect(() => {
     let obj = {...links}
     if (socketMessage.online) {
-      console.log('MainAppPage ... UseEffect...', links, socketMessage.online)
       let key = socketMessage.online
       if ((obj[key] !== undefined) && (obj[key]['online'] === false)) {
         obj[key] = { ...obj[key], 'online' : true }
@@ -114,7 +113,7 @@ export default function MainAppPage () {
     data.forEach(e =>  obj[e._id] = { 'msgs': false, 'online': false })
     setLinks({ ...links, ...obj })
   }
-
+  // console.log('MainAppPage ... render ...', links)
   return (
     <div style={{...styles.flexcol, ...styles.wrap}}>
       <main style={{...styles.flexrow, ...styles.main}}>
@@ -130,8 +129,8 @@ export default function MainAppPage () {
 
           <section style={styles.rooms}>
             { loading 
-              ? <Loader size='md' style={styles.plus} />
-              : <ElementList selected={selectOne} setSelected={setSelectOne} data={items} style={styles.list} multi='false' />  
+                ? <Loader size='md' style={styles.plus} />
+                : <ElementList selected={selectOne} setSelected={setSelectOne} data={items} style={styles.list} multi='false' modal='false'/>  
             }
           </section>
 
@@ -148,7 +147,12 @@ export default function MainAppPage () {
         
       </main>
       <footer style={{...styles.flexrow, ...styles.footer}}>
-        <h5> Footer </h5>
+        <Whisper  placement="topStart" trigger="hover" 
+                  speaker={<Tooltip>See source on Github</Tooltip>}>
+          <IconButton icon={<Icon icon="github" />} 
+                    color="blue" circle style={styles.plus}
+                    href="https://github.com/Vlad-Pischaeff/chatApp2"/>
+        </Whisper>
         <SendMessageInput />
       </footer>
     </div>

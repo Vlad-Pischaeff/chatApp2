@@ -17,7 +17,7 @@ export default function SearchResultPage() {
   const [selectMany, setSelectMany] = useState({})
   const [show, setShow] = useState(true)
   const { request } = useHttp()
-  const { setItems, activeKey } = useContext(context)
+  const { setItems, activeKey, links, setLinks } = useContext(context)
 
   const closeWindow = () => {
     setSelectMany({})
@@ -31,7 +31,14 @@ export default function SearchResultPage() {
     const data = await request(API, 'PATCH', body)
     console.log(`${API} patch result ...`, data)
     setItems(data)
+    fillLinks(data)
     closeWindow()
+  }
+
+  const fillLinks = (data) => {
+    let obj = {}
+    data.forEach(e =>  obj[e._id] = { 'msgs': false, 'online': false })
+    setLinks({ ...links, ...obj })
   }
 
   return (
@@ -41,7 +48,7 @@ export default function SearchResultPage() {
       </Modal.Header>
       <Modal.Body style={styles.body} >
         <ElementList  selected={selectMany} setSelected={setSelectMany} 
-                      data={location.state.result} style={styles.list} multi='true' />
+                      data={location.state.result} style={styles.list} multi='true' modal='true' />
       </Modal.Body>
       <Modal.Footer>
         <Badge content={Object.keys(selectMany).length > 0 ? Object.keys(selectMany).length : false} >

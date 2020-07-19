@@ -4,7 +4,6 @@ const cors = require('cors')
 const fs = require('fs')
 const http = require('http')
 const https = require('https')
-const httpolyglot = require('httpolyglot')
 const privateKey  = fs.readFileSync('./selfsigned.key', 'utf8')
 const certificate = fs.readFileSync('./selfsigned.crt', 'utf8')
 const credentials = {key: privateKey, cert: certificate}
@@ -18,33 +17,12 @@ mongoose.set('useFindAndModify', false)
 const WebSocket = require('ws')
 const httpServer = http.createServer(app)
 const httpsServer = https.createServer(credentials, app)
-const httPolyglot = httpolyglot.createServer(credentials, app)
-// const httPolyglot = httpolyglot.createServer({credentials}, (req, res) => {
-//   if (!req.socket.encrypted) {
-//     res.writeHead(301, { 'Location': 'https://localhost:5000' });
-//     return res.end();
-//   }
-//   res.writeHead(200, { 'Content-Type': 'text/plain' });
-//   res.end('Welcome, HTTPS user!');
-// })
-// const wss = new WebSocket.Server({ server, path: '/ws' })
 
 let clients = new Set()
+let server
 
 app.use(express.json({ extended: true }))
 app.use(cors())
-
-//redirect to https
-// app.use((req, res, next) => {
-// //   // console.log('req header...', req.headers, req.secure, req.headers.host, req.url )
-//   if (req.secure) { 
-//     console.log('secured connection ...')
-//     return next()
-//   } else { 
-//     console.log('redirect to https ...')
-//     res.redirect("https://" + req.headers.host + req.url)
-//   }
-// })
 
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/room', require('./routes/room.routes'))
@@ -71,21 +49,15 @@ const start = async () => {
       useCreateIndex: true
     })
     
-    // const server = await app.listen(PORT, () => {
-    //   console.log(`server started on port ${PORT}...`)
-    // })
-
-    // const server = await httpServer.listen(PORT, () => {
-    //   console.log('http server started ...')
-    // })
-
-    // const server = await httpsServer.listen(PORT, () => {
-    //   console.log('https server started ...')
-    // })
-
-    const server = await httPolyglot.listen(PORT, () => {
-      console.log('http polyglot server started ...')
-    })
+    if (process.env.NODE_ENV === 'production') {
+      server = await httpsServer.listen(PORT, () => {
+        console.log('https server started ...')
+      })
+    } else {
+      server = await httpServer.listen(PORT, () => {
+        console.log('http server started ...')
+      })
+    }
 
     wss = new WebSocket.Server({ server, path: '/ws' })
     

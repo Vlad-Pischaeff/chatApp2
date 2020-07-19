@@ -9,7 +9,7 @@ const styles = {
 }
 
 const Speaker = ({ content, item, ...props }) => {
-  const { setItems } = useContext(context)
+  const { setItems, links, setLinks } = useContext(context)
   const { request } = useHttp()
 
   const handlerOnClick = async () => {
@@ -17,6 +17,14 @@ const Speaker = ({ content, item, ...props }) => {
     const API = `/api/room/${item}`
     const data = await request(API, 'DELETE')
     setItems(data)
+    deleteLink(item)
+  }
+  
+  const deleteLink = (item) => {
+    const obj = { ...links }
+    delete obj[item]
+    setLinks(obj)
+    console.log('PopoverDelPrivChat .. delete item', obj, links)
   }
 
   return (

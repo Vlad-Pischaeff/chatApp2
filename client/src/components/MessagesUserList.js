@@ -9,7 +9,7 @@ const styles = {
 }
 
 export default function MessagesUserList() {
-  const { items, itemIndex, credentials, socketMessage, activeKey, links, setLinks } = useContext(context)
+  const { items, itemIndex, credentials, socketMessage, activeKey } = useContext(context)
   const [ newMessages, setNewMessages ] = useState([])
   const { request } = useHttp()
   const [ loading , setLoading ] = useState(false)
@@ -26,12 +26,14 @@ export default function MessagesUserList() {
   }, [activeKey])
 
   useEffect(() => {
-    if (itemIndex !== undefined && items[0].friends !== undefined) {  
+    if (itemIndex !== undefined && 
+        items[0] !== undefined &&
+        items[0].friends !== undefined) {  
       setLoading(true)
       getUserMessages()
         .then(e => setNewMessages(e))
         .then(() => setLoading(false))
-      setLinksMsgsFalse()
+      // setLinksMsgsFalse()
     }
   }, [itemIndex])
 
@@ -49,11 +51,15 @@ export default function MessagesUserList() {
     return await request(API, 'GET')
   }
 
-  const setLinksMsgsFalse = () => {
-    const obj = { ...links }
-    obj[to] = { ...obj[to], 'msgs': false }
-    setLinks(obj)
-  }
+  // moved into <Element /> ...
+  //
+  // const setLinksMsgsFalse = () => {
+  //   if (to !== null) {
+  //     const obj = { ...links }
+  //     obj[to] = { ...obj[to], 'msgs': false }
+  //     setLinks(obj)
+  //   }
+  // }
 
   if (itemIndex !== undefined && newMessages.length !== 0) {
     msgList = newMessages.map((item, index) => {

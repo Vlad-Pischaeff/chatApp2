@@ -5,10 +5,10 @@ import { Container } from 'rsuite'
 import MainRoutes from './routes/MainRoutes'
 import NavLoginRegister from './components/NavLoginRegister'
 import NavMainApp from './components/NavMainApp'
-import {context} from './context/context'
+import { context } from './context/context'
 import { useMenu } from './hooks/menu.hook'
 import { useStorage } from './hooks/storage.hook'
-import  useWebsocket from './hooks/websocket.hook'
+import { useWebsocket } from './hooks/websocket.hook'
 
 const styles = {
   container: { 

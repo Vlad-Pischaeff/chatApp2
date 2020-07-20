@@ -1,14 +1,13 @@
 import { useEffect, useRef, useCallback, useState } from 'react'
 const protocolPrefix = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-let {host} = window.location
+let { host } = window.location
 const url = `${protocolPrefix}//${host}/ws`
-// let webSocket = new WebSocket(url)
 
-export default function useWebsocket() {
+export const useWebsocket = () => {
   const socketRef = useRef()
-  const isReady = useRef()  
+  const isReady = useRef()
   const [ socketMessage, setSocketMessage ] = useState({})
-  const [webSocket, setWebsocket] = useState()
+  const [ webSocket, setWebsocket ] = useState()
 
   useEffect(() => {
     let socket = new WebSocket(url)
@@ -28,8 +27,7 @@ export default function useWebsocket() {
 
   const handleOpen = () => {
     console.log("Websocket opened ...")
-    let message = { client: 'new' }
-    socketRef.current.send(JSON.stringify(message))
+    socketRef.current.send(JSON.stringify({ client: 'new' }))
   }
 
   const handleClose = () => {
@@ -48,9 +46,7 @@ export default function useWebsocket() {
   )
  
   const handleReceiveMessage = messageObject => {
-    const message = JSON.parse(messageObject.data)
-    setSocketMessage(message)
-    // console.log('Websocket.hook received message ...', message)
+    setSocketMessage(JSON.parse(messageObject.data))
   }
 
   // function waitForOpenSocket(socket) {
@@ -64,6 +60,6 @@ export default function useWebsocket() {
   //   await waitForOpenSocket(socket)
   //   socket.send(msg)
   // }
-  
+
   return {socketRef, socketMessage, socketSendMessage}
 }

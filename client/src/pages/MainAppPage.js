@@ -5,6 +5,7 @@ import privatechat from '../avatars/social-network.svg'
 import chatroom from '../avatars/chat-room.svg'
 import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
+import { useWSParse } from '../hooks/wsparse.hook'
 import ElementList from '../components/ElementList'
 import SendMessageInput from '../components/SendMessageInput'
 import MessagesUserList from '../components/MessagesUserList'
@@ -27,8 +28,9 @@ const styles = {
 
 export default function MainAppPage () {
   const { request } = useHttp()
-  const { items, setItems, activeKey, setActiveKey, itemIndex, setItemIndex, socketMessage, setLinks, links, credentials } = useContext(context)
-  const [selectOne, setSelectOne] = useState({})
+  const { success } = useWSParse()
+  const { items, setItems, activeKey, setActiveKey, setItemIndex, setLinks, links } = useContext(context)
+  const [ selectOne, setSelectOne ] = useState({})
   const [ loading, setLoading ] = useState(false)
 
   useEffect(() => {
@@ -48,46 +50,6 @@ export default function MainAppPage () {
     getAllLinks()
       .then(e => fillLinks(e))
   }, [])
-
-  useEffect(() => {
-    let obj = {...links}
-    if (socketMessage.online) {
-      let key = socketMessage.online
-      if ((obj[key] !== undefined) && (obj[key]['online'] === false)) {
-        obj[key] = { ...obj[key], 'online' : true }
-        setLinks(obj)
-      } // if user is our friend and hi is online, then set property obj[key]['online'] = true
-    }
-    if (socketMessage.offline) {
-      let key = socketMessage.offline
-      if ((obj[key] !== undefined) && (obj[key]['online'] === true)) {
-        obj[key] = { ...obj[key], 'online' : false }
-        setLinks(obj)
-      } // if user is our friend and hi is offline, then set property obj[key]['online'] = false
-    }
-    if (socketMessage.toroom) {
-      let key = socketMessage.toroom
-      if (obj[key] !== undefined && 
-          (items[itemIndex] === undefined || key !== items[itemIndex]._id)) {
-        let val = obj[key]['msgs'] === false 
-          ? 1 
-          : +obj[key]['msgs'] + 1
-        obj[key] = { ...obj[key], 'msgs': val }
-        setLinks(obj)
-      } // if room is in our subscription or we own it,
-    }   // then set property obj[key]['msgs'] = as counter of new messages to room
-    if (socketMessage.fromuser && socketMessage.to === credentials.userId) {
-      let key = socketMessage.fromuser
-      if (obj[key] !== undefined &&
-          (items[itemIndex] === undefined || key !== items[itemIndex]._id)) {
-        let val = obj[key]['msgs'] === false 
-          ? 1 
-          : +obj[key]['msgs'] + 1
-        obj[key] = { ...obj[key], 'msgs': val }
-        setLinks(obj)
-      } // if user is our friend,
-    }   // then set property obj[key]['msgs'] = as counter of new messages from user
-  }, [socketMessage])
 
   const getChatrooms = async (room) => {
     try {
@@ -113,7 +75,7 @@ export default function MainAppPage () {
     data.forEach(e =>  obj[e._id] = { 'msgs': false, 'online': false })
     setLinks({ ...links, ...obj })
   }
-  // console.log('MainAppPage ... render ...', links)
+
   return (
     <div style={{...styles.flexcol, ...styles.wrap}}>
       <main style={{...styles.flexrow, ...styles.main}}>

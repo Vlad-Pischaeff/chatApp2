@@ -35,6 +35,8 @@ export default function MessageUserListElement(props) {
   const { item, date } = props
   const { credentials, items, itemIndex } = useContext(context)
 
+  // console.log('MessageUserListElement ...render...', itemIndex, items )
+
   return credentials.userId !== item.from
       ? <section style={styles.wrap} >
           <img src={items[itemIndex].avatar} style={styles.img} alt='' />

@@ -75,7 +75,7 @@ const start = async () => {
           client.socket = ws
           clients.add(client)
         }
-        if (data.from || data.to) {
+        if (data.from || data.to || data.invite) {
           wss.clients.forEach(client => client.send(message))
         }
       })

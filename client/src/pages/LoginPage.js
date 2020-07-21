@@ -46,19 +46,19 @@ export default function LoginPage () {
       <Panel header={<h3>Sign in</h3>} bordered shaded style={styles.item}>
         <Form fluid>
           <FormGroup>
-            <ControlLabel>Username or email address</ControlLabel>
+            <ControlLabel>Username ...</ControlLabel>
             <FormControl name="name" {...login} />
           </FormGroup>
           <FormGroup>
-            <ControlLabel>Password</ControlLabel>
+            <ControlLabel>Password ...</ControlLabel>
             <FormControl name="password" type="password" {...password} />
           </FormGroup>
           <FormGroup>
             <ButtonToolbar >
               <Button appearance="primary" onClick={loginHandler} loading={loading}>Sign in</Button>
-              <Button appearance="link">
+              {/* <Button appearance="link">
                 <Link to="/register">Forgot password?</Link>
-              </Button>
+              </Button> */}
               <Checkbox inline checked={save} onClick={() => setSave(!save)}>Remember me</Checkbox>
             </ButtonToolbar>
           </FormGroup>

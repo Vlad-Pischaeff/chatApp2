@@ -46,7 +46,6 @@ const Speaker = ({ item, ...props }) => {
 export default function PopoverShowUserAvatars({ placement, item }) {
   return (
     <Whisper  trigger="hover" 
-              // triggerRef={triggerRef}
               placement={placement} 
               speaker={<Speaker item={item} />} >
       <Icon icon="user" style={styles.icon} /> 

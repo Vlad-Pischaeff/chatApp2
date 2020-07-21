@@ -45,6 +45,7 @@ function Element(props) {
       if (modal === 'false') setLinksMsgsFalse(item)
     }
   }
+
   // reset unreaded messages counter while select item
   const setLinksMsgsFalse = (item) => {
     const to = item._id
@@ -67,10 +68,13 @@ function Element(props) {
         <div style={{...styles.description, ...styles.elipsis}} >{item.description}</div>
       </div>
 
-      <div style={{...styles.wrap, ...styles.flex}}>
-        <ElementDeleteSymbol item={item} index={index} selected={selected} />
-        <ElementInformSymbol item={item} />
-      </div>
+      { modal === 'false'
+        ? <div style={{...styles.wrap, ...styles.flex}}>
+            <ElementDeleteSymbol item={item} index={index} selected={selected} setSelected={setSelected}/>
+            <ElementInformSymbol item={item} />
+          </div>
+        : <></>
+      }
 
     </section>
   )

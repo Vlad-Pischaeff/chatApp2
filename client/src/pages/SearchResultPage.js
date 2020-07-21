@@ -14,10 +14,10 @@ export default function SearchResultPage() {
   let history = useHistory()
   let location = useLocation()
 
-  const [selectMany, setSelectMany] = useState({})
-  const [show, setShow] = useState(true)
+  const [ selectMany, setSelectMany ] = useState({})
+  const [ show, setShow ] = useState(true)
   const { request } = useHttp()
-  const { setItems, activeKey, links, setLinks } = useContext(context)
+  const { setItems, activeKey, links, setLinks, socketSendMessage, credentials } = useContext(context)
 
   const closeWindow = () => {
     setSelectMany({})
@@ -29,9 +29,16 @@ export default function SearchResultPage() {
     const API = (activeKey === 'conversations') ? '/api/auth/friends' : '/api/room/follow'
     const body = { 'friends': selectMany }
     const data = await request(API, 'PATCH', body)
-    console.log(`${API} patch result ...`, data)
+    console.log(`${API} patch result ...`, data, selectMany)
     setItems(data)
     fillLinks(data)
+    // send notification to users added to friends
+    if ((selectMany.length !== 0) && (activeKey === 'conversations')) {
+      let arr = Object.values(selectMany)
+      arr.forEach(item => {
+        socketSendMessage({ 'invite': item, 'friend': credentials.userId })
+      })
+    }
     closeWindow()
   }
 

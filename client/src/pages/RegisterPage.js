@@ -60,11 +60,11 @@ export default function RegisterPage () {
       <Panel header={<h3>Sign up</h3>} bordered shaded style={styles.item}>
         <Form fluid>
           <FormGroup>
-            <ControlLabel>Username or email address</ControlLabel>
+            <ControlLabel>Username ...</ControlLabel>
             <FormControl name="name" {...login} />
           </FormGroup>
           <FormGroup>
-            <ControlLabel>Password</ControlLabel>
+            <ControlLabel>Password ...</ControlLabel>
             <FormControl name="password" type="password" {...password} />
           </FormGroup>
           <FormGroup>

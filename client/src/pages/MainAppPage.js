@@ -21,6 +21,7 @@ const styles = {
   rooms: { flex: '1 1 15rem', overflowY: 'auto', },
   messages: { flex: '1 1 16.5rem', overflowY: 'auto', background: '#c9d7ff', },
   footer: { background: '#a6d7ff', height: '3.5rem', alignItems: 'center', },
+  footerleft: { justifyContent: 'flex-start', width: '8rem', },
   icon: { width: '3rem', background: 'transparent', },
   plus: { margin: '0.5rem', },
   list: { height: '100%' }
@@ -28,7 +29,7 @@ const styles = {
 
 export default function MainAppPage () {
   const { request } = useHttp()
-  const { success } = useWSParse()
+  useWSParse()
   const { items, setItems, activeKey, setActiveKey, setItemIndex, setLinks, links } = useContext(context)
   const [ selectOne, setSelectOne ] = useState({})
   const [ loading, setLoading ] = useState(false)
@@ -109,12 +110,20 @@ export default function MainAppPage () {
         
       </main>
       <footer style={{...styles.flexrow, ...styles.footer}}>
-        <Whisper  placement="topStart" trigger="hover" 
-                  speaker={<Tooltip>See source on Github</Tooltip>}>
-          <IconButton icon={<Icon icon="github" />} 
-                    color="blue" circle style={styles.plus}
-                    href="https://github.com/Vlad-Pischaeff/chatApp2"/>
-        </Whisper>
+        <div style={{...styles.flexrow, ...styles.footerleft}}>
+          <Whisper  placement="topStart" trigger="hover" 
+                    speaker={<Tooltip>See source on Github</Tooltip>}>
+            <IconButton icon={<Icon icon="github" />} 
+                      color="blue" circle style={styles.plus}
+                      href="https://github.com/Vlad-Pischaeff/chatApp2"/>
+          </Whisper>
+          <Whisper  placement="topStart" trigger="hover" 
+                    speaker={<Tooltip>See my workout on Codepen</Tooltip>}>
+            <IconButton icon={<Icon icon="codepen" />} 
+                      color="blue" circle style={styles.plus}
+                      href="https://codepen.io/vlad-pischaeff/"/>
+          </Whisper>
+        </div>
         <SendMessageInput />
       </footer>
     </div>

@@ -8,14 +8,17 @@ const styles = {
   icon: { margin: '0 0.2rem',  }, 
 }
 
-const Speaker = ({ content, item, ...props }) => {
-  const { setItems, links, setLinks } = useContext(context)
+const Speaker = ({ content, item, setSelected, ...props }) => {
+  const { setItems, links, setLinks, setItemIndex } = useContext(context)
   const { request } = useHttp()
 
   const handlerOnClick = async () => {
     trigger.hide()    
     const API =`/api/auth/unfollow/${item}`
     const data = await request(API, 'PATCH')
+    // reset selections and itemIndex after delete user 
+    undefineItemIndex()
+    setSelected({})
     setItems(data)
     deleteLink(item)
   }
@@ -24,7 +27,10 @@ const Speaker = ({ content, item, ...props }) => {
     const obj = { ...links }
     delete obj[item]
     setLinks(obj)
-    console.log('PopoverDelUser .. delete item', obj, links)
+  }
+
+  const undefineItemIndex = () => {
+    setItemIndex(undefined)
   }
 
   return (
@@ -37,14 +43,15 @@ const Speaker = ({ content, item, ...props }) => {
   )
 }
 
-export default function PopoverDelUser({ content, placement, item }) {
+export default function PopoverDelUser(props) {
+  const { placement, ...arr } = props
   const triggerRef = ref => (trigger = ref)
 
   return (
     <Whisper  trigger="click" 
               triggerRef={triggerRef}
               placement={placement} 
-              speaker={<Speaker content={content} item={item} />} >
+              speaker={<Speaker {...arr} />} >
       <Icon icon="close" style={styles.icon} /> 
     </Whisper>
   )

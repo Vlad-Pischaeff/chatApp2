@@ -17,8 +17,8 @@ export default function SendMessageInput () {
 
   useEffect(() => {
     itemIndex !== undefined 
-    ? setDisabled(false)
-    : setDisabled(true)
+      ? setDisabled(false)
+      : setDisabled(true)
   }, [itemIndex])
 
   const handleClick = async () => {
@@ -30,7 +30,6 @@ export default function SendMessageInput () {
     let msg = activeKey === 'conversations' 
       ? { 'fromuser': from, 'to': to }
       : { 'from': from, 'toroom': to }
-      console.log('SendMessageInput ...', activeKey, msg)
     socketSendMessage(msg)
   }
 

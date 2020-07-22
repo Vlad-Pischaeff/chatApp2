@@ -16,7 +16,7 @@ export default function InviteUsersPage() {
   const [selectMany, setSelectMany] = useState({})
   const [show, setShow] = useState(true)
   const { request } = useHttp()
-  const { setItems, items, itemIndex } = useContext(context)
+  const { setItems, items, itemIndex, socketSendMessage } = useContext(context)
   const [ friends, setFriends ] = useState()
 
   useEffect(() => {
@@ -49,6 +49,8 @@ export default function InviteUsersPage() {
     const data = await request(API, 'PATCH', body)
     console.log(`${API} patch result ...`, data)
     setItems(data)
+    // send message to users to update list of private chatrooms
+    socketSendMessage({ 'privchatadd': selectMany })
     closeWindow()
   }
 

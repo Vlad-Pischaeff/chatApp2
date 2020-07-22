@@ -3,7 +3,7 @@ import { context } from '../context/context'
 
 export const useWSParse = () => {
   const { links, setLinks, items, itemIndex, socketMessage, credentials } = useContext(context)
-  const [ success, setSuccess ] = useState(false)
+  const [ sockMsg, setSockMsg ] = useState()
 
   useEffect(() => {
     let obj = {...links}
@@ -14,7 +14,7 @@ export const useWSParse = () => {
       if (obj[key] && obj[key]['online'] === false) {
         obj[key] = { ...obj[key], 'online' : true }
         setLinks(obj)
-        setSuccess(true)
+        setSockMsg({ 'online': key })
       }
     }
 
@@ -23,7 +23,7 @@ export const useWSParse = () => {
       if (obj[key] && obj[key]['online'] === true) {
         obj[key] = { ...obj[key], 'online' : false }
         setLinks(obj)
-        setSuccess(true)
+        setSockMsg({ 'offline': key })
       }
     }
     
@@ -37,7 +37,7 @@ export const useWSParse = () => {
           : +obj[key]['msgs'] + 1
         obj[key] = { ...obj[key], 'msgs': val }
         setLinks(obj)
-        setSuccess(true)
+        setSockMsg({ 'msgs': key })
       }
     }
   
@@ -51,7 +51,7 @@ export const useWSParse = () => {
           : +obj[key]['msgs'] + 1
         obj[key] = { ...obj[key], 'msgs': val }
         setLinks(obj)
-        setSuccess(true)
+        setSockMsg({ 'msgs': key })
       } 
     }   
 
@@ -62,8 +62,23 @@ export const useWSParse = () => {
       }
     }
 
-    return () => setSuccess(false)
+    // if user add me to his private chatroom
+    if (key = socketMessage.privchatadd) {
+      let obj = Object.values(key)
+      if (obj.indexOf(credentials.userId) !== -1)
+        setSockMsg({ 'privchatadd': credentials.userId })
+        console.log('I am invited to privchat ...', key)
+    }
+
+    // if user delete his private chatroom
+    if (key = socketMessage.privchatdel) {
+      if (key.indexOf(credentials.userId) !== -1)
+        setSockMsg({ 'privchatdel': credentials.userId })
+        console.log('I am removed from privchat ...', key)
+    }
+
+    return () => setSockMsg()
   }, [socketMessage])
 
-  return { success }
+  return { sockMsg }
 }

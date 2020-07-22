@@ -29,12 +29,26 @@ const styles = {
 
 export default function MainAppPage () {
   const { request } = useHttp()
-  useWSParse()
+  const { sockMsg } = useWSParse()
   const { items, setItems, activeKey, setActiveKey, setItemIndex, setLinks, links } = useContext(context)
   const [ selectOne, setSelectOne ] = useState({})
   const [ loading, setLoading ] = useState(false)
 
+  useEffect(() => { 
+    sockMsg && sockMsg.privchatadd && activeKey === 'privatechat' && getItemsList()
+    sockMsg && sockMsg.privchatdel && activeKey === 'privatechat' && getItemsList()  
+  }, [sockMsg])
+
+  useEffect(() => { 
+    getItemsList() 
+  }, [activeKey])
+  
   useEffect(() => {
+    getAllLinks()
+      .then(e => fillLinks(e))
+  }, [])
+
+  const getItemsList = () => {
     setLoading(true)
     activeKey === 'conversations' 
       ? getFriends()
@@ -45,12 +59,7 @@ export default function MainAppPage () {
           .then(() => setLoading(false))
     setSelectOne({})
     setItemIndex()
-  }, [activeKey])
-  
-  useEffect(() => {
-    getAllLinks()
-      .then(e => fillLinks(e))
-  }, [])
+  }
 
   const getChatrooms = async (room) => {
     try {

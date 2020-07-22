@@ -12,15 +12,15 @@ export default function ElementDeleteSymbol(props) {
     <div>
       { item.private === true && itemIndex !== undefined && 
         selected[index] && item.owner === credentials.userId &&
-          <PopoverDelPrivChat placement="rightStart" content={item.name} item={item._id} setSelected={setSelected} />
+          <PopoverDelPrivChat placement="rightStart" item={item} setSelected={setSelected} />
       }
       { item.private === false && itemIndex !== undefined && 
         selected[index] && item.owner !== credentials.userId &&
-          <PopoverDelChat placement="rightStart" content={item.name} item={item._id} setSelected={setSelected} />
+          <PopoverDelChat placement="rightStart" item={item} setSelected={setSelected} />
       }
       { item.login && itemIndex !== undefined && 
         selected[index] &&
-          <PopoverDelUser placement="rightStart" content={item.login} item={item._id} setSelected={setSelected} />
+          <PopoverDelUser placement="rightStart" item={item} setSelected={setSelected} />
       }
     </div>
   )

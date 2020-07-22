@@ -8,19 +8,19 @@ const styles = {
   icon: { margin: '0 0.2rem',  }, 
 }
 
-const Speaker = ({ content, item, setSelected, ...props }) => {
+const Speaker = ({ item, setSelected, ...props }) => {
   const { setItems, links, setLinks, setItemIndex } = useContext(context)
   const { request } = useHttp()
 
   const handlerOnClick = async () => {
     trigger.hide()    
-    const API =`/api/auth/unfollow/${item}`
+    const API =`/api/auth/unfollow/${item._id}`
     const data = await request(API, 'PATCH')
     // reset selections and itemIndex after delete user 
     undefineItemIndex()
     setSelected({})
     setItems(data)
-    deleteLink(item)
+    deleteLink(item._id)
   }
 
   const deleteLink = (item) => {
@@ -35,7 +35,7 @@ const Speaker = ({ content, item, setSelected, ...props }) => {
 
   return (
     <Popover title="Unsubscribe from user ..." {...props}>
-      <p>Do You want to unsubscribe from <strong> "{content}" </strong> ?</p>
+      <p>Do You want to unsubscribe from <strong> "{item.login}" </strong> ?</p>
       <hr/>
       <Button appearance="primary" onClick={handlerOnClick}>Yes</Button>
       <Button onClick={() => trigger.hide()}>No</Button>

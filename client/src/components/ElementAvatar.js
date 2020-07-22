@@ -12,7 +12,6 @@ export default function ElementAvatar(props) {
   const { activeKey, links } = useContext(context)
   const { item } = props
   const content = links[item._id] !== undefined ? links[item._id]['msgs'] : false
-  // console.log('ElementAvatar ...', item._id, links[item._id], content)
 
   return (
     <div>

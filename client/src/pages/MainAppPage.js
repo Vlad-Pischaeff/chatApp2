@@ -35,8 +35,11 @@ export default function MainAppPage () {
   const [ loading, setLoading ] = useState(false)
 
   useEffect(() => { 
-    sockMsg && sockMsg.privchatadd && activeKey === 'privatechat' && getItemsList()
-    sockMsg && sockMsg.privchatdel && activeKey === 'privatechat' && getItemsList()  
+    if (sockMsg) {
+      sockMsg.privchatadd && activeKey === 'privatechat' && getItemsList()
+      sockMsg.privchatdel && activeKey === 'privatechat' && getItemsList()
+      sockMsg.chatdel && activeKey === 'chatroom' && getItemsList()    
+    }
   }, [sockMsg])
 
   useEffect(() => { 

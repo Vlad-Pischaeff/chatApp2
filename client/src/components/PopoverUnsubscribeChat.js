@@ -15,9 +15,9 @@ const Speaker = (props) => {
 
   const handlerOnClick = async () => {
     trigger.hide()    
-    const API =`/api/auth/unfollow/${item._id}`
+    const API = `/api/room/unfollow/${item._id}`
     const data = await request(API, 'PATCH')
-    // reset selections and itemIndex after delete user 
+    // reset selections and itemIndex after delete chat 
     undefineItemIndex()
     setSelected({})
     setItems(data)
@@ -35,8 +35,8 @@ const Speaker = (props) => {
   }
 
   return (
-    <Popover title="Unsubscribe from user ..." {...arr}>
-      <p>Do You want to unsubscribe from <strong> "{item.login}" </strong> ?</p>
+    <Popover title="Unsubscribe from chat room ..." {...arr}>
+      <p>Do You want to unsubscribe from <strong> "{item.name}" </strong> ?</p>
       <hr/>
       <Button appearance="primary" onClick={handlerOnClick}>Yes</Button>
       <Button onClick={() => trigger.hide()}>No</Button>
@@ -44,7 +44,7 @@ const Speaker = (props) => {
   )
 }
 
-export default function PopoverDelUser(props) {
+export default function PopoverUnsubscribeChat(props) {
   const { placement, ...arr } = props
   const triggerRef = ref => (trigger = ref)
 
@@ -53,7 +53,7 @@ export default function PopoverDelUser(props) {
               triggerRef={triggerRef}
               placement={placement} 
               speaker={<Speaker {...arr.props} />} >
-      <Icon icon="close" style={styles.icon} /> 
+      <Icon icon="thumbs-o-down" style={styles.icon} /> 
     </Whisper>
   )
 }

@@ -72,6 +72,17 @@ router.get('/user/:id', auth, async (req, res) => {
   }
 })
 
+// get users information
+router.post('/users', auth, async (req, res) => {
+  try {
+    const candidates = req.body.users
+    const users = await User.find({ _id: { $in: candidates } })
+    res.status(201).json(users)
+  } catch(e) {
+    res.status(500).json({ message:`Something wrong ..., details ${e}` })
+  }
+})
+
 // update user information
 router.patch('/user/:id', auth, async (req, res) => {
   try {
@@ -95,7 +106,6 @@ router.post('/upload', async (req, res) => {
 )
 
 // /api/auth/search
-
 router.post('/search', auth, async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.user.userId })
@@ -111,7 +121,6 @@ router.post('/search', auth, async (req, res) => {
 })
 
 // list of friends ready to invite /api/auth/friends
-
 router.get('/friends', auth, async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.user.userId })

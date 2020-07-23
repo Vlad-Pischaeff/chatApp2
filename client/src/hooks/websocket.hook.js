@@ -21,12 +21,12 @@ export const useWebsocket = () => {
       webSocket.onmessage = handleReceiveMessage
       socketRef.current = webSocket
       isReady.current = true
-      console.log('Websocket initialisation ... isReady =', isReady, webSocket )
+      // console.log('Websocket initialisation ... isReady =', isReady, webSocket )
     }
   }, [webSocket])
 
   const handleOpen = () => {
-    console.log("Websocket opened ...")
+    // console.log("Websocket opened ...")
     socketRef.current.send(JSON.stringify({ client: 'new' }))
   }
 
@@ -47,7 +47,7 @@ export const useWebsocket = () => {
  
   const handleReceiveMessage = messageObject => {
     setSocketMessage(JSON.parse(messageObject.data))
-    console.log('websocket.hook .. received message', JSON.parse(messageObject.data) )
+    // console.log('websocket.hook .. received message', JSON.parse(messageObject.data) )
   }
 
   // function waitForOpenSocket(socket) {

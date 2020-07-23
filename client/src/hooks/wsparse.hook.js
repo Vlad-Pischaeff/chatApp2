@@ -77,6 +77,13 @@ export const useWSParse = () => {
         console.log('I am removed from privchat ...', key)
     }
 
+    // if user delete his public chatroom
+    if (key = socketMessage.chatdel) {
+      if (key.indexOf(credentials.userId) !== -1)
+        setSockMsg({ 'chatdel': credentials.userId })
+        console.log('I am removed from public chat ...', key)
+    }
+
     return () => setSockMsg()
   }, [socketMessage])
 

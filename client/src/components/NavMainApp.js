@@ -1,8 +1,9 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
-import { Header, Navbar, Nav, Icon } from 'rsuite'
+import { Header, Navbar, Nav, Icon, Badge } from 'rsuite'
 import { context } from '../context/context'
 import SearchInput from './SearchInput'
+import { useHttp } from '../hooks/http.hook'
 
 const styles = {
   lheader: {
@@ -16,13 +17,28 @@ const styles = {
     height: '3.5rem', 
     width: '3.5rem',
     margin: '0 1rem 0 0' 
+  },
+  notify: {
+    position: 'relative',
+    left: '1rem',
   }
 }
 
 export default function NavMainApp() {
+  const { request } = useHttp()
   const { credentials, deleteCredentials, setAvatar, activeKey, items, itemIndex } = useContext(context)
+  const [ notifications, setNotifications ] = useState([])
   const history = useHistory()
   let location = useLocation()
+
+  useEffect(() => {
+    getNewNotifications()
+      .then(e => setNotifications(e))
+  }, [])
+
+  const getNewNotifications = async () => {
+    return await request('/api/notification/new', 'GET')
+  }
 
   const Logout = (e) => {
     e.preventDefault()
@@ -30,7 +46,7 @@ export default function NavMainApp() {
     setAvatar(null)
     history.push('/')
   }
-  // console.log('main nav menu ...', itemIndex)
+
   return (
     <Header>
       <Navbar appearance="inverse" >
@@ -44,20 +60,29 @@ export default function NavMainApp() {
         </Navbar.Header>
 
         <Nav pullRight>
+          
+          <Link to={{ pathname: '/notifications', state: {background: location, notifications} }}>
+            <Badge content="2" style={styles.notify}><></></Badge>
+            <Nav.Item eventKey="1" componentClass="span"
+                    icon={<Icon icon="bell" />}>Notifications</Nav.Item>
+          </Link>
+
           { activeKey === 'privatechat' && 
             itemIndex !== undefined &&
             items[itemIndex].owner === credentials.userId &&
               <Link to={{ pathname: '/invite', state: {background: location} }}>
-                <Nav.Item eventKey="1" componentClass="span"
+                <Nav.Item eventKey="2" componentClass="span"
                           icon={<Icon icon="people-group" />}>Invite users</Nav.Item>
               </Link>
           }
+
           { activeKey !== 'conversations' &&
             <Link to={{ pathname: `/${activeKey}`, state: {background: location} }}>
               <Nav.Item eventKey="3" componentClass="span"
                         icon={<Icon icon="comments" />}>Add {activeKey}</Nav.Item>
             </Link>
           }
+
           <Link to={{ pathname: '/profile', state: {background: location} }}>
             <Nav.Item eventKey="4" componentClass="span"
                       icon={<Icon icon="avatar" />}>Profile</Nav.Item>

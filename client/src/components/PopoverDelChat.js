@@ -8,19 +8,23 @@ const styles = {
   icon: { margin: '0 0.2rem',  }, 
 }
 
-const Speaker = ({ item, setSelected, ...props }) => {
-  const { setItems, links, setLinks, setItemIndex } = useContext(context)
+const Speaker = (props) => {
+  const { item, setSelected, ...arr } = props
+  const { setItems, links, setLinks, setItemIndex, socketSendMessage } = useContext(context)
   const { request } = useHttp()
 
   const handlerOnClick = async () => {
-    trigger.hide()    
-    const API = `/api/room/unfollow/${item._id}`
-    const data = await request(API, 'PATCH')
+    trigger.hide()
+    const body = { private: false }    
+    const API = `/api/room/${item._id}`
+    const data = await request(API, 'DELETE', body)
     // reset selections and itemIndex after delete chat 
     undefineItemIndex()
     setSelected({})
     setItems(data)
     deleteLink(item._id)
+    // send message to users to update list of chatrooms
+    socketSendMessage({ 'chatdel': item.followers })
   }
 
   const deleteLink = (item) => {
@@ -34,8 +38,8 @@ const Speaker = ({ item, setSelected, ...props }) => {
   }
 
   return (
-    <Popover title="Unsubscribe from chat room ..." {...props}>
-      <p>Do You want to unsubscribe from <strong> "{item.name}" </strong> ?</p>
+    <Popover title="Delete chat room ..." {...arr}>
+      <p>Do You want to delete <strong> "{item.name}" </strong> ?</p>
       <hr/>
       <Button appearance="primary" onClick={handlerOnClick}>Yes</Button>
       <Button onClick={() => trigger.hide()}>No</Button>
@@ -51,7 +55,7 @@ export default function PopoverDelChat(props) {
     <Whisper  trigger="click" 
               triggerRef={triggerRef}
               placement={placement} 
-              speaker={<Speaker {...arr} />} >
+              speaker={<Speaker {...arr.props} />} >
       <Icon icon="close" style={styles.icon} /> 
     </Whisper>
   )

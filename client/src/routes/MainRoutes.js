@@ -8,6 +8,7 @@ import ChatRoomPage from '../pages/ChatRoomPage'
 import SearchResultPage from '../pages/SearchResultPage'
 import InviteUsersPage from '../pages/InviteUsersPage'
 import { context } from '../context/context'
+import NotificationsPage from '../pages/NotificationsPage'
 
 export default function MainRoutes() {
   const { credentials } = useContext(context)
@@ -15,7 +16,7 @@ export default function MainRoutes() {
   let location = useLocation()
   let background = location.state && location.state.background
 
-  // console.log('location ...', background, location)
+  console.log('location ...', background, location)
 
   if (isAuthenticated) {
     return (
@@ -27,6 +28,7 @@ export default function MainRoutes() {
           <Route path='/privatechat' exact children={<ChatRoomPage />} />
           <Route path='/search' exact children={<SearchResultPage />} />
           <Route path='/invite' exact children={<InviteUsersPage />} />
+          <Route path='/notifications' exact children={<NotificationsPage />} />
           <Redirect to='/' />
         </Switch>
         { background && 
@@ -36,6 +38,7 @@ export default function MainRoutes() {
             <Route path='/privatechat' exact children={<ChatRoomPage />} />
             <Route path='/search' exact children={<SearchResultPage />} />
             <Route path='/invite' exact children={<InviteUsersPage />} />
+            <Route path='/notifications' exact children={<NotificationsPage />} />
           </Switch> 
         }
       </>

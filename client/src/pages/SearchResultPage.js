@@ -59,7 +59,7 @@ export default function SearchResultPage() {
       </Modal.Body>
       <Modal.Footer>
         <Badge content={Object.keys(selectMany).length > 0 ? Object.keys(selectMany).length : false} >
-          <div></div>
+          <></>
         </Badge>
         <Button onClick={OK_onClick} appearance="primary">
           Subcsribe

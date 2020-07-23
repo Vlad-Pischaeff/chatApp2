@@ -8,14 +8,16 @@ const styles = {
   icon: { margin: '0 0.2rem',  }, 
 }
 
-const Speaker = ({ item, setSelected, ...props }) => {
+const Speaker = (props) => {
+  const { item, setSelected, ...arr } = props
   const { setItems, links, setLinks, setItemIndex, socketSendMessage } = useContext(context)
   const { request } = useHttp()
 
   const handlerOnClick = async () => {
     trigger.hide()
+    const body = { private: true } 
     const API = `/api/room/${item._id}`
-    const data = await request(API, 'DELETE')
+    const data = await request(API, 'DELETE', body)
     // reset selections and itemIndex after delete privchat 
     undefineItemIndex()
     setSelected({})
@@ -36,7 +38,7 @@ const Speaker = ({ item, setSelected, ...props }) => {
   }
 
   return (
-    <Popover title="Delete private chat room ..." {...props}>
+    <Popover title="Delete private chat room ..." {...arr}>
       <p>Do You want to delete <strong> "{item.name}" </strong> ?</p>
       <hr/>
       <Button appearance="primary" onClick={handlerOnClick}>Yes</Button>
@@ -53,7 +55,7 @@ export default function PopoverDelPrivChat(props) {
     <Whisper  trigger="click" 
               triggerRef={triggerRef}
               placement={placement} 
-              speaker={<Speaker {...arr} />} >
+              speaker={<Speaker {...arr.props} />} >
       <Icon icon="close" style={styles.icon} /> 
     </Whisper>
   )

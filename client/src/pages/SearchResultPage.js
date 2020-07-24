@@ -37,6 +37,9 @@ export default function SearchResultPage() {
       let arr = Object.values(selectMany)
       arr.forEach(item => {
         socketSendMessage({ 'invite': item, 'friend': credentials.userId })
+        // create notifications in database for each 'item'
+        let body = { 'to': item, 'from': credentials.userId, 'text': 'invited' }
+        request ('/api/notification/new', 'PUT', body)
       })
     }
     closeWindow()

@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
-import { Header, Navbar, Nav, Icon, Badge } from 'rsuite'
+import { Header, Navbar, Nav, Icon, Badge, Whisper, Tooltip } from 'rsuite'
 import { context } from '../context/context'
 import SearchInput from './SearchInput'
 import { useHttp } from '../hooks/http.hook'
+import { useWSParse } from '../hooks/wsparse.hook'
 
 const styles = {
   lheader: {
@@ -21,20 +22,33 @@ const styles = {
   notify: {
     position: 'relative',
     left: '1rem',
-  }
+  },
+  icon: {
+    position: 'relative',
+    top: '1.1rem',
+    color: 'white',
+  },
+  wrap: {
+    display: 'inline-block',
+    margin: '0 0.5rem',
+  },
 }
 
 export default function NavMainApp() {
   const { request } = useHttp()
   const { credentials, deleteCredentials, setAvatar, activeKey, items, itemIndex } = useContext(context)
   const [ notifications, setNotifications ] = useState([])
+  const { sockMsg } = useWSParse()
   const history = useHistory()
   let location = useLocation()
 
   useEffect(() => {
-    getNewNotifications()
-      .then(e => setNotifications(e))
+    getNewNotifications().then(e => setNotifications(e))
   }, [])
+
+  useEffect(() => {
+    sockMsg && sockMsg.invite && getNewNotifications().then(e => setNotifications(e))
+  }, [sockMsg])
 
   const getNewNotifications = async () => {
     return await request('/api/notification/new', 'GET')
@@ -62,35 +76,50 @@ export default function NavMainApp() {
         <Nav pullRight>
           
           <Link to={{ pathname: '/notifications', state: {background: location, notifications} }}>
-            <Badge content="2" style={styles.notify}><></></Badge>
-            <Nav.Item eventKey="1" componentClass="span"
-                    icon={<Icon icon="bell" />}>Notifications</Nav.Item>
+            <div style={styles.wrap} >
+              <Badge content={ notifications.length != 0 ? notifications.length : false} style={styles.notify}><></></Badge>
+              <Whisper placement="bottom" trigger="hover" speaker={<Tooltip>Notifications</Tooltip>}>
+                <Icon icon="bell" style={styles.icon} />
+              </Whisper>
+            </div>
           </Link>
 
           { activeKey === 'privatechat' && 
             itemIndex !== undefined &&
             items[itemIndex].owner === credentials.userId &&
               <Link to={{ pathname: '/invite', state: {background: location} }}>
-                <Nav.Item eventKey="2" componentClass="span"
-                          icon={<Icon icon="people-group" />}>Invite users</Nav.Item>
+                <div style={styles.wrap} >
+                  <Whisper placement="bottom" trigger="hover" speaker={<Tooltip>Invite users</Tooltip>}>
+                    <Icon icon="people-group" style={styles.icon} />
+                  </Whisper>
+                </div>
               </Link>
           }
 
           { activeKey !== 'conversations' &&
             <Link to={{ pathname: `/${activeKey}`, state: {background: location} }}>
-              <Nav.Item eventKey="3" componentClass="span"
-                        icon={<Icon icon="comments" />}>Add {activeKey}</Nav.Item>
+              <div style={styles.wrap} >
+                <Whisper placement="bottom" trigger="hover" speaker={<Tooltip>Add {activeKey}</Tooltip>}>
+                  <Icon icon="comments" style={styles.icon} />
+                </Whisper>
+              </div>
             </Link>
           }
 
           <Link to={{ pathname: '/profile', state: {background: location} }}>
-            <Nav.Item eventKey="4" componentClass="span"
-                      icon={<Icon icon="avatar" />}>Profile</Nav.Item>
+            <div style={styles.wrap} >
+              <Whisper placement="bottom" trigger="hover" speaker={<Tooltip>Profile</Tooltip>}>
+                <Icon icon="avatar" style={styles.icon} />
+              </Whisper>
+            </div>
           </Link>
          
           <Link to="/" >
-            <Nav.Item eventKey="5" componentClass="span" 
-                      icon={<Icon icon="exit" />} onClick={Logout}>Exit</Nav.Item>
+            <div style={styles.wrap} onClick={Logout} >
+              <Whisper placement="bottomEnd" trigger="hover" speaker={<Tooltip>Exit</Tooltip>}>
+                <Icon icon="exit" style={styles.icon} />
+              </Whisper>
+            </div>
           </Link>
 
         </Nav>

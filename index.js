@@ -75,13 +75,7 @@ const start = async () => {
           client.id = data.online
           client.socket = ws
           clients.add(client)
-        }
-        if (data.from || 
-            data.to || 
-            data.invite || 
-            data.privchatadd || 
-            data.privchatdel || 
-            data.chatdel) {
+        } else {
           wss.clients.forEach(client => client.send(message))
         }
       })

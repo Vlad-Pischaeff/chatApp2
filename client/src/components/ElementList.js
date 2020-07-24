@@ -2,7 +2,7 @@ import React from 'react'
 import { List } from 'rsuite'
 import Element from './Element'
 
-function ElementList(props) {
+export default function ElementList(props) {
   const { data, style, ...arr } = props
 
   return (
@@ -15,5 +15,3 @@ function ElementList(props) {
     </List>
   )
 }
-
-export default ElementList

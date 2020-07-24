@@ -84,6 +84,13 @@ export const useWSParse = () => {
         console.log('I am removed from public chat ...', key)
     }
 
+    // if user invited by another one, receive notification
+    if (key = socketMessage.invite) {
+      if (key === credentials.userId)
+        setSockMsg({ 'invite': socketMessage.friend })
+        console.log('I have ben added to friend by ...', key)
+    }
+
     return () => setSockMsg()
   }, [socketMessage])
 

@@ -64,7 +64,9 @@ export default function InviteUsersPage() {
                       data={friends} style={styles.list} multi='true' modal='true' />
       </Modal.Body>
       <Modal.Footer>
-        <Badge content={Object.keys(selectMany).length > 0 ? Object.keys(selectMany).length : false} />
+        <Badge content={Object.keys(selectMany).length > 0 ? Object.keys(selectMany).length : false} >
+          <></>
+        </Badge>
         <Button onClick={OK_onClick} appearance="primary">
           Invite
         </Button>

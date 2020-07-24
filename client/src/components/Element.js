@@ -22,7 +22,7 @@ const styles = {
   wrap: { flex: '1 0 auto', alignItems: 'flex-end', flexFlow: 'column nowrap', height: '4rem',}
 }
 
-function Element(props) {
+export default function Element(props) {
   const { setItemIndex, links, setLinks } = useContext(context)
   const { item, index, multi, modal, selected, setSelected } = props
 
@@ -79,5 +79,3 @@ function Element(props) {
     </section>
   )
 }
-
-export default Element

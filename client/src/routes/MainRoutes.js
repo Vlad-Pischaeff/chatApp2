@@ -16,7 +16,7 @@ export default function MainRoutes() {
   let location = useLocation()
   let background = location.state && location.state.background
 
-  console.log('location ...', background, location)
+  // console.log('location ...', background, location)
 
   if (isAuthenticated) {
     return (

@@ -4,8 +4,8 @@ const cors = require('cors')
 const fs = require('fs')
 const http = require('http')
 const https = require('https')
-const privateKey  = fs.readFileSync('./selfsigned.key', 'utf8')
-const certificate = fs.readFileSync('./selfsigned.crt', 'utf8')
+const privateKey  = fs.readFileSync('./privkey.pem', 'utf8')
+const certificate = fs.readFileSync('./cert.pem', 'utf8')
 const credentials = {key: privateKey, cert: certificate}
 
 const config = require('config')

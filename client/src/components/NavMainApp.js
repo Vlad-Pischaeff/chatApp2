@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { Header, Navbar, Nav, Icon, Badge, Whisper, Tooltip } from 'rsuite'
 import { context } from '../context/context'
 import SearchInput from './SearchInput'
 import { useHttp } from '../hooks/http.hook'
-import { useWSParse } from '../hooks/wsparse.hook'
 
 const styles = {
   lheader: {
@@ -36,19 +35,14 @@ const styles = {
 
 export default function NavMainApp() {
   const { request } = useHttp()
-  const { credentials, deleteCredentials, setAvatar, activeKey, items, itemIndex } = useContext(context)
-  const [ notifications, setNotifications ] = useState([])
-  const { sockMsg } = useWSParse()
+  const { credentials, deleteCredentials, setAvatar, activeKey, items, itemIndex, notifications, setNotifications } = useContext(context)
   const history = useHistory()
   let location = useLocation()
 
   useEffect(() => {
-    getNewNotifications().then(e => setNotifications(e))
+    getNewNotifications()
+      .then(e => e.length !== 0 ? setNotifications(e.length) : setNotifications(false))
   }, [])
-
-  useEffect(() => {
-    sockMsg && sockMsg.invite && getNewNotifications().then(e => setNotifications(e))
-  }, [sockMsg])
 
   const getNewNotifications = async () => {
     return await request('/api/notification/new', 'GET')
@@ -75,9 +69,9 @@ export default function NavMainApp() {
 
         <Nav pullRight>
           
-          <Link to={{ pathname: '/notifications', state: {background: location, notifications} }}>
+          <Link to={{ pathname: '/notifications', state: { background: location } }}>
             <div style={styles.wrap} >
-              <Badge content={ notifications.length != 0 ? notifications.length : false} style={styles.notify}><></></Badge>
+              <Badge content={notifications} style={styles.notify}><></></Badge>
               <Whisper placement="bottom" trigger="hover" speaker={<Tooltip>Notifications</Tooltip>}>
                 <Icon icon="bell" style={styles.icon} />
               </Whisper>
@@ -116,8 +110,16 @@ export default function NavMainApp() {
          
           <Link to="/" >
             <div style={styles.wrap} onClick={Logout} >
-              <Whisper placement="bottomEnd" trigger="hover" speaker={<Tooltip>Exit</Tooltip>}>
+              <Whisper placement="bottom" trigger="hover" speaker={<Tooltip>Exit</Tooltip>}>
                 <Icon icon="exit" style={styles.icon} />
+              </Whisper>
+            </div>
+          </Link>
+
+          <Link to={{ pathname: '/help', state: {background: location} }} >
+            <div style={styles.wrap} >
+              <Whisper placement="bottomEnd" trigger="hover" speaker={<Tooltip>Help</Tooltip>}>
+                <Icon icon="question-circle2" style={styles.icon} />
               </Whisper>
             </div>
           </Link>

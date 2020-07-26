@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react'
 import { context } from '../context/context'
 
 export const useWSParse = () => {
-  const { links, setLinks, items, itemIndex, socketMessage, credentials } = useContext(context)
+  const { links, setLinks, items, itemIndex, socketMessage, credentials, notifications, setNotifications } = useContext(context)
   const [ sockMsg, setSockMsg ] = useState()
 
   useEffect(() => {
@@ -86,9 +86,15 @@ export const useWSParse = () => {
 
     // if user invited by another one, receive notification
     if (key = socketMessage.invite) {
-      if (key === credentials.userId)
+      if (key === credentials.userId) {
         setSockMsg({ 'invite': socketMessage.friend })
-        console.log('I have ben added to friend by ...', key)
+        if (notifications) {
+          setNotifications(notifications + 1)
+        } else {
+          setNotifications(1)
+        }
+        console.log('I have ben added to friend by ...', socketMessage.friend, notifications)
+      }
     }
 
     return () => setSockMsg()

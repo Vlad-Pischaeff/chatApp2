@@ -30,6 +30,7 @@ export default function App () {
                                                       // chatrooms current state
                                                       // {id: {online: <false | true>,
                                                       //       msgs:   <false | number> }}
+  const [ notifications, setNotifications ] = useState()  // number of current notifications
   const { menu, setMenu } = useMenu()
   const { credentials, saveCredentials, deleteCredentials } = useStorage()
   const { socketRef, socketMessage, socketSendMessage } = useWebsocket()
@@ -43,7 +44,8 @@ export default function App () {
                                socketRef, socketMessage, socketSendMessage,
                                items, setItems,
                                itemIndex, setItemIndex,
-                               links, setLinks }}>
+                               links, setLinks,
+                               notifications, setNotifications }}>
       <Container style={styles.container}>
         <Router>
           { Object.keys(credentials).length === 0 

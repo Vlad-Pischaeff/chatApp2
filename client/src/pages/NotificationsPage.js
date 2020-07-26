@@ -1,24 +1,22 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import NotificationsElementsList from '../components/NotificationsElementsList'
 import { Modal, Button } from 'rsuite'
-import { context } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 const styles = { body: { margin: '1rem 0', width: '20rem' }, }
 
 export default function NotificationsPage() {
   let history = useHistory()
-  let location = useLocation()
 
   const [ candidates, setCandidates ] = useState([])
   const [ show, setShow ] = useState(true)
   const { request } = useHttp()
-  const { setItems, activeKey, links, setLinks, socketSendMessage, credentials } = useContext(context)
 
   // get users information while open window
   useEffect(() => {
-    getUsersProfiles().then(e => setCandidates(e))
+    getNewNotifications()
+      .then(e => getUsersProfiles(e))
   }, [])
 
   const closeWindow = () => {
@@ -26,15 +24,34 @@ export default function NotificationsPage() {
     history.goBack()
   }
 
-  const OK_onClick = async () => {
-    closeWindow()
-  }
-
-  const getUsersProfiles = async () => {
-    let arr = [...location.state.notifications]
+  const getUsersProfiles = async (notes) => {
+    let arr = [...notes]
     let friends = arr.map(e => e.from)
     let body = { 'users': friends }
-    return await request('/api/auth/users', 'POST', body)
+    let data = await request('/api/auth/users', 'POST', body)
+    let newData = combiningProfilesAndNotifications(arr, data)
+    // console.log('NotificationsPage... getUsersProfiles', newData)
+    setCandidates(newData)
+  }
+  // merge arrays of UserProfiles and Notifications
+  // arr1 - Notifications
+  // arr2 - UserProfiles
+  const combiningProfilesAndNotifications = (arr1, arr2) => {
+    return arr1.map(e => {
+      let item = arr2.filter(n => n._id === e.from)
+      e.login = item[0].login
+      e.avatar = item[0].avatar
+      return e
+    })
+  }
+
+  const getNewNotifications = async () => {
+    return await request('/api/notification/new', 'GET')
+  }
+
+  const getAllNotificaions = async () => {
+    let data = await request('/api/notification/all', 'GET')
+    getUsersProfiles(data)
   }
 
   return (
@@ -46,14 +63,11 @@ export default function NotificationsPage() {
         <NotificationsElementsList data={candidates} />
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={OK_onClick} appearance="primary">
-          Subcsribe All
+        <Button onClick={getAllNotificaions} appearance="primary">
+          Show All
         </Button>
-        <Button onClick={OK_onClick} appearance="primary">
-          Clear
-        </Button>
-        <Button onClick={closeWindow} appearance="subtle">
-          Cancel
+        <Button onClick={closeWindow} appearance="default">
+          OK
         </Button>
       </Modal.Footer>
     </Modal>

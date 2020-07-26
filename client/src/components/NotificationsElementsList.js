@@ -6,7 +6,7 @@ const styles = { list: { overflow: 'hidden', }, }
 
 export default function NotificationsElementsList(props) {
   const { data } = props
-
+  // console.log('NotificationsElementsList ... data...', data)
   return (
     <List style={styles.list}>
       { data &&  

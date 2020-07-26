@@ -7,8 +7,9 @@ import ProfilePage from '../pages/ProfilePage'
 import ChatRoomPage from '../pages/ChatRoomPage'
 import SearchResultPage from '../pages/SearchResultPage'
 import InviteUsersPage from '../pages/InviteUsersPage'
-import { context } from '../context/context'
 import NotificationsPage from '../pages/NotificationsPage'
+import HelpPage from '../pages/HelpPage'
+import { context } from '../context/context'
 
 export default function MainRoutes() {
   const { credentials } = useContext(context)
@@ -29,6 +30,7 @@ export default function MainRoutes() {
           <Route path='/search' exact children={<SearchResultPage />} />
           <Route path='/invite' exact children={<InviteUsersPage />} />
           <Route path='/notifications' exact children={<NotificationsPage />} />
+          <Route path='/help' exact children={<HelpPage />} />
           <Redirect to='/' />
         </Switch>
         { background && 
@@ -39,6 +41,7 @@ export default function MainRoutes() {
             <Route path='/search' exact children={<SearchResultPage />} />
             <Route path='/invite' exact children={<InviteUsersPage />} />
             <Route path='/notifications' exact children={<NotificationsPage />} />
+            <Route path='/help' exact children={<HelpPage />} />
           </Switch> 
         }
       </>

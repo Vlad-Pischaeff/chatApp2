@@ -3,7 +3,7 @@ import { Icon, Alert, Button, FormControl, ButtonToolbar,
         Panel, Form, FormGroup, ControlLabel } from "rsuite"
 import { useAuth } from '../hooks/auth.hook'
 import { useHttp } from '../hooks/http.hook'
-import { context } from '../context/context'
+import { context, useGlobalCredentialsContext, useGlobalWebsocketContext } from '../context/context'
 import ModalSelectImage from '../components/ModalSelectImage'
 
 const styles = {
@@ -30,7 +30,9 @@ export default function RegisterPage () {
   const login = useAuth('login', false)
   const password = useAuth('password', false)
   const { request, loading, error } = useHttp()
-  const { setMenu, avatar, saveCredentials, socketSendMessage } = useContext(context)
+  const { saveCredentials } = useGlobalCredentialsContext()
+  const { socketSendMessage } = useGlobalWebsocketContext()
+  const { setMenu, avatar } = useContext(context)
   
   useEffect(() => {
     if (error) Alert.error(`${error}`, 5000)

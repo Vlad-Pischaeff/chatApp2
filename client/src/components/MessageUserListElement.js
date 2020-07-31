@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { context } from '../context/context'
+import { context, useGlobalCredentialsContext } from '../context/context'
 
 const styles = {
   wrap: { maxWidth: '75%',  display: 'flex',  flexFlow: 'row nowrap', margin: '1rem', },
@@ -33,7 +33,8 @@ const styles = {
 
 export default function MessageUserListElement(props) {
   const { item, date } = props
-  const { credentials, items, itemIndex } = useContext(context)
+  const { credentials } = useGlobalCredentialsContext()
+  const { items, itemIndex } = useContext(context)
 
   // console.log('MessageUserListElement ...render...', itemIndex, items )
 

@@ -2,16 +2,18 @@ import React, { useState, useContext, useEffect } from 'react'
 import { Input, InputGroup, Icon } from 'rsuite'
 import { useAuth } from '../hooks/auth.hook'
 import { useHttp } from '../hooks/http.hook'
-import { context } from '../context/context'
+import { context, useGlobalCredentialsContext, useGlobalWebsocketContext } from '../context/context'
 
 const styles = { search: { width: '25rem', margin: '0 1rem' }, }
 
 export default function SendMessageInput () {
   
   const message = useAuth('message', false)
+  const { credentials } = useGlobalCredentialsContext()
+  const { socketSendMessage } = useGlobalWebsocketContext()
   const { request } = useHttp()
-  const { items, itemIndex, socketSendMessage, credentials, activeKey } = useContext(context)
-  const [disabled, setDisabled] = useState(true)
+  const { items, itemIndex, activeKey } = useContext(context)
+  const [ disabled, setDisabled ] = useState(true)
   let from = credentials.userId
   let to = items[itemIndex] === undefined ? null : items[itemIndex]._id
 

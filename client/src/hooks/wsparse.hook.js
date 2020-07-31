@@ -1,8 +1,12 @@
 import { useState, useContext, useEffect } from 'react'
-import { context } from '../context/context'
+import { context, useGlobalWebsocketContext, useGlobalCredentialsContext, useGlobalNotificationsContext, useGlobalLinksContext } from '../context/context'
 
 export const useWSParse = () => {
-  const { links, setLinks, items, itemIndex, socketMessage, credentials, notifications, setNotifications } = useContext(context)
+  const { socketMessage } = useGlobalWebsocketContext()
+  const { credentials } = useGlobalCredentialsContext()
+  const { notifications, setNotifications } = useGlobalNotificationsContext()
+  const { links, setLinks } = useGlobalLinksContext()
+  const { items, itemIndex } = useContext(context)
   const [ sockMsg, setSockMsg ] = useState()
 
   useEffect(() => {

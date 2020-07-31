@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom'
 import LoginPage from '../pages/LoginPage'
 import RegisterPage from '../pages/RegisterPage'
@@ -9,15 +9,13 @@ import SearchResultPage from '../pages/SearchResultPage'
 import InviteUsersPage from '../pages/InviteUsersPage'
 import NotificationsPage from '../pages/NotificationsPage'
 import HelpPage from '../pages/HelpPage'
-import { context } from '../context/context'
+import { useGlobalCredentialsContext } from '../context/context'
 
 export default function MainRoutes() {
-  const { credentials } = useContext(context)
+  const { credentials } = useGlobalCredentialsContext()
   const isAuthenticated = !!credentials.token
   let location = useLocation()
   let background = location.state && location.state.background
-
-  // console.log('location ...', background, location)
 
   if (isAuthenticated) {
     return (

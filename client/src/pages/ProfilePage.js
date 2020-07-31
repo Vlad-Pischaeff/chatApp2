@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Modal, Button, FormGroup, FormControl, ControlLabel, Form, Icon, Alert } from 'rsuite'
 import ModalSelectImage from '../components/ModalSelectImage'
-import { context } from '../context/context'
+import { context, useGlobalCredentialsContext } from '../context/context'
 import { useAuth } from '../hooks/auth.hook'
 import { useHttp } from '../hooks/http.hook'
 import { useHistory } from 'react-router-dom'
@@ -13,9 +13,10 @@ const styles = {
 
 export default function ProfilePage() {
   let history = useHistory()
-  const [showUpload, setShowUpload] = useState(false)
-  const [show, setShow] = useState(true)
-  const { avatar, credentials, saveCredentials, setAvatar } = useContext(context)
+  const [ showUpload, setShowUpload ] = useState(false)
+  const [ show, setShow ] = useState(true)
+  const { credentials, saveCredentials } = useGlobalCredentialsContext()
+  const { avatar, setAvatar } = useContext(context)
   const { request } = useHttp()
   const login = useAuth('login', false)
 

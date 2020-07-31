@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { Header, Navbar, Nav, Icon, Badge, Whisper, Tooltip } from 'rsuite'
-import { context } from '../context/context'
+import { context, useGlobalCredentialsContext, useGlobalNotificationsContext } from '../context/context'
 import SearchInput from './SearchInput'
 import { useHttp } from '../hooks/http.hook'
 
@@ -35,7 +35,9 @@ const styles = {
 
 export default function NavMainApp() {
   const { request } = useHttp()
-  const { credentials, deleteCredentials, setAvatar, activeKey, items, itemIndex, notifications, setNotifications } = useContext(context)
+  const { credentials, deleteCredentials } = useGlobalCredentialsContext()
+  const { notifications, setNotifications } = useGlobalNotificationsContext()
+  const { setAvatar, activeKey, items, itemIndex } = useContext(context)
   const history = useHistory()
   let location = useLocation()
 

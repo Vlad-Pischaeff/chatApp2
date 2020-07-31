@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import ElementList from '../components/ElementList'
 import { Modal, Button, Badge } from 'rsuite'
-import { context } from '../context/context'
+import { context, useGlobalWebsocketContext } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 import { useHistory } from 'react-router-dom'
 
@@ -16,7 +16,8 @@ export default function InviteUsersPage() {
   const [selectMany, setSelectMany] = useState({})
   const [show, setShow] = useState(true)
   const { request } = useHttp()
-  const { setItems, items, itemIndex, socketSendMessage } = useContext(context)
+  const { socketSendMessage } = useGlobalWebsocketContext()
+  const { setItems, items, itemIndex } = useContext(context)
   const [ friends, setFriends ] = useState()
 
   useEffect(() => {

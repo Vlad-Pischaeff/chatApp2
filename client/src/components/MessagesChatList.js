@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
-import { context } from '../context/context'
+import { context, useGlobalWebsocketContext } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 import MessageChatListElement from './MessageChatListElement'
 
 export default function MessagesChatList() {
-  const { items, itemIndex, socketMessage, activeKey } = useContext(context)
+  const { socketMessage } = useGlobalWebsocketContext()
+  const { items, itemIndex, activeKey } = useContext(context)
   const { request } = useHttp()
   const [ newMessages, setNewMessages ] = useState([])
   let to = items[itemIndex] === undefined ? null : items[itemIndex]._id

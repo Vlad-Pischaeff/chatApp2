@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { context } from '../context/context'
+import { context, useGlobalCredentialsContext } from '../context/context'
 
 const styles = {
   wrap: { maxWidth: '75%',  display: 'flex',  flexFlow: 'row nowrap', margin: '1rem', },
@@ -33,7 +33,7 @@ const styles = {
 
 export default function MessageChatListElement(props) {
   const { item, date } = props
-  const { credentials } = useContext(context)
+  const { credentials } = useGlobalCredentialsContext()
 
   return credentials.userId !== item.from
       ? <section style={styles.wrap} >

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
-import { context } from '../context/context'
+import { context, useGlobalCredentialsContext, useGlobalWebsocketContext } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 import MessageUserListElement from './MessageUserListElement'
 import { Loader } from 'rsuite'
@@ -9,7 +9,9 @@ const styles = {
 }
 
 export default function MessagesUserList() {
-  const { items, itemIndex, credentials, socketMessage, activeKey } = useContext(context)
+  const { credentials } = useGlobalCredentialsContext()
+  const { socketMessage } = useGlobalWebsocketContext()
+  const { items, itemIndex, activeKey } = useContext(context)
   const [ newMessages, setNewMessages ] = useState([])
   const { request } = useHttp()
   const [ loading , setLoading ] = useState(false)

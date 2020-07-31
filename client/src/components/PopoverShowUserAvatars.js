@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from  'react'
 import { Popover, Whisper, Icon } from "rsuite"
-import { context } from '../context/context'
+import { context, useGlobalCredentialsContext } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 
 const styles = { 
@@ -10,7 +10,7 @@ const styles = {
 }
 
 const Speaker = ({ item, ...props }) => {
-  const { credentials } = useContext(context)
+  const { credentials } = useGlobalCredentialsContext()
   const { request } = useHttp()
   const [ users, setUsers ] = useState()
 

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { context } from '../context/context'
+import { context, useGlobalLinksContext } from '../context/context'
 import './Element.css'
 import ElementAvatar from './ElementAvatar'
 import ElementDeleteSymbol from './ElementDeleteSymbol'
@@ -23,7 +23,8 @@ const styles = {
 }
 
 export default function Element(props) {
-  const { setItemIndex, links, setLinks } = useContext(context)
+  const { links, setLinks } = useGlobalLinksContext()
+  const { setItemIndex } = useContext(context)
   const { item, index, multi, modal, selected, setSelected } = props
 
   const handlerOnClick = (item, index) => {

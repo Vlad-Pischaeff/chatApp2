@@ -3,7 +3,7 @@ import { Avatar, Nav, Loader, Alert, IconButton, Icon, Whisper, Tooltip } from '
 import conversations from '../avatars/conversations.svg'
 import privatechat from '../avatars/social-network.svg'
 import chatroom from '../avatars/chat-room.svg'
-import { context } from '../context/context'
+import { context, useGlobalLinksContext } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 import { useWSParse } from '../hooks/wsparse.hook'
 import ElementList from '../components/ElementList'
@@ -30,7 +30,8 @@ const styles = {
 export default function MainAppPage () {
   const { request } = useHttp()
   const { sockMsg } = useWSParse()
-  const { items, setItems, activeKey, setActiveKey, setItemIndex, setLinks, links } = useContext(context)
+  const { links, setLinks } = useGlobalLinksContext()
+  const { items, setItems, activeKey, setActiveKey, setItemIndex } = useContext(context)
   const [ selectOne, setSelectOne ] = useState({})
   const [ loading, setLoading ] = useState(false)
 

@@ -1,6 +1,6 @@
 import React, { useContext } from  'react'
 import { Popover, Button, Whisper, Icon } from "rsuite"
-import { context } from '../context/context'
+import { context, useGlobalLinksContext } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 let trigger = null
 
@@ -10,7 +10,8 @@ const styles = {
 
 const Speaker = (props) => {
   const { item, setSelected, ...arr } = props
-  const { setItems, links, setLinks, setItemIndex } = useContext(context)
+  const { links, setLinks } = useGlobalLinksContext()
+  const { setItems, setItemIndex } = useContext(context)
   const { request } = useHttp()
 
   const handlerOnClick = async () => {

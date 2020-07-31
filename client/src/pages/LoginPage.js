@@ -3,7 +3,7 @@ import { Button, Panel, Form, FormGroup,
          ControlLabel, FormControl, ButtonToolbar, Checkbox, Alert } from "rsuite";
 import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/auth.hook'
-import { context } from '../context/context'
+import { context, useGlobalCredentialsContext, useGlobalWebsocketContext } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 
 const styles = {
@@ -12,11 +12,13 @@ const styles = {
 }
 
 export default function LoginPage () {
-  const [save, setSave] = useState(false)
+  const [ save, setSave ] = useState(false)
   const login = useAuth('login', save)
   const password = useAuth('password', save)
   const { request, loading, error } = useHttp()
-  const { setMenu, saveCredentials, socketSendMessage } = useContext(context)
+  const { saveCredentials } = useGlobalCredentialsContext()
+  const { socketSendMessage } = useGlobalWebsocketContext()
+  const { setMenu } = useContext(context)
 
   useEffect(() => {
     (!login.value || !password.value) && setSave(false)
@@ -56,9 +58,6 @@ export default function LoginPage () {
           <FormGroup>
             <ButtonToolbar >
               <Button appearance="primary" onClick={loginHandler} loading={loading}>Sign in</Button>
-              {/* <Button appearance="link">
-                <Link to="/register">Forgot password?</Link>
-              </Button> */}
               <Checkbox inline checked={save} onClick={() => setSave(!save)}>Remember me</Checkbox>
             </ButtonToolbar>
           </FormGroup>

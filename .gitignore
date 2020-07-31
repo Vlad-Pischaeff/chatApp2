@@ -1,4 +1,4 @@
 node_modules
 selfsigned*
-cert*
-privkey*
+cert.pem
+privkey.pem

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { context } from '../context/context'
+import { context, useGlobalCredentialsContext } from '../context/context'
 import { Icon } from 'rsuite'
 import PopoverShowUserAvatars from './PopoverShowUserAvatars'
 
@@ -9,7 +9,8 @@ const styles = {
 
 export default function ElementInformSymbol(props) {
   const { item } = props
-  const { activeKey, credentials } = useContext(context)
+  const { credentials } = useGlobalCredentialsContext()
+  const { activeKey } = useContext(context)
 
   return (
     <div>

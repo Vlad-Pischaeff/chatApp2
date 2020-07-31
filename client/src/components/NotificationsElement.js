@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Icon, Checkbox, Whisper, Tooltip } from 'rsuite'
 import { useHttp } from '../hooks/http.hook'
-import { context } from '../context/context'
+import { useGlobalNotificationsContext } from '../context/context'
 
 const styles = {
   flex: { display: 'flex', justifyContent: 'space-between', },
@@ -18,7 +18,7 @@ export default function NotificationsElement(props) {
   const { item, index } = props
   const { request } = useHttp()
   const [ checked, setChecked ] = useState()
-  const { notifications, setNotifications } = useContext(context)
+  const { notifications, setNotifications } = useGlobalNotificationsContext()
   let date = new Date(item.date).toLocaleString()
 
   useEffect(() => {

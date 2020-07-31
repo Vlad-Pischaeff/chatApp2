@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import ElementList from '../components/ElementList'
 import { Modal, Button, Badge } from 'rsuite'
-import { context } from '../context/context'
+import { context, useGlobalCredentialsContext, useGlobalWebsocketContext, useGlobalLinksContext } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 import { useHistory, useLocation } from 'react-router-dom'
 
@@ -17,7 +17,10 @@ export default function SearchResultPage() {
   const [ selectMany, setSelectMany ] = useState({})
   const [ show, setShow ] = useState(true)
   const { request } = useHttp()
-  const { setItems, activeKey, links, setLinks, socketSendMessage, credentials } = useContext(context)
+  const { credentials } = useGlobalCredentialsContext()
+  const { socketSendMessage } = useGlobalWebsocketContext()
+  const { links, setLinks } = useGlobalLinksContext()
+  const { setItems, activeKey } = useContext(context)
 
   const closeWindow = () => {
     setSelectMany({})

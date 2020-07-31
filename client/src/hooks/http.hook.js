@@ -1,10 +1,10 @@
-import { useState, useCallback, useContext } from 'react'
-import { context } from '../context/context'
+import { useState, useCallback } from 'react'
+import { useGlobalCredentialsContext } from '../context/context'
 
 export const useHttp = () => {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const { credentials } = useContext(context)
+  const [ loading, setLoading ] = useState(false)
+  const [ error, setError ] = useState(null)
+  const { credentials } = useGlobalCredentialsContext()
   const header = Object.keys(credentials).length !== 0 
     ? { 'Content-Type': 'application/json', Authorization: credentials.token }
     : { 'Content-Type': 'application/json' }

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { context } from '../context/context'
+import { context, useGlobalLinksContext } from '../context/context'
 import { Badge, Icon } from 'rsuite'
 
 const styles = {
@@ -9,7 +9,8 @@ const styles = {
 }
 
 export default function ElementAvatar(props) {
-  const { activeKey, links } = useContext(context)
+  const { links } = useGlobalLinksContext()
+  const { activeKey } = useContext(context)
   const { item } = props
   const content = links[item._id] !== undefined ? links[item._id]['msgs'] : false
 

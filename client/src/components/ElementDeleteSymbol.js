@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { context } from '../context/context'
+import { context, useGlobalCredentialsContext } from '../context/context'
 import PopoverDelPrivChat from './PopoverDelPrivChat'
 import PopoverUnsubscribeChat from './PopoverUnsubscribeChat'
 import PopoverDelUser from './PopoverDelUser'
@@ -7,7 +7,8 @@ import PopoverDelChat from './PopoverDelChat'
 
 export default function ElementDeleteSymbol(props) {
   const { item, index, selected } = props
-  const { credentials, itemIndex } = useContext(context)
+  const { credentials } = useGlobalCredentialsContext()
+  const { itemIndex } = useContext(context)
 
   return (
     <div>

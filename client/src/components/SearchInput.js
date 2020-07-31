@@ -14,7 +14,7 @@ export default function SearchInput () {
   const search = useAuth('search', false)
   const { request } = useHttp()
   const { activeKey } = useContext(context)
-  const [result, setResult] = useState([])
+  const [ result, setResult ] = useState([])
   const searchRef = useRef()
 
   const handleClick = async () => {

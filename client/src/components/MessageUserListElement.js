@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { context, useGlobalCredentialsContext } from '../context/context'
+import { Icon } from 'rsuite'
 
 const styles = {
   wrap: { maxWidth: '75%',  display: 'flex',  flexFlow: 'row nowrap', margin: '1rem', },
@@ -8,6 +9,7 @@ const styles = {
   mymsg: { background: '#a6d7ff', color: 'black', },
   msg: { background: '#409cff', color: 'white', },
   img: { width: '3rem', height: '3rem', },
+  noimg: { fontSize: '3rem', width: '3rem', textAlign: 'center', },
   arrow: {
     margin: '0',
     padding: '0',
@@ -40,7 +42,10 @@ export default function MessageUserListElement(props) {
 
   return credentials.userId !== item.from
       ? <section style={styles.wrap} >
-          <img src={items[itemIndex].avatar} style={styles.img} alt='' />
+          {items[itemIndex].avatar !== null
+            ? <img src={items[itemIndex].avatar} style={styles.img} alt='' />
+            : <Icon icon="user" style={styles.noimg} />
+          }
           <span style={{...styles.arrow, ...styles.left}}></span>
           <article style={{...styles.wrapmsg, ...styles.msg}}>
             <div style={{...styles.date, ...styles.color}}> {date} </div>
@@ -48,7 +53,10 @@ export default function MessageUserListElement(props) {
           </article>
         </section>
       : <section style={styles.mywrap} >
-          <img src={credentials.avatar} style={styles.img} alt='' />
+          {credentials.avatar !== null
+            ? <img src={credentials.avatar} style={styles.img} alt='' />
+            : <Icon icon="user" style={styles.noimg} />
+          }
           <span style={{...styles.arrow, ...styles.right}}></span>
           <article style={{...styles.wrapmsg, ...styles.mymsg}}>
             <div style={{...styles.date, ...styles.mycolor}}> {date} </div>

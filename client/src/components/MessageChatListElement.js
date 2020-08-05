@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { context, useGlobalCredentialsContext } from '../context/context'
+import { Icon } from 'rsuite'
 
 const styles = {
   wrap: { maxWidth: '75%',  display: 'flex',  flexFlow: 'row nowrap', margin: '1rem', },
@@ -8,6 +9,7 @@ const styles = {
   mymsg: { background: '#a6d7ff', color: 'black', },
   msg: { background: '#409cff', color: 'white', },
   img: { width: '3rem', height: '3rem', },
+  noimg: { fontSize: '3.3rem', width: '3.5rem', textAlign: 'center', },
   arrow: {
     margin: '0',
     padding: '0',
@@ -37,20 +39,26 @@ export default function MessageChatListElement(props) {
 
   return credentials.userId !== item.from
       ? <section style={styles.wrap} >
-          <img src={item.avatar} style={styles.img} alt='' />
-          <span style={{...styles.arrow, ...styles.left}}></span>
-          <article style={{...styles.wrapmsg, ...styles.msg}}>
-            <div style={{...styles.date, ...styles.color}}> {date} </div>
-            <div style={{...styles.user, ...styles.color}}> User {item.login} wrote : </div>
-            <div> {item.text} </div>
-          </article>
-        </section>
+          {item.avatar !== null
+            ? <img src={item.avatar} style={styles.img} alt='' />
+            : <Icon icon="user" style={styles.noimg} />
+          }
+            <span style={{...styles.arrow, ...styles.left}}></span>
+            <article style={{...styles.wrapmsg, ...styles.msg}}>
+              <div style={{...styles.date, ...styles.color}}> {date} </div>
+              <div style={{...styles.user, ...styles.color}}> User {item.login} wrote : </div>
+              <div> {item.text} </div>
+            </article>
+          </section>
       : <section style={styles.mywrap} >
-          <img src={item.avatar} style={styles.img} alt='' />
-          <span style={{...styles.arrow, ...styles.right}}></span>
-          <article style={{...styles.wrapmsg, ...styles.mymsg}}>
-            <div style={{...styles.date, ...styles.mycolor}}> {date} </div>
-            <div> {item.text} </div>
-          </article>
-        </section>
+          {item.avatar !== null
+            ? <img src={item.avatar} style={styles.img} alt='' />
+            : <Icon icon="user" style={styles.noimg} />
+          }
+            <span style={{...styles.arrow, ...styles.right}}></span>
+            <article style={{...styles.wrapmsg, ...styles.mymsg}}>
+              <div style={{...styles.date, ...styles.mycolor}}> {date} </div>
+              <div> {item.text} </div>
+            </article>
+          </section>
 }

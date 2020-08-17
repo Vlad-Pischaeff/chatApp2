@@ -21,7 +21,7 @@ const styles = {
   rooms: { flex: '1 1 15rem', overflowY: 'auto', },
   messages: { flex: '1 1 16.5rem', overflowY: 'auto', background: '#c9d7ff', },
   footer: { background: '#a6d7ff', height: '3.5rem', alignItems: 'center', },
-  footerleft: { justifyContent: 'flex-start', width: '8rem', },
+  footerleft: { justifyContent: 'flex-start', width: '12rem', },
   icon: { width: '3rem', background: 'transparent', },
   plus: { margin: '0.5rem', },
   list: { height: '100%' }
@@ -135,6 +135,12 @@ export default function MainAppPage () {
             <IconButton icon={<Icon icon="codepen" />} 
                       color="blue" circle style={styles.plus}
                       href="https://codepen.io/vlad-pischaeff/"/>
+          </Whisper>
+          <Whisper  placement="topStart" trigger="hover" 
+                    speaker={<Tooltip>Docker image</Tooltip>}>
+            <IconButton icon={<Icon icon="cubes" />} 
+                      color="blue" circle style={styles.plus}
+                      href="https://hub.docker.com/r/pischaeff/chat"/>
           </Whisper>
         </div>
         <SendMessageInput />

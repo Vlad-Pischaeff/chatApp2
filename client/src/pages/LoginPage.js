@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Button, Panel, Form, FormGroup, 
          ControlLabel, FormControl, ButtonToolbar, Checkbox, Alert } from "rsuite";
-import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/auth.hook'
 import { context, useGlobalCredentialsContext, useGlobalWebsocketContext } from '../context/context'
 import { useHttp } from '../hooks/http.hook'

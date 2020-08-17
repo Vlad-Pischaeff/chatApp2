@@ -15,7 +15,7 @@ export default function MessagesUserList() {
   const [ newMessages, setNewMessages ] = useState([])
   const { request } = useHttp()
   const [ loading , setLoading ] = useState(false)
-  let to = items[itemIndex] === undefined ? null : items[itemIndex]._id
+  let to = (!!items && !!itemIndex) ? items[itemIndex]._id : null
   const liRef = useRef('')
   let msgList = null
 
@@ -52,16 +52,6 @@ export default function MessagesUserList() {
     const API = `/api/message/user/${to}`
     return await request(API, 'GET')
   }
-
-  // moved into <Element /> ...
-  //
-  // const setLinksMsgsFalse = () => {
-  //   if (to !== null) {
-  //     const obj = { ...links }
-  //     obj[to] = { ...obj[to], 'msgs': false }
-  //     setLinks(obj)
-  //   }
-  // }
 
   if (itemIndex !== undefined && newMessages.length !== 0) {
     msgList = newMessages.map((item, index) => {

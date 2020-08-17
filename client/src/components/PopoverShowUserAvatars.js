@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from  'react'
+import React, { useEffect, useState } from  'react'
 import { Popover, Whisper, Icon } from "rsuite"
-import { context, useGlobalCredentialsContext } from '../context/context'
+import { useGlobalCredentialsContext } from '../context/context'
 import { useHttp } from '../hooks/http.hook'
 
 const styles = { 

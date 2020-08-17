@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { context, useGlobalCredentialsContext } from '../context/context'
+import React from 'react'
+import { useGlobalCredentialsContext } from '../context/context'
 import { Icon } from 'rsuite'
 
 const styles = {

@@ -8,7 +8,7 @@ export default function MessagesChatList() {
   const { items, itemIndex, activeKey } = useContext(context)
   const { request } = useHttp()
   const [ newMessages, setNewMessages ] = useState([])
-  let to = items[itemIndex] === undefined ? null : items[itemIndex]._id
+  let to = (!!items && !!itemIndex) ? items[itemIndex]._id : null
   const liRef = useRef('')
   let msgList = null
 

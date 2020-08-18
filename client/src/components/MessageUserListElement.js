@@ -42,9 +42,9 @@ export default function MessageUserListElement(props) {
 
   return credentials.userId !== item.from
       ? <section style={styles.wrap} >
-          {items[itemIndex].avatar !== null
-            ? <img src={items[itemIndex].avatar} style={styles.img} alt='' />
-            : <Icon icon="user" style={styles.noimg} />
+          { !!items[itemIndex].avatar
+              ? <img src={items[itemIndex].avatar} style={styles.img} alt='' />
+              : <Icon icon="user" style={styles.noimg} />
           }
           <span style={{...styles.arrow, ...styles.left}}></span>
           <article style={{...styles.wrapmsg, ...styles.msg}}>
@@ -53,9 +53,9 @@ export default function MessageUserListElement(props) {
           </article>
         </section>
       : <section style={styles.mywrap} >
-          {credentials.avatar !== null
-            ? <img src={credentials.avatar} style={styles.img} alt='' />
-            : <Icon icon="user" style={styles.noimg} />
+          { !!credentials.avatar
+              ? <img src={credentials.avatar} style={styles.img} alt='' />
+              : <Icon icon="user" style={styles.noimg} />
           }
           <span style={{...styles.arrow, ...styles.right}}></span>
           <article style={{...styles.wrapmsg, ...styles.mymsg}}>

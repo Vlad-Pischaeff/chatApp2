@@ -8,7 +8,7 @@ export default function MessagesChatList() {
   const { items, itemIndex, activeKey } = useContext(context)
   const { request } = useHttp()
   const [ newMessages, setNewMessages ] = useState([])
-  let to = (!!items && !!itemIndex) ? items[itemIndex]._id : null
+  let to = (!!items && itemIndex !== undefined ) ? items[itemIndex]._id : null
   const liRef = useRef('')
   let msgList = null
 
@@ -22,20 +22,16 @@ export default function MessagesChatList() {
 
   useEffect(() => {
     getInformation()
-    // setLinksMsgsFalse()
   }, [itemIndex])
 
   useEffect(() => {
-    if (items[itemIndex] !== undefined && 
-        socketMessage.toroom === items[itemIndex]._id) {
+    if ( !!items && itemIndex !== undefined && socketMessage.toroom === items[itemIndex]._id) {
       getInformation()
     }
   }, [socketMessage])
 
   const getInformation = async () => {
-    if (itemIndex !== undefined && 
-        items[0] !== undefined &&
-        items[0].followers !== undefined) {
+    if (itemIndex !== undefined && !!items[0] && !!items[0].followers ) {
       let data = await getChatUsersProfiles()
       let userAvatars = data.reduce((obj, item) => {
         obj[item._id] = item.avatar
@@ -71,16 +67,6 @@ export default function MessagesChatList() {
     return await request(API, 'POST', body)
   }
   
-  // moved into <Element /> ...
-  //
-  // const setLinksMsgsFalse = () => {
-  //   if (to !== null) {
-  //     const obj = { ...links }
-  //     obj[to] = { ...obj[to], 'msgs': false }
-  //     setLinks(obj)
-  //   }
-  // }
-
   if (itemIndex !== undefined && newMessages.length !== 0) {
     msgList = newMessages.map((item, index) => {
       let date = new Date(item.date).toLocaleString() 

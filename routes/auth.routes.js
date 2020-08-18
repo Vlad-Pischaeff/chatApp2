@@ -25,7 +25,7 @@ router.post('/register', async (req, res) => {
           console.error(err) 
           return res.status(500).json({message:`User ${login} not created...`})
         } else {
-          const token = jwt.sign( { userId: doc.id }, SECRET, { expiresIn: '1h' } )
+          const token = jwt.sign( { userId: doc.id }, SECRET, { expiresIn: '10h' } )
           res.status(201).json({ login, token, userId: doc.id, avatar })
           // res.status(201).json({message:`User ${login} created...`})
         }
@@ -53,7 +53,7 @@ router.post('/login', async (req, res) => {
         return res.status(400).json({ message: 'Wrong password...' })
       }
 
-      const token = jwt.sign( { userId: candidate.id }, SECRET, { expiresIn: '1h' } )
+      const token = jwt.sign( { userId: candidate.id }, SECRET, { expiresIn: '10h' } )
 
       res.status(201).json({ login, token, userId: candidate.id, avatar: candidate.avatar })
     } catch (e) {

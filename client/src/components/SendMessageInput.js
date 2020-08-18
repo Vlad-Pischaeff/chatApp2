@@ -15,7 +15,7 @@ export default function SendMessageInput () {
   const { items, itemIndex, activeKey } = useContext(context)
   const [ disabled, setDisabled ] = useState(true)
   let from = credentials.userId
-  let to = (!!items && !!itemIndex) ? items[itemIndex]._id : null
+  let to = ( !!items && itemIndex !== undefined ) ? items[itemIndex]._id : null
 
   useEffect(() => {
     itemIndex !== undefined 

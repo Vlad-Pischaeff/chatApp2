@@ -39,9 +39,9 @@ export default function MessageChatListElement(props) {
 
   return credentials.userId !== item.from
       ? <section style={styles.wrap} >
-          {item.avatar !== null
-            ? <img src={item.avatar} style={styles.img} alt='' />
-            : <Icon icon="user" style={styles.noimg} />
+          { !!item.avatar
+              ? <img src={item.avatar} style={styles.img} alt='' />
+              : <Icon icon="user" style={styles.noimg} />
           }
             <span style={{...styles.arrow, ...styles.left}}></span>
             <article style={{...styles.wrapmsg, ...styles.msg}}>
@@ -51,9 +51,9 @@ export default function MessageChatListElement(props) {
             </article>
           </section>
       : <section style={styles.mywrap} >
-          {item.avatar !== null
-            ? <img src={item.avatar} style={styles.img} alt='' />
-            : <Icon icon="user" style={styles.noimg} />
+          { !!item.avatar
+              ? <img src={item.avatar} style={styles.img} alt='' />
+              : <Icon icon="user" style={styles.noimg} />
           }
             <span style={{...styles.arrow, ...styles.right}}></span>
             <article style={{...styles.wrapmsg, ...styles.mymsg}}>

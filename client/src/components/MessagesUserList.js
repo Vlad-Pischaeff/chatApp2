@@ -4,9 +4,7 @@ import { useHttp } from '../hooks/http.hook'
 import MessageUserListElement from './MessageUserListElement'
 import { Loader } from 'rsuite'
 
-const styles = {
-  loader: { margin: '2rem', }, 
-}
+const styles = { loader: { margin: '2rem', }, }
 
 export default function MessagesUserList() {
   const { credentials } = useGlobalCredentialsContext()
@@ -15,7 +13,7 @@ export default function MessagesUserList() {
   const [ newMessages, setNewMessages ] = useState([])
   const { request } = useHttp()
   const [ loading , setLoading ] = useState(false)
-  let to = (!!items && !!itemIndex) ? items[itemIndex]._id : null
+  let to = (!!items && itemIndex !== undefined ) ? items[itemIndex]._id : null
   const liRef = useRef('')
   let msgList = null
 
@@ -28,19 +26,16 @@ export default function MessagesUserList() {
   }, [activeKey])
 
   useEffect(() => {
-    if (itemIndex !== undefined && 
-        items[0] !== undefined &&
-        items[0].friends !== undefined) {  
+    if ( itemIndex !== undefined && !!items[0] && !!items[0].friends ) {  
       setLoading(true)
       getUserMessages()
         .then(e => setNewMessages(e))
         .then(() => setLoading(false))
-      // setLinksMsgsFalse()
     }
   }, [itemIndex])
 
   useEffect(() => {
-    if (items[itemIndex] !== undefined && 
+    if ( !!items && itemIndex !== undefined && 
         ((socketMessage.to === items[itemIndex]._id && socketMessage.fromuser === credentials.userId) ||
         (socketMessage.fromuser === items[itemIndex]._id && socketMessage.to === credentials.userId))) {
         getUserMessages()
@@ -53,7 +48,7 @@ export default function MessagesUserList() {
     return await request(API, 'GET')
   }
 
-  if (itemIndex !== undefined && newMessages.length !== 0) {
+  if ( itemIndex !== undefined && newMessages.length !== 0) {
     msgList = newMessages.map((item, index) => {
       let date = new Date(item.date).toLocaleString() 
       return  <li key={index} ref={liRef}>

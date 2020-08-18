@@ -56,9 +56,10 @@ export default function Element(props) {
   }
 
   return (
-    <section style={selected[index] 
-                    ? {...styles.select, ...styles.flex} 
-                    : {...styles.noselect, ...styles.flex}} 
+    <section style={  selected[index] 
+                        ? {...styles.select, ...styles.flex} 
+                        : {...styles.noselect, ...styles.flex} 
+                    } 
                     onClick={() => handlerOnClick(item, index)} key={index} 
                     className="element" >
 

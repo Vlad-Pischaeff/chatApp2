@@ -47,7 +47,6 @@ export const useWebsocket = () => {
  
   const handleReceiveMessage = messageObject => {
     setSocketMessage(JSON.parse(messageObject.data))
-    // console.log('websocket.hook .. received message', JSON.parse(messageObject.data) )
   }
 
   // function waitForOpenSocket(socket) {

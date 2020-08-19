@@ -13,7 +13,7 @@ export default function MessagesUserList() {
   const [ newMessages, setNewMessages ] = useState([])
   const { request } = useHttp()
   const [ loading , setLoading ] = useState(false)
-  let to = (!!items && itemIndex !== undefined ) ? items[itemIndex]._id : null
+  let to = ( !!items && itemIndex !== undefined ) ? items[itemIndex]._id : null
   const liRef = useRef('')
   let msgList = null
 

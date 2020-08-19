@@ -50,11 +50,11 @@ export default function NotificationsElement(props) {
 
     <section style={{...styles.noselect, ...styles.flex}} key={index} >
 
-      {item.avatar
-              // if user has "avatar" then show image
-            ? <img src={item.avatar} alt='' style={styles.img} />
-              // if user has no "avatar" then show icon
-            : <Icon style={styles.noimg} icon="user-o" />
+      { item.avatar
+            // if user has "avatar" then show image
+          ? <img src={item.avatar} alt='' style={styles.img} />
+            // if user has no "avatar" then show icon
+          : <Icon style={styles.noimg} icon="user-o" />
       }
 
       <div style={{...styles.content, ...styles.flex}} >

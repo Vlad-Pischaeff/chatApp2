@@ -1,5 +1,6 @@
 {
   "port": 5000,
-  "mongoUrl": "mongodb+srv://vlad:123321@cluster0-pphif.mongodb.net/app?retryWrites=true&w=majority",
+  // "mongoUrl": "mongodb+srv://vlad:123321@cluster0-pphif.mongodb.net/app?retryWrites=true&w=majority",
+  "mongoUrl": "mongodb://192.168.0.100:27017/app2",
   "jwtSecret": "jrv0e7rf2oi43dfq0"
 }

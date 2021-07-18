@@ -2,24 +2,28 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const fs = require('fs')
+const config = require('config')
 const http = require('http')
 const https = require('https')
-const privateKey  = fs.readFileSync('./privkey.pem', 'utf8')
-const certificate = fs.readFileSync('./cert.pem', 'utf8')
-const credentials = {key: privateKey, cert: certificate}
-
-const config = require('config')
-const PORT = config.get('port') || 5000
+const WebSocket = require('ws')
 const path = require('path')
 const mongoose = require('mongoose')
-mongoose.set('useFindAndModify', false)
 
-const WebSocket = require('ws')
-const httpServer = http.createServer(app)
-const httpsServer = https.createServer(credentials, app)
+const privateKey  = fs.readFileSync('./keys/privkey.pem', 'utf8')
+const certificate = fs.readFileSync('./keys/cert.pem', 'utf8')
+const credentials = {key: privateKey, cert: certificate}
 
-let clients = new Set()
-let server
+const PORT = config.get('port') || 5000
+const MONGO_URL = config.get('mongoUrl')
+
+const isProduction = process.env.NODE_ENV === 'production'
+                      ? true
+                      : false
+const Server = isProduction
+                ? https.createServer(credentials, app)
+                : http.createServer(app)
+
+const clients = new Set()
 
 app.use(express.json({ extended: true }))
 app.use(cors())
@@ -29,36 +33,25 @@ app.use('/api/room', require('./routes/room.routes'))
 app.use('/api/message', require('./routes/message.routes'))
 app.use('/api/notification', require('./routes/notification.routes'))
 
-// app.get('*', function(req, res) {
-//   console.log('get /')
-//   res.sendFile(__dirname + '/index.html')
-// })
-
-if (process.env.NODE_ENV === 'production') {
+if (isProduction) {
   app.use('/', express.static(path.join(__dirname, 'client', 'build', )))
-
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', '/index.html'))
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
   })
 }
 
 const start = async () => {
   try {
-    await mongoose.connect(config.get('mongoUrl'), {
+    await mongoose.connect(MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useCreateIndex: true
+      useCreateIndex: true,
+      useFindAndModify: false
     })
-    
-    if (process.env.NODE_ENV === 'production') {
-      server = await httpsServer.listen(PORT, () => {
-        console.log('https server started ...')
-      })
-    } else {
-      server = await httpServer.listen(PORT, () => {
-        console.log('http server started ...')
-      })
-    }
+
+    const server = await Server.listen(PORT, () => {
+        console.log('http/https server started ...')
+    })
 
     wss = new WebSocket.Server({ server, path: '/ws' })
     

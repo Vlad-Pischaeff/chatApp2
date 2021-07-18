@@ -1,5 +1,2 @@
 node_modules
-selfsigned*
-cert.pem
-privkey.pem
-*.pem
+keys

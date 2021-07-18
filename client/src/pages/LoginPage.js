@@ -36,7 +36,7 @@ export default function LoginPage () {
       const body = { login: login.value, password: password.value }
       const data = await request('/api/auth/login', 'POST', body)
       saveCredentials(data)
-      socketSendMessage({ 'online': data.userId })
+      socketSendMessage({ 'action': 'online', 'state': true, 'id': data.userId })
     } catch (e) {
       console.log('login user error...', e)
     }

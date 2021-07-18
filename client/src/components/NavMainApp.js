@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { Header, Navbar, Nav, Icon, Badge, Whisper, Tooltip } from 'rsuite'
-import { context, useGlobalCredentialsContext, useGlobalNotificationsContext } from '../context/context'
+import { context, useGlobalCredentialsContext, useGlobalNotificationsContext, useGlobalWebsocketContext } from '../context/context'
 import SearchInput from './SearchInput'
 import { useHttp } from '../hooks/http.hook'
 
@@ -37,6 +37,7 @@ export default function NavMainApp() {
   const { request } = useHttp()
   const { credentials, deleteCredentials } = useGlobalCredentialsContext()
   const { notifications, setNotifications } = useGlobalNotificationsContext()
+  const { socketRef, socketSendMessage } = useGlobalWebsocketContext()
   const { setAvatar, activeKey, items, itemIndex } = useContext(context)
   const history = useHistory()
   let location = useLocation()
@@ -52,6 +53,9 @@ export default function NavMainApp() {
 
   const Logout = (e) => {
     e.preventDefault()
+    let msg = { 'action': 'online', 'state': false, 'id': credentials.userId }
+    socketSendMessage(msg)
+    socketRef.current.close()
     deleteCredentials()
     setAvatar(null)
     history.push('/')

@@ -63,11 +63,16 @@ const start = async () => {
       ws.on('message', message => {
         let data = JSON.parse(message)
         console.log('received: %s', message, data, wss.clients.size)
-        if (data.online) {
-          // ...add clients to Set
-          client.id = data.online
-          client.socket = ws
-          clients.add(client)
+        if (data.action === 'online') {
+          if (data.state) {
+            // ...add clients to Set
+            client.id = data.id
+            client.socket = ws
+            clients.add(client)
+            // console.log('Clients Set ...', client, clients)
+          } else {
+            ws.isAlive = false
+          }
         } else {
           wss.clients.forEach(client => client.send(message))
         }
@@ -78,7 +83,7 @@ const start = async () => {
         // console.log('all clients ...', clients.size)
         console.log('isAlive', ws.isAlive,`${new Date()}`)
         for (let client of clients) {
-          let message = JSON.stringify({ online: client.id })
+          let message = JSON.stringify({ action: 'online', state: true, id: client.id })
           wss.clients.forEach(client => client.send(message))
         }
       })
@@ -94,11 +99,13 @@ const start = async () => {
     // }, 10000)
 
     setInterval(() => {
+      // console.log('set interval...', clients)
       clients.forEach(ws => {
+        console.log('Is Web Socket Alive ...', ws.socket.isAlive)
         if (!ws.socket.isAlive) {
-          let message = JSON.stringify({ offline: ws.id })
-          wss.clients.forEach(client => client.send(message))
+          let message = JSON.stringify({ action: 'online', state: false, id: ws.id })
           clients.delete(ws)
+          wss.clients.forEach(client => client.send(message))
           return ws.socket.terminate()
         }
         ws.socket.isAlive = false

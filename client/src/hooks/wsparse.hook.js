@@ -12,24 +12,38 @@ export const useWSParse = () => {
   useEffect(() => {
     let obj = {...links}
     let key
+    // console.log('WsParse socket message ...', socketMessage)
+    // const states = {
+    //   online: function () {
+    //     obj[socketMessage.id] = { ...obj[socketMessage.id], 'online' : socketMessage.state }
+    //     setLinks(obj)
+    //     setSockMsg({ 'action': 'online', 'state': socketMessage.state, 'id': key })
+    //   }
+    // }
+    // if (socketMessage.action === 'online') states[socketMessage.action]()
 
     // if user is our friend and hi is online, then set property obj[key]['online'] = true
-    if (key = socketMessage.online) {
-      if (obj[key] && obj[key]['online'] === false) {
-        obj[key] = { ...obj[key], 'online' : true }
-        setLinks(obj)
-        setSockMsg({ 'online': key })
-      }
+    // if (key = socketMessage.online) {
+    //   if (obj[key] && obj[key]['online'] === false) {
+    //     obj[key] = { ...obj[key], 'online' : true }
+    //     setLinks(obj)
+    //     setSockMsg({ 'online': key })
+    //   }
+    // }
+    if (socketMessage.action === 'online') {
+      obj[socketMessage.id] = { ...obj[socketMessage.id], 'online' : socketMessage.state }
+      setLinks(obj)
+      setSockMsg({ 'action': 'online', 'state': socketMessage.state, 'id': key })
     }
 
     // if user is our friend and hi is offline, then set property obj[key]['online'] = false
-    if (key = socketMessage.offline) {
-      if (obj[key] && obj[key]['online'] === true) {
-        obj[key] = { ...obj[key], 'online' : false }
-        setLinks(obj)
-        setSockMsg({ 'offline': key })
-      }
-    }
+    // if (key = socketMessage.offline) {
+    //   if (obj[key] && obj[key]['online'] === true) {
+    //     obj[key] = { ...obj[key], 'online' : false }
+    //     setLinks(obj)
+    //     setSockMsg({ 'offline': key })
+    //   }
+    // }
     
     // if room is in our subscription or we own it,
     // then set property obj[key]['msgs'] = as counter of new messages to room

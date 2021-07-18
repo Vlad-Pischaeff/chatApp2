@@ -13,7 +13,7 @@ export default function ElementAvatar(props) {
   const { activeKey } = useContext(context)
   const { item } = props
   const content = !!links[item._id] ? links[item._id]['msgs'] : false
-
+  // console.log('ElementAvatar ...', links[item._id])
   return (
     <div>
       { (() => {

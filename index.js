@@ -61,20 +61,23 @@ const start = async () => {
       let client = {}
     
       ws.on('message', message => {
-        let data = JSON.parse(message)
-        console.log('received: %s', message, data, wss.clients.size)
-        if (data.action === 'online') {
-          if (data.state) {
-            // ...add clients to Set
-            client.id = data.id
-            client.socket = ws
-            clients.add(client)
-            // console.log('Clients Set ...', client, clients)
+        try {
+          let data = JSON.parse(message)
+          console.log('received: %s', message, data, wss.clients.size)
+          if (data.action === 'online') {
+            if (data.state) {
+              // ...add clients to Set
+              client.id = data.id
+              client.socket = ws
+              clients.add(client)
+            } else {
+              ws.isAlive = false
+            }
           } else {
-            ws.isAlive = false
+            wss.clients.forEach(client => client.send(message))
           }
-        } else {
-          wss.clients.forEach(client => client.send(message))
+        } catch(e) {
+          console.log('Received unrecognized message ... ', message)
         }
       })
     

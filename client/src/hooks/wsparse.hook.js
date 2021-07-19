@@ -12,6 +12,7 @@ export const useWSParse = () => {
   useEffect(() => {
     let obj = {...links}
     let key
+    const {action, id, state, to, fromuser} = socketMessage
 
     // const states = {
     //   online: function () {
@@ -21,12 +22,23 @@ export const useWSParse = () => {
     //   }
     // }
     // if (socketMessage.action === 'online') states[socketMessage.action]()
-
+    
     // if user is our friend and hi is online, then set property obj['state'] = true
-    if (socketMessage.action === 'online') {
-      obj[socketMessage.id] = { ...obj[socketMessage.id], 'online' : socketMessage.state }
+    if (action === 'online') {
+      obj[id] = { ...obj[id], 'online' : state }
       setLinks(obj)
-      setSockMsg({ 'action': 'online', 'state': socketMessage.state, 'id': key })
+    }
+    
+    // if user is our friend, and not selected in WebChat interface
+    // then set property obj[key]['msgs'] = as counter of new messages from user
+    if (action === 'friends_msg') {
+      if (to === credentials.userId && !itemIndex) {
+        let counter = obj[fromuser]['msgs']
+        obj[fromuser]['msgs'] = !counter 
+                                  ? 1 
+                                  : counter++
+        setLinks(obj)
+      }   
     }
     
     // if room is in our subscription or we own it,
@@ -43,20 +55,6 @@ export const useWSParse = () => {
       }
     }
   
-    // if user is our friend,
-    // then set property obj[key]['msgs'] = as counter of new messages from user
-    if ((key = socketMessage.fromuser) && socketMessage.to === credentials.userId) {
-      if (obj[key] &&
-          (itemIndex === undefined || key !== items[itemIndex]._id)) {
-        let val = obj[key]['msgs'] === false 
-          ? 1 
-          : +obj[key]['msgs'] + 1
-        obj[key] = { ...obj[key], 'msgs': val }
-        setLinks(obj)
-        setSockMsg({ 'msgs': key })
-      } 
-    }   
-
     // if user add me to his friends
     if (key = socketMessage.invite) {
       if (key === credentials.userId) {
@@ -90,11 +88,9 @@ export const useWSParse = () => {
     if (key = socketMessage.invite) {
       if (key === credentials.userId) {
         setSockMsg({ 'invite': socketMessage.friend })
-        if (notifications) {
-          setNotifications(notifications + 1)
-        } else {
-          setNotifications(1)
-        }
+        notifications
+          ? setNotifications(notifications + 1)
+          : setNotifications(1)
         console.log('I have ben added to friend by ...', socketMessage.friend, notifications)
       }
     }

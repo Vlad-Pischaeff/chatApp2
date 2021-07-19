@@ -7,11 +7,11 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "http-proxy-middleware": "^0.20.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-image-crop": "^8.6.4",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-image-crop": "^8.6.12",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "4.0.3",
     "rsuite": "^4.10.2"
   },
   "scripts": {
@@ -36,7 +36,7 @@
     ]
   },
   "devDependencies": {
-    "@craco/craco": "^5.9.0",
+    "@craco/craco": "^6.2.0",
     "craco-less": "^1.18.0"
   }
 }

@@ -63,7 +63,7 @@ const start = async () => {
       ws.on('message', message => {
         try {
           let data = JSON.parse(message)
-          console.log('received: %s', message, data, wss.clients.size)
+          console.log('received: %s', data, wss.clients.size)
           if (data.action === 'online') {
             if (data.state) {
               // ...add clients to Set

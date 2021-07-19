@@ -1,3 +1,4 @@
 node_modules
 keys
 config/default.json
+package-lock.json

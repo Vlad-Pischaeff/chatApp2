@@ -36,8 +36,8 @@ export default function MessagesUserList() {
 
   useEffect(() => {
     if ( !!items && itemIndex !== undefined && 
-        ((socketMessage.to === items[itemIndex]._id && socketMessage.fromuser === credentials.userId) ||
-        (socketMessage.fromuser === items[itemIndex]._id && socketMessage.to === credentials.userId))) {
+        ((socketMessage.to === items[itemIndex]._id && socketMessage.from === credentials.userId) ||
+        (socketMessage.from === items[itemIndex]._id && socketMessage.to === credentials.userId))) {
         getUserMessages()
           .then(e => setNewMessages(e))
     }

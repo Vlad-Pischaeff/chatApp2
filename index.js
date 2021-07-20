@@ -75,6 +75,7 @@ const start = async () => {
             }
           } else {
             wss.clients.forEach(client => client.send(message))
+            console.log('sended: %s', message)
           }
         } catch(e) {
           console.log('Received unrecognized message ... ', message)
@@ -84,7 +85,7 @@ const start = async () => {
       ws.on('pong', () => {
         ws.isAlive = true
         // console.log('all clients ...', clients.size)
-        console.log('isAlive', ws.isAlive,`${new Date()}`)
+        // console.log('isAlive', ws.isAlive,`${new Date()}`)
         for (let client of clients) {
           let message = JSON.stringify({ action: 'online', state: true, id: client.id })
           wss.clients.forEach(client => client.send(message))
@@ -104,7 +105,7 @@ const start = async () => {
     setInterval(() => {
       // console.log('set interval...', clients)
       clients.forEach(ws => {
-        console.log('Is Web Socket Alive ...', ws.socket.isAlive)
+        // console.log('Is Web Socket Alive ...', ws.socket.isAlive)
         if (!ws.socket.isAlive) {
           let message = JSON.stringify({ action: 'online', state: false, id: ws.id })
           clients.delete(ws)

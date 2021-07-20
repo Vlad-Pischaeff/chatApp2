@@ -11,7 +11,7 @@ export default function MessagesChatList() {
   let to = ( !!items && itemIndex !== undefined ) ? items[itemIndex]._id : null
   const liRef = useRef('')
   let msgList = null
-
+  console.log('MessageChatList ...', socketMessage)
   useEffect(() => {
     liRef.current && liRef.current.scrollIntoView({ behavior: 'smooth' })
   }, [newMessages])
@@ -25,7 +25,8 @@ export default function MessagesChatList() {
   }, [itemIndex])
 
   useEffect(() => {
-    if ( !!items && itemIndex !== undefined && socketMessage.toroom === items[itemIndex]._id) {
+    // console.log('MessageChatList ...', socketMessage)
+    if ( !!items && itemIndex !== undefined && socketMessage.to === items[itemIndex]._id) {
       getInformation()
     }
   }, [socketMessage])

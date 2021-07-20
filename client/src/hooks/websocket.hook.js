@@ -2,7 +2,7 @@ import { useEffect, useRef, useCallback, useState } from 'react'
 const protocolPrefix = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
 let { host } = window.location
 const url = `${protocolPrefix}//${host}/ws`
-console.log('WebSocket URL ...', url)
+// console.log('WebSocket URL ...', url)
 
 export const useWebsocket = () => {
   const socketRef = useRef()

@@ -30,8 +30,8 @@ export default function SendMessageInput () {
     await request(API, 'PUT', body)
     message.onFocus()
     let msg = activeKey === 'conversations' 
-      ? { 'action': 'friends_msg', 'fromuser': from, 'to': to }
-      : { 'from': from, 'toroom': to }
+      ? { 'action': 'friends_msg', 'from': from, 'to': to }
+      : { 'action': 'rooms_msg', 'from': from, 'to': to }
     socketSendMessage(msg)
   }
 

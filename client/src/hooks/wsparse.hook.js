@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react'
 import { context, useGlobalWebsocketContext, useGlobalCredentialsContext, useGlobalNotificationsContext, useGlobalLinksContext } from '../context/context'
 
 export const useWSParse = () => {
-  const { socketMessage } = useGlobalWebsocketContext()
+  const { socketMessage, setSocketMessage } = useGlobalWebsocketContext()
   const { credentials } = useGlobalCredentialsContext()
   const { notifications, setNotifications } = useGlobalNotificationsContext()
   const { links, setLinks } = useGlobalLinksContext()
@@ -12,48 +12,65 @@ export const useWSParse = () => {
   useEffect(() => {
     let obj = {...links}
     let key
-    const {action, id, state, to, fromuser} = socketMessage
+    const {action, id, state, to, from} = socketMessage
 
-    // const states = {
-    //   online: function () {
-    //     obj[socketMessage.id] = { ...obj[socketMessage.id], 'online' : socketMessage.state }
-    //     setLinks(obj)
-    //     setSockMsg({ 'action': 'online', 'state': socketMessage.state, 'id': key })
-    //   }
-    // }
-    // if (socketMessage.action === 'online') states[socketMessage.action]()
+    const states = {
+      online: function () {
+        obj[id] = { ...obj[id], 'online' : state }
+        setLinks(obj)
+      },
+      friends_msg: function() {
+        if (to === credentials.userId && itemIndex === undefined) {
+          let counter = obj[from]['msgs']
+          obj[from]['msgs'] = !counter ? +1 : counter + 1
+          setLinks(obj)
+        }
+      },
+      rooms_msg: function() {
+        // console.log('rooms_msg ... ', items, items.map(i => i._id))
+        if (items.map(i => i._id).includes(to) && itemIndex === undefined) {
+          let counter = obj[to]['msgs']
+          obj[to]['msgs'] = !counter ? +1 : counter + 1
+          setLinks(obj)
+        }
+      }
+    }
+    
+    states[action]?.()
     
     // if user is our friend and hi is online, then set property obj['state'] = true
-    if (action === 'online') {
-      obj[id] = { ...obj[id], 'online' : state }
-      setLinks(obj)
-    }
+    // if (action === 'online') {
+    //   obj[id] = { ...obj[id], 'online' : state }
+    //   setLinks(obj)
+    //   console.log('LINKS ... ', obj)
+    // }
     
     // if user is our friend, and not selected in WebChat interface
     // then set property obj[key]['msgs'] = as counter of new messages from user
-    if (action === 'friends_msg') {
-      if (to === credentials.userId && !itemIndex) {
-        let counter = obj[fromuser]['msgs']
-        obj[fromuser]['msgs'] = !counter 
-                                  ? 1 
-                                  : counter++
-        setLinks(obj)
-      }   
-    }
+    // if (action === 'friends_msg') {
+    //   if (to === credentials.userId && itemIndex === undefined) {
+    //     let counter = obj[from]['msgs']
+    //     obj[from]['msgs'] = !counter 
+    //                           ? +1 
+    //                           : counter + 1
+    //     setLinks(obj)
+    //   }
+    //   // setSockMsg({ 'msgs': from })
+    // }
     
     // if room is in our subscription or we own it,
     // then set property obj[key]['msgs'] = as counter of new messages to room
-    if (key = socketMessage.toroom) {
-      if (obj[key] && 
-          (itemIndex === undefined || key !== items[itemIndex]._id)) {
-        let val = obj[key]['msgs'] === false 
-          ? 1 
-          : +obj[key]['msgs'] + 1
-        obj[key] = { ...obj[key], 'msgs': val }
-        setLinks(obj)
-        setSockMsg({ 'msgs': key })
-      }
-    }
+    // if (action === 'rooms_msg') {
+    //   console.log('rooms_msg ... ', items)
+    //   if (to === items[itemIndex]._id && itemIndex === undefined) {
+    //     let counter = obj[to]['msgs']
+    //     obj[to]['msgs'] = !counter 
+    //                           ? +1 
+    //                           : counter + 1
+    //     setLinks(obj)
+    //     // setSockMsg({ 'msgs': key })
+    //   }
+    // }
   
     // if user add me to his friends
     if (key = socketMessage.invite) {
@@ -98,5 +115,6 @@ export const useWSParse = () => {
     return () => setSockMsg()
   }, [socketMessage])
 
+  // console.log('WsParse socket message ...', sockMsg)
   return { sockMsg }
 }

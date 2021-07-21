@@ -8,10 +8,10 @@ export default function MessagesChatList() {
   const { items, itemIndex, activeKey } = useContext(context)
   const { request } = useHttp()
   const [ newMessages, setNewMessages ] = useState([])
-  let to = ( !!items && itemIndex !== undefined ) ? items[itemIndex]._id : null
+  let to = itemIndex !== undefined ? items[itemIndex]._id : null
   const liRef = useRef('')
   let msgList = null
-  console.log('MessageChatList ...', socketMessage)
+  // console.log('MessageChatList ...', socketMessage)
   useEffect(() => {
     liRef.current && liRef.current.scrollIntoView({ behavior: 'smooth' })
   }, [newMessages])
@@ -26,7 +26,7 @@ export default function MessagesChatList() {
 
   useEffect(() => {
     // console.log('MessageChatList ...', socketMessage)
-    if ( !!items && itemIndex !== undefined && socketMessage.to === items[itemIndex]._id) {
+    if (itemIndex !== undefined && socketMessage.to === items[itemIndex]._id) {
       getInformation()
     }
   }, [socketMessage])

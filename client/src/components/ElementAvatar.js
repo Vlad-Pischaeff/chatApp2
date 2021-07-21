@@ -25,7 +25,7 @@ export default function ElementAvatar(props) {
                           ? {...styles.img}
                           : {...styles.img, ...styles.grey}} /></Badge>
               // if user has no "avatar" then show icon
-              : <Badge  content={content}><Icon style={styles.noimg}
+              : <Badge  content={content}><Icon style={styles.noimg} alt=''
                         icon={ links[item._id] && links[item._id].online 
                           ? "user"
                           : "user-o"} /></Badge>

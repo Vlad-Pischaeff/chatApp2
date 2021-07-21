@@ -13,7 +13,7 @@ export default function MessagesUserList() {
   const [ newMessages, setNewMessages ] = useState([])
   const { request } = useHttp()
   const [ loading , setLoading ] = useState(false)
-  let to = ( !!items && itemIndex !== undefined ) ? items[itemIndex]._id : null
+  let to = itemIndex !== undefined ? items[itemIndex]._id : null
   const liRef = useRef('')
   let msgList = null
 
@@ -26,7 +26,8 @@ export default function MessagesUserList() {
   }, [activeKey])
 
   useEffect(() => {
-    if ( itemIndex !== undefined && !!items[0] && !!items[0].friends ) {  
+    // console.log('MessageUserList UseEffect ... ', itemIndex, activeKey)
+    if ( itemIndex !== undefined ) {    
       setLoading(true)
       getUserMessages()
         .then(e => setNewMessages(e))
@@ -35,9 +36,10 @@ export default function MessagesUserList() {
   }, [itemIndex])
 
   useEffect(() => {
-    if ( !!items && itemIndex !== undefined && 
-        ((socketMessage.to === items[itemIndex]._id && socketMessage.from === credentials.userId) ||
-        (socketMessage.from === items[itemIndex]._id && socketMessage.to === credentials.userId))) {
+    const { from, to } = socketMessage
+    if (itemIndex !== undefined && 
+        ((to === items[itemIndex]._id && from === credentials.userId) ||
+        (from === items[itemIndex]._id && to === credentials.userId))) {
         getUserMessages()
           .then(e => setNewMessages(e))
     }

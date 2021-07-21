@@ -2,12 +2,16 @@ import { useState, useContext, useEffect } from 'react'
 import { context, useGlobalWebsocketContext, useGlobalCredentialsContext, useGlobalNotificationsContext, useGlobalLinksContext } from '../context/context'
 
 export const useWSParse = () => {
-  const { socketMessage, setSocketMessage } = useGlobalWebsocketContext()
+  const { socketMessage } = useGlobalWebsocketContext()
   const { credentials } = useGlobalCredentialsContext()
   const { notifications, setNotifications } = useGlobalNotificationsContext()
   const { links, setLinks } = useGlobalLinksContext()
   const { items, itemIndex } = useContext(context)
   const [ sockMsg, setSockMsg ] = useState()
+
+  const incrementCounter = (c) => {
+    return c ? c + 1 : +1
+  }
 
   useEffect(() => {
     let obj = {...links}
@@ -15,69 +19,37 @@ export const useWSParse = () => {
     const {action, id, state, to, from} = socketMessage
 
     const states = {
+      // if user is our friend and hi is online, then set property obj['state'] = true
       online: function () {
         obj[id] = { ...obj[id], 'online' : state }
         setLinks(obj)
       },
+      // if user is our friend, and not selected in WebChat interface
+      // then set property obj[key]['msgs'] = as counter of new messages from user      
       friends_msg: function() {
-        if (to === credentials.userId && itemIndex === undefined) {
-          let counter = obj[from]['msgs']
-          obj[from]['msgs'] = !counter ? +1 : counter + 1
+        if (itemIndex === undefined || items[itemIndex]._id !== from ) {
+          obj[from]['msgs'] = incrementCounter(obj[from]['msgs'])
           setLinks(obj)
         }
       },
+      // if room is in our subscription or we own it,
+      // then set property obj[key]['msgs'] = as counter of new messages to room
       rooms_msg: function() {
-        // console.log('rooms_msg ... ', items, items.map(i => i._id))
-        if (items.map(i => i._id).includes(to) && itemIndex === undefined) {
-          let counter = obj[to]['msgs']
-          obj[to]['msgs'] = !counter ? +1 : counter + 1
+        if (itemIndex === undefined || items[itemIndex]._id !== to) {
+          obj[to]['msgs'] = incrementCounter(obj[to]['msgs'])
           setLinks(obj)
-        }
+        } 
       }
     }
     
     states[action]?.()
-    
-    // if user is our friend and hi is online, then set property obj['state'] = true
-    // if (action === 'online') {
-    //   obj[id] = { ...obj[id], 'online' : state }
-    //   setLinks(obj)
-    //   console.log('LINKS ... ', obj)
-    // }
-    
-    // if user is our friend, and not selected in WebChat interface
-    // then set property obj[key]['msgs'] = as counter of new messages from user
-    // if (action === 'friends_msg') {
-    //   if (to === credentials.userId && itemIndex === undefined) {
-    //     let counter = obj[from]['msgs']
-    //     obj[from]['msgs'] = !counter 
-    //                           ? +1 
-    //                           : counter + 1
-    //     setLinks(obj)
-    //   }
-    //   // setSockMsg({ 'msgs': from })
-    // }
-    
-    // if room is in our subscription or we own it,
-    // then set property obj[key]['msgs'] = as counter of new messages to room
-    // if (action === 'rooms_msg') {
-    //   console.log('rooms_msg ... ', items)
-    //   if (to === items[itemIndex]._id && itemIndex === undefined) {
-    //     let counter = obj[to]['msgs']
-    //     obj[to]['msgs'] = !counter 
-    //                           ? +1 
-    //                           : counter + 1
-    //     setLinks(obj)
-    //     // setSockMsg({ 'msgs': key })
-    //   }
-    // }
   
     // if user add me to his friends
-    if (key = socketMessage.invite) {
-      if (key === credentials.userId) {
-        console.log('I am invited by ...', socketMessage.friend, key)
-      }
-    }
+    // if (key = socketMessage.invite) {
+    //   if (key === credentials.userId) {
+    //     console.log('I am invited by ...', socketMessage.friend, key)
+    //   }
+    // }
 
     // if user add me to his private chatroom
     if (key = socketMessage.privchatadd) {

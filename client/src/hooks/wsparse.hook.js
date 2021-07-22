@@ -24,7 +24,7 @@ export const useWSParse = () => {
         obj[id] = { ...obj[id], 'online' : state }
         setLinks(obj)
       },
-      // if user is our friend, and not selected in WebChat interface
+      // if user is our friend, and NOT SELECTED in WebChat interface
       // then set property obj[key]['msgs'] = as counter of new messages from user      
       friends_msg: function() {
         if (itemIndex === undefined || items[itemIndex]._id !== from ) {
@@ -32,7 +32,7 @@ export const useWSParse = () => {
           setLinks(obj)
         }
       },
-      // if room is in our subscription or we own it,
+      // if room is in our subscription or we own it and NOT SELECTED,
       // then set property obj[key]['msgs'] = as counter of new messages to room
       rooms_msg: function() {
         if (itemIndex === undefined || items[itemIndex]._id !== to) {
